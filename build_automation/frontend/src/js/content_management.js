@@ -2,6 +2,7 @@ import React from 'react';
 import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
 import UploadContent from './upload_content';
+import BulkUploadContent from './bulk_upload_content';
 import Snackbar from 'material-ui/Snackbar';
 import FileListComponent from './file_list_component';
 import {buildMapFromArray} from './utils';
@@ -156,6 +157,13 @@ class ContentManagement extends React.Component{
             }
         })
     }
+
+    uploadBulkFiles() {
+        this.setState({
+            currentView: 'bulkUpload',
+        })
+    }
+
     handleContentEdit(content){
         this.setState({
             currentView: 'upload',
@@ -196,7 +204,7 @@ class ContentManagement extends React.Component{
                             Add Content
                         </Button>
                         <div style={{marginTop: '20px'}}> </div>
-                        <Button variant="raised" color="primary" onClick={e => {this.uploadNewFile()}}>
+                        <Button variant="raised" color="primary" onClick={e => {this.uploadBulkFiles()}}>
                             Express Loading
                         </Button>
                     </Grid>
@@ -208,6 +216,9 @@ class ContentManagement extends React.Component{
                         {this.state.isLoaded && this.state.currentView=='upload'&&<UploadContent onSave={this.saveContentCallback}
                                                                                                  tagIdsTagsMap={this.tagIdTagsMap} allTags={this.state.tags}
                                                                                                  content={this.state.content}/>}
+
+                        {this.state.isLoaded && this.state.currentView === 'bulkUpload' && <BulkUploadContent />}
+
                         {!this.state.isLoaded && 'loading'}
                     </Grid>
                 </Grid>
