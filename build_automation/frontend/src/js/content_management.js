@@ -195,6 +195,10 @@ class ContentManagement extends React.Component{
                         <Button variant="raised" color="primary" onClick={e => {this.uploadNewFile()}}>
                             Add Content
                         </Button>
+                        <div style={{marginTop: '20px'}}> </div>
+                        <Button variant="raised" color="primary" onClick={e => {this.uploadNewFile()}}>
+                            Express Loading
+                        </Button>
                     </Grid>
 
                     <Grid item xs={8}>
