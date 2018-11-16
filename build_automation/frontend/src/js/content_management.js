@@ -160,7 +160,8 @@ class ContentManagement extends React.Component{
 
     uploadBulkFiles() {
         this.setState({
-            currentView: 'bulkUpload',
+            currentView: 'bulkUploadContent',
+
         })
     }
 
@@ -190,6 +191,7 @@ class ContentManagement extends React.Component{
         let splitval = inputStr.split("-");
         return new Date(splitval[0], splitval[1] - 1, splitval[2]);
     }
+
     render(){
         return (
             <div>
@@ -217,7 +219,7 @@ class ContentManagement extends React.Component{
                                                                                                  tagIdsTagsMap={this.tagIdTagsMap} allTags={this.state.tags}
                                                                                                  content={this.state.content}/>}
 
-                        {this.state.isLoaded && this.state.currentView === 'bulkUpload' && <BulkUploadContent />}
+                        {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent />}
 
                         {!this.state.isLoaded && 'loading'}
                     </Grid>

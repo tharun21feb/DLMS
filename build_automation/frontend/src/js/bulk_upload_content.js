@@ -1,10 +1,12 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import {APP_URLS, get_url} from "./url";
 import Snackbar from '@material-ui/core/Snackbar';
-import Grid from '@material-ui/core/Grid';
+import axios from 'axios';
 
 const styles = theme => ({
     root: {
@@ -23,33 +25,55 @@ const styles = theme => ({
     },
 });
 
-class BulkUploadContent extends React.Component {
+
+class BulkUploadContent extends React.Component{
     constructor(props) {
         super(props);
+        this.state = {
 
-        this.handleFileSelection = this.handleFileSelection.bind(this);
+            fieldErrors: {},
+
+        };
+
+        this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
+
+        this.handleFileSelection=this.handleFileSelection.bind(this);
+        this.saveContent=this.saveContent.bind(this);
     }
 
-    handleFileSelection(event) {
-        event.persist();
-
-        const selectedFiles = event.target.files;
+    saveContent(evt) {
 
     }
 
-    saveSelectedFiles() {
+    handleFileSelection(evt) {
+        evt.persist();
+        const file = evt.target.files;
 
-    }
+        console.log(file);
 
-    render() {
+        if (!Boolean(file)) { // If there is no file selected.
+            return;
+        }
+        this.setState((prevState, props) => {
+            const newState = {
+                contentFile: file,
+                contentFileName: file.name,
+                fieldErrors: prevState.fieldErrors,
+            };
+            newState.fieldErrors['file'] = null;
+            return newState;
+        });
+
+     }
+
+    render(){
         return (
             <Grid item xs={8}>
                 <AppBar position="static" style={{ height: '50px', margin: 'auto'}}>
-                    <Typography gutterBottom variant="subheading" style={{color: '#ffffff'}}>
-                        Express Load Content
+                    <Typography gutterBottom variant="subtitle1" style={{color: '#ffffff', textAlign: 'center'}}>
+                        Express Content Loading
                     </Typography>
                 </AppBar>
-
                 <div style={{marginTop: '20px'}}> </div>
                 <TextField
                     id="contentFiles"
@@ -66,19 +90,20 @@ class BulkUploadContent extends React.Component {
                 <input
                     accept="*"
                     className={'hidden'}
-                    id="raised-button-file"
+                    id="upload-file"
                     multiple
                     type="file"
                     ref={input => {this.fileInput = input;}}
                     onChange={this.handleFileSelection}
                 />
-                <label htmlFor="raised-button-file">
-                    <Button variant="raised" component="span">
+                <label htmlFor="upload-file">
+                    <Button variant="contained" component="span">
                         Browse
                     </Button>
                 </label>
 
-                <Button variant="raised" component="span" onClick={this.saveSelectedFiles()}>
+                <div style={{marginTop: '20px'}}> </div>
+                <Button variant="contained" component="span" onClick={this.saveContent}>
                     Save
                 </Button>
 
@@ -91,12 +116,15 @@ class BulkUploadContent extends React.Component {
                     open={Boolean(this.state.message)}
                     onClose={this.handleCloseSnackbar}
                     message={<span>{this.state.message}</span>}
-                    SnackbarContentProps={{
+                    ContentProps={{
                         "style": this.getErrorClass()
                     }}
                 />
             </Grid>
         )
+    }
+    getErrorClass() {
+        return this.state.messageType === "error" ? {backgroundColor: '#B71C1C', fontWeight: 'normal'} : {};
     }
 
     handleCloseSnackbar() {
