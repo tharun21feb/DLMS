@@ -1,10 +1,10 @@
 import React from 'react';
-import AppBar from "material-ui/AppBar/AppBar";
-import Typography from "material-ui/Typography/Typography";
-import TextField from "material-ui/TextField/TextField";
-import Button from "material-ui/Button/Button";
-import Snackbar from "material-ui/Snackbar/Snackbar";
-import Grid from "material-ui/Grid/Grid";
+import AppBar from '@material-ui/core/AppBar';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     root: {
@@ -107,4 +107,4 @@ class BulkUploadContent extends React.Component {
     }
 }
 
-module.exports = BulkUploadContent;
+export default BulkUploadContent;
