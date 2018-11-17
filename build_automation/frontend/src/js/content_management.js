@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import UploadContent from './upload_content';
 import Snackbar from '@material-ui/core/Snackbar';
+import BulkUploadContent from './bulk_upload_content';
 import FileListComponent from './file_list_component';
 import {buildMapFromArray} from './utils';
 import {APP_URLS} from "./url";
@@ -156,6 +157,14 @@ class ContentManagement extends React.Component{
             }
         })
     }
+
+    uploadBulkFiles() {
+        this.setState({
+            currentView: 'bulkUploadContent',
+
+        })
+    }
+
     handleContentEdit(content){
         this.setState({
             currentView: 'upload',
@@ -182,6 +191,7 @@ class ContentManagement extends React.Component{
         let splitval = inputStr.split("-");
         return new Date(splitval[0], splitval[1] - 1, splitval[2]);
     }
+
     render(){
         return (
             <div>
@@ -195,6 +205,10 @@ class ContentManagement extends React.Component{
                         <Button variant="contained" color="primary" onClick={e => {this.uploadNewFile()}}>
                             Add Content
                         </Button>
+                        <div style={{marginTop: '20px'}}> </div>
+                        <Button variant="raised" color="primary" onClick={e => {this.uploadBulkFiles()}}>
+                            Express Loading
+                        </Button>
                     </Grid>
 
                     <Grid item xs={8}>
@@ -204,6 +218,9 @@ class ContentManagement extends React.Component{
                         {this.state.isLoaded && this.state.currentView=='upload'&&<UploadContent onSave={this.saveContentCallback}
                                                                                                  tagIdsTagsMap={this.tagIdTagsMap} allTags={this.state.tags}
                                                                                                  content={this.state.content}/>}
+
+                        {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent />}
+
                         {!this.state.isLoaded && 'loading'}
                     </Grid>
                 </Grid>
