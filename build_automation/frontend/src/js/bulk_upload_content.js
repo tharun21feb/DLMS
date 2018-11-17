@@ -30,7 +30,8 @@ class BulkUploadContent extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-
+			contentFile: {},
+            contentFileName: '',
             fieldErrors: {},
 
         };
@@ -42,25 +43,68 @@ class BulkUploadContent extends React.Component{
     }
 
     saveContent(evt) {
-
+		if (!this.is_valid_state(!(this.state.id > 0))) {
+            // If it is in an invalid state, do not proceed with the save operation.
+            return;
+        }
+        var targetUrl = APP_URLS.CONTENTS_LIST;
+		
+		const payload = new FormData();
+		Boolean(this.state.contentFile) && payload.append('content_file', this.state.contentFile);
+		payload.append('contentFileName', this.state.contentFileName);
+		const currInstance = this;
+        if (this.state.id > 0) {
+            // Update an existing directory.
+            payload.append('id', this.state.id);
+            targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id:this.state.id});
+            axios.patch(targetUrl, payload, {
+                responseType: 'json'
+            }).then(function(response) {
+                currInstance.saveCallback(response.data, true);
+            }).catch(function(error) {
+                console.error("Error in updating the content", error);
+                console.error(error.response.data);
+                let errorMsg = 'Error in updating the content';
+                currInstance.setState({
+                    message: errorMsg,
+                    messageType: 'error'
+                });
+            });
+        } else {
+            // Create a new directory.
+            axios.post(targetUrl, payload, {
+                responseType: 'json'
+            }).then(function(response) {
+                currInstance.saveCallback(response.data, false);
+            }).catch(function(error) {
+                console.error("Error in uploading the content", error);
+                console.error(error.response.data);
+                let errorMsg = 'Error in uploading the content';
+                currInstance.setState({
+                    message: errorMsg,
+                    messageType: 'error'
+                });
+            });
+        }
+		
     }
 
     handleFileSelection(evt) {
         evt.persist();
-        const file = evt.target.files;
+        const files = evt.target.files;
 
-        console.log(file);
+        console.log(files);
 
-        if (!Boolean(file)) { // If there is no file selected.
+        if (!Boolean(files)) { // If there is no file selected.
             return;
         }
         this.setState((prevState, props) => {
             const newState = {
-                contentFile: file,
-                contentFileName: file.name,
+                contentFile: files,
+                contentFileName: files.name,
                 fieldErrors: prevState.fieldErrors,
             };
-            newState.fieldErrors['file'] = null;
+            newState.fieldErrors['files'] = null;
             return newState;
         });
 
