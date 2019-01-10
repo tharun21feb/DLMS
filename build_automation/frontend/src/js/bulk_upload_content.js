@@ -29,29 +29,63 @@ const styles = theme => ({
 class BulkUploadContent extends React.Component{
     constructor(props) {
         super(props);
+		//this.tagIdsTagsMap = this.buildTagIdTagsMap(props.allTags);
+        //const labels = this.getAutoCompleteLabelsFromTagIds(props.content, this.tagIdsTagsMap);
         this.state = {
+			id: 1,
 			contentFile: {},
-            contentFileName: '',
+            contentFileNames: '',
             fieldErrors: {},
 
         };
-
+		this.tags = props.allTags;
+        //this.tagNameTagMap = this.buildTagNameTagMap(props.allTags);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
 
         this.handleFileSelection=this.handleFileSelection.bind(this);
         this.saveContent=this.saveContent.bind(this);
     }
+	
+	/* buildTagIdTagsMap(tags) {
+        // Builds a map of <Tag Id> - Tag map for each tag type.
+        const tagIdTagMap = {};
+        Object.keys(tags).forEach(eachTagType => {
+            tagIdTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'id');
+        });
+        return tagIdTagMap;
+    }
+    buildTagNameTagMap(tags) {
+        const tagNameTagMap = {};
+        Object.keys(tags).forEach(eachTagType => {
+            tagNameTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'name');
+        });
+        return tagNameTagMap;
+    } */
+    /* getAutoCompleteLabelsFromTagIds(boardInfo, tagIdsTagsMap) {
+        const retval = {};
+        Object.keys(tagIdsTagsMap).forEach(eachTagType => {
+            const selectedTagsForDir = boardInfo[eachTagType];
+            const selectedTypeAllTags = tagIdsTagsMap[eachTagType];
+            const labels = [];
+            selectedTagsForDir.forEach(eachTagId => {
+                labels.push(selectedTypeAllTags[eachTagId].name);
+            });
+            retval[eachTagType] = labels;
+        });
+        return retval;
+    } */
 
     saveContent(evt) {
 		if (!this.is_valid_state(!(this.state.id > 0))) {
-            // If it is in an invalid state, do not proceed with the save operation.
+			console.log("invalid state somehow id: " + this.state.id);
+			// If it is in an invalid state, do not proceed with the save operation.
             return;
         }
         var targetUrl = APP_URLS.CONTENTS_LIST;
 		
 		const payload = new FormData();
 		Boolean(this.state.contentFile) && payload.append('content_file', this.state.contentFile);
-		payload.append('contentFileName', this.state.contentFileName);
+		payload.append('contentFileNames', this.state.contentFileNames);
 		const currInstance = this;
         if (this.state.id > 0) {
             // Update an existing directory.
@@ -88,12 +122,33 @@ class BulkUploadContent extends React.Component{
         }
 		
     }
+	
+	is_valid_state(is_save) {
+        var hasErrors = false;
+        const fieldErrors = {};
+        if (!this.state.name || this.state.name.trim().length === 0) {
+            hasErrors = true;
+            fieldErrors['name'] = 'Name is required.';
+        }
+        /* if (!this.state.description || this.state.description.trim().length === 0) {
+            hasErrors = true;
+            fieldErrors['description'] = 'Description is required.';
+        } */
+        if (hasErrors) {
+            this.setState({fieldErrors});
+        }
+        return !hasErrors;
+    }
 
     handleFileSelection(evt) {
         evt.persist();
         const files = evt.target.files;
+		var fileNames = [];
 
-        console.log(files);
+        console.log("files below");
+		console.log(files);
+		
+		Array.from(files).forEach(file => fileNames.push(file.name));
 
         if (!Boolean(files)) { // If there is no file selected.
             return;
@@ -101,9 +156,10 @@ class BulkUploadContent extends React.Component{
         this.setState((prevState, props) => {
             const newState = {
                 contentFile: files,
-                contentFileName: files.name,
+                contentFileNames: fileNames,
                 fieldErrors: prevState.fieldErrors,
             };
+			console.log(newState);
             newState.fieldErrors['files'] = null;
             return newState;
         });
@@ -128,7 +184,7 @@ class BulkUploadContent extends React.Component{
                         shrink: true,
                     }}
                     error={this.state.fieldErrors.file ? true : false}
-                    value={this.state.contentFileName}
+                    value={this.state.contentFileNames.toString()}
                     margin="normal"
                 />
                 <input
@@ -140,6 +196,8 @@ class BulkUploadContent extends React.Component{
                     ref={input => {this.fileInput = input;}}
                     onChange={this.handleFileSelection}
                 />
+				
+				
                 <label htmlFor="upload-file">
                     <Button variant="contained" component="span">
                         Browse
