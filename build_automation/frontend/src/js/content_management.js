@@ -161,7 +161,24 @@ class ContentManagement extends React.Component{
     uploadBulkFiles() {
         this.setState({
             currentView: 'bulkUploadContent',
-
+			contentArray: [],
+			content: {
+                id: -1,
+                name: "",
+                description: "",
+                creators: [],
+                coverages: [],
+                subjects: [],
+                keywords: [],
+                workareas: [],
+                languages: [],
+                catalogers: [],
+                updatedDate: new Date(),
+                source: "",
+                copyright: "",
+                rightsStatement: "",
+                originalFileName: ""
+            }
         })
     }
 

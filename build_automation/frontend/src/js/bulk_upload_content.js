@@ -28,11 +28,11 @@ const styles = theme => ({
 
 class BulkUploadContent extends React.Component{
     constructor(props) {
-        super(props);
+        /* super(props);
 		//this.tagIdsTagsMap = this.buildTagIdTagsMap(props.allTags);
         //const labels = this.getAutoCompleteLabelsFromTagIds(props.content, this.tagIdsTagsMap);
         this.state = {
-			id: 1,
+			//id: props.content.id,
 			contentFile: {},
             contentFileNames: '',
             fieldErrors: {},
@@ -43,7 +43,56 @@ class BulkUploadContent extends React.Component{
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
 
         this.handleFileSelection=this.handleFileSelection.bind(this);
+        this.saveContent=this.saveContent.bind(this); */
+		
+		
+		
+		super(props);
+        this.tagIdsTagsMap = this.buildTagIdTagsMap(props.allTags);
+        const labels = this.getAutoCompleteLabelsFromTagIds(props.content, this.tagIdsTagsMap);
+        this.state = {
+            id: props.content.id,
+            name: props.content.name,
+            description: props.content.description,
+            creators: labels.creators,
+            coverages: labels.coverages,
+            subjects: labels.subjects,
+            keywords: labels.keywords,
+            workareas: labels.workareas,
+            languages: labels.languages,
+            catalogers: labels.catalogers,
+            fieldErrors: {},
+            selectedDate: props.content.updatedDate,
+            source: props.content.source,
+            copyright: props.content.copyright,
+            rightsStatement: props.content.rightsStatement,
+            contentFile: null,
+            contentFileName: props.content.originalFileName ? props.content.originalFileName : '',
+        };
+        this.tags = props.allTags;
+        this.tagNameTagMap = this.buildTagNameTagMap(props.allTags);
+        this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
+        this.handleDateChange=this.handleDateChange.bind(this);
+        this.handleTagAddition=this.handleTagAddition.bind(this);
+        this.handleCreatorAddition=this.handleCreatorAddition.bind(this);
+        this.handleCoverageAddition=this.handleCoverageAddition.bind(this);
+        this.handleSubjectAddition=this.handleSubjectAddition.bind(this);
+        this.handleKeywordAddition=this.handleKeywordAddition.bind(this);
+        this.handleWorkareaAddition=this.handleWorkareaAddition.bind(this);
+        this.handleLanguageAddition=this.handleLanguageAddition.bind(this);
+        this.handleCatalogerAddition=this.handleCatalogerAddition.bind(this);
+        this.handleTagDeletion=this.handleTagDeletion.bind(this);
+        this.handleCreatorDeletion=this.handleCreatorDeletion.bind(this);
+        this.handleCoverageDeletion=this.handleCoverageDeletion.bind(this);
+        this.handleSubjectDeletion=this.handleSubjectDeletion.bind(this);
+        this.handleKeywordDeletion=this.handleKeywordDeletion.bind(this);
+        this.handleWorkareaDeletion=this.handleWorkareaDeletion.bind(this);
+        this.handleLanguageDeletion=this.handleLanguageDeletion.bind(this);
+        this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this);
+        this.handleFileSelection=this.handleFileSelection.bind(this);
         this.saveContent=this.saveContent.bind(this);
+        this.saveTag=this.saveTag.bind(this);
+        this.saveCallback=props.onSave.bind(this);
     }
 	
 	/* buildTagIdTagsMap(tags) {
@@ -77,7 +126,7 @@ class BulkUploadContent extends React.Component{
 
     saveContent(evt) {
 		if (!this.is_valid_state(!(this.state.id > 0))) {
-			console.log("invalid state somehow id: " + this.state.id);
+			console.log("invalid state bro!!!!: " + this.state.id);
 			// If it is in an invalid state, do not proceed with the save operation.
             return;
         }
@@ -126,14 +175,20 @@ class BulkUploadContent extends React.Component{
 	is_valid_state(is_save) {
         var hasErrors = false;
         const fieldErrors = {};
-        if (!this.state.name || this.state.name.trim().length === 0) {
+		console.log(this.state);
+        /* if (!this.state.name || this.state.name.trim().length === 0) {
             hasErrors = true;
             fieldErrors['name'] = 'Name is required.';
-        }
+        } */
         /* if (!this.state.description || this.state.description.trim().length === 0) {
             hasErrors = true;
             fieldErrors['description'] = 'Description is required.';
         } */
+		if(!this.state.contentFileNames.length > 0) {
+			hasErrors = true;
+			fieldErrors['name'] = 'File names are required.';
+		}
+		
         if (hasErrors) {
             this.setState({fieldErrors});
         }
