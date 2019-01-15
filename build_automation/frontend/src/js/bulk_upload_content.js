@@ -28,7 +28,7 @@ const styles = theme => ({
 
 class BulkUploadContent extends React.Component{
     constructor(props) {
-        /* super(props);
+        super(props);
 		//this.tagIdsTagsMap = this.buildTagIdTagsMap(props.allTags);
         //const labels = this.getAutoCompleteLabelsFromTagIds(props.content, this.tagIdsTagsMap);
         this.state = {
@@ -38,7 +38,7 @@ class BulkUploadContent extends React.Component{
             fieldErrors: {},
 
         };
-		this.tags = props.allTags;
+		/* this.tags = props.allTags;
         //this.tagNameTagMap = this.buildTagNameTagMap(props.allTags);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
 
@@ -47,9 +47,9 @@ class BulkUploadContent extends React.Component{
 		
 		
 		
-		super(props);
-        this.tagIdsTagsMap = this.buildTagIdTagsMap(props.allTags);
-        const labels = this.getAutoCompleteLabelsFromTagIds(props.content, this.tagIdsTagsMap);
+		/* super(props);
+        //this.tagIdsTagsMap = this.buildTagIdTagsMap(props.allTags);
+        //const labels = this.getAutoCompleteLabelsFromTagIds(props.content, this.tagIdsTagsMap);
         this.state = {
             id: props.content.id,
             name: props.content.name,
@@ -68,8 +68,8 @@ class BulkUploadContent extends React.Component{
             rightsStatement: props.content.rightsStatement,
             contentFile: null,
             contentFileName: props.content.originalFileName ? props.content.originalFileName : '',
-        };
-        this.tags = props.allTags;
+        }; */
+        /* this.tags = props.allTags;
         this.tagNameTagMap = this.buildTagNameTagMap(props.allTags);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
         this.handleDateChange=this.handleDateChange.bind(this);
@@ -88,11 +88,11 @@ class BulkUploadContent extends React.Component{
         this.handleKeywordDeletion=this.handleKeywordDeletion.bind(this);
         this.handleWorkareaDeletion=this.handleWorkareaDeletion.bind(this);
         this.handleLanguageDeletion=this.handleLanguageDeletion.bind(this);
-        this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this);
+        this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this); */
         this.handleFileSelection=this.handleFileSelection.bind(this);
         this.saveContent=this.saveContent.bind(this);
-        this.saveTag=this.saveTag.bind(this);
-        this.saveCallback=props.onSave.bind(this);
+        //this.saveTag=this.saveTag.bind(this);
+        //this.saveCallback=props.onSave.bind(this);
     }
 	
 	/* buildTagIdTagsMap(tags) {
@@ -102,8 +102,8 @@ class BulkUploadContent extends React.Component{
             tagIdTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'id');
         });
         return tagIdTagMap;
-    }
-    buildTagNameTagMap(tags) {
+    } */
+    /* buildTagNameTagMap(tags) {
         const tagNameTagMap = {};
         Object.keys(tags).forEach(eachTagType => {
             tagNameTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'name');
@@ -123,7 +123,11 @@ class BulkUploadContent extends React.Component{
         });
         return retval;
     } */
-
+	formatDate(input) {
+        
+        return '2019' + '-' + '12' + '-' + '12';
+    }
+	
     saveContent(evt) {
 		if (!this.is_valid_state(!(this.state.id > 0))) {
 			console.log("invalid state bro!!!!: " + this.state.id);
@@ -133,8 +137,10 @@ class BulkUploadContent extends React.Component{
         var targetUrl = APP_URLS.CONTENTS_LIST;
 		
 		const payload = new FormData();
-		Boolean(this.state.contentFile) && payload.append('content_file', this.state.contentFile);
-		payload.append('contentFileNames', this.state.contentFileNames);
+		Boolean(this.state.contentFile) && payload.append('content_file', this.state.contentFile[0]);
+		payload.append('name', this.state.contentFileNames);
+		payload.append('description', "change me");
+		payload.append('updated_time', this.formatDate(this.state.selectedDate));
 		const currInstance = this;
         if (this.state.id > 0) {
             // Update an existing directory.
@@ -143,7 +149,7 @@ class BulkUploadContent extends React.Component{
             axios.patch(targetUrl, payload, {
                 responseType: 'json'
             }).then(function(response) {
-                currInstance.saveCallback(response.data, true);
+                //currInstance.saveCallback(response.data, true);
             }).catch(function(error) {
                 console.error("Error in updating the content", error);
                 console.error(error.response.data);
@@ -158,7 +164,7 @@ class BulkUploadContent extends React.Component{
             axios.post(targetUrl, payload, {
                 responseType: 'json'
             }).then(function(response) {
-                currInstance.saveCallback(response.data, false);
+                //currInstance.saveCallback(response.data, false);
             }).catch(function(error) {
                 console.error("Error in uploading the content", error);
                 console.error(error.response.data);

@@ -161,7 +161,6 @@ class ContentManagement extends React.Component{
     uploadBulkFiles() {
         this.setState({
             currentView: 'bulkUploadContent',
-			contentArray: [],
 			content: {
                 id: -1,
                 name: "",
