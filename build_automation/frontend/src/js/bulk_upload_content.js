@@ -92,7 +92,7 @@ class BulkUploadContent extends React.Component{
         this.handleFileSelection=this.handleFileSelection.bind(this);
         this.saveContent=this.saveContent.bind(this);
         //this.saveTag=this.saveTag.bind(this);
-        //this.saveCallback=props.onSave.bind(this);
+        this.saveCallback=props.onSave.bind(this);
     }
 	
 	/* buildTagIdTagsMap(tags) {
@@ -123,6 +123,25 @@ class BulkUploadContent extends React.Component{
         });
         return retval;
     } */
+	
+	componentDidMount() {
+        // this.loadData()
+    }
+	
+	loadData() {
+        const currInstance = this;
+        axios.get(APP_URLS.TAG_LIST, {
+            responseType: 'json'
+        }).then(function (response) {
+            currInstance.setState({
+                tags: response.data
+            })
+        }).catch(function (error) {
+            console.error(error);
+            // TODO : Show the error message.
+        });
+    }
+	
 	formatDate(input) {
         
         return '2019' + '-' + '12' + '-' + '12';
@@ -151,7 +170,7 @@ class BulkUploadContent extends React.Component{
 				axios.patch(targetUrl, payload, {
 					responseType: 'json'
 				}).then(function(response) {
-					//currInstance.saveCallback(response.data, true);
+					currInstance.saveCallback(response.data, true);
 				}).catch(function(error) {
 					console.error("Error in updating the content", error);
 					console.error(error.response.data);
@@ -166,7 +185,7 @@ class BulkUploadContent extends React.Component{
 				axios.post(targetUrl, payload, {
 					responseType: 'json'
 				}).then(function(response) {
-					//currInstance.saveCallback(response.data, false);
+					currInstance.saveCallback(response.data, false);
 				}).catch(function(error) {
 					console.error("Error in uploading the content", error);
 					console.error(error.response.data);

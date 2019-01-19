@@ -45,6 +45,7 @@ class ContentManagement extends React.Component{
         this.tagIdTagsMap = {};
         this.handleFileDelete = this.handleFileDelete.bind(this);
         this.saveContentCallback = this.saveContentCallback.bind(this);
+		this.saveContentCallbackTwo = this.saveContentCallbackTwo.bind(this);
         this.uploadNewFile = this.uploadNewFile.bind(this);
         this.handleContentEdit = this.handleContentEdit.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
@@ -106,6 +107,39 @@ class ContentManagement extends React.Component{
         })
     }
     saveContentCallback(content, updated){
+		console.log("save callback in CM.js");
+        const currInstance = this;
+        axios.get(APP_URLS.ALLTAGS_LIST, {
+            responseType: 'json'
+        }).then(function (response) {
+            currInstance.tagIdTagsMap=currInstance.buildTagIdTagsMap(response.data);
+            currInstance.setState((prevState, props)=>{
+                const {files} = prevState;
+                if (updated){
+                    files.forEach(eachFile => {
+                        if (eachFile.id===content.id){
+                            files.splice(files.indexOf(eachFile), 1, content);
+                        }
+                    });
+                }
+                else{
+                    files.push(content);
+                }
+                return {
+                    message: 'Save Successful',
+                    messageType: 'info',
+                    currentView: 'manage',
+                    files,
+                    tags: response.data
+                }
+            })
+        }).catch(function (error) {
+            console.error(error);
+        });
+    }
+	
+	saveContentCallbackTwo(content, updated){
+		console.log("save callback in CM.js");
         const currInstance = this;
         axios.get(APP_URLS.ALLTAGS_LIST, {
             responseType: 'json'
@@ -235,8 +269,9 @@ class ContentManagement extends React.Component{
                                                                                                  tagIdsTagsMap={this.tagIdTagsMap} allTags={this.state.tags}
                                                                                                  content={this.state.content}/>}
 
-                        {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent />}
-
+                        {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent onSave={this.saveContentCallbackTwo} 
+						content={this.state.content} />}
+						
                         {!this.state.isLoaded && 'loading'}
                     </Grid>
                 </Grid>
