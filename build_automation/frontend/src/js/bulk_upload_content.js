@@ -136,46 +136,48 @@ class BulkUploadContent extends React.Component{
         }
         var targetUrl = APP_URLS.CONTENTS_LIST;
 		
-		const payload = new FormData();
-		Boolean(this.state.contentFile) && payload.append('content_file', this.state.contentFile[0]);
-		payload.append('name', this.state.contentFileNames);
-		payload.append('description', "change me");
-		payload.append('updated_time', this.formatDate(this.state.selectedDate));
-		const currInstance = this;
-        if (this.state.id > 0) {
-            // Update an existing directory.
-            payload.append('id', this.state.id);
-            targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id:this.state.id});
-            axios.patch(targetUrl, payload, {
-                responseType: 'json'
-            }).then(function(response) {
-                //currInstance.saveCallback(response.data, true);
-            }).catch(function(error) {
-                console.error("Error in updating the content", error);
-                console.error(error.response.data);
-                let errorMsg = 'Error in updating the content';
-                currInstance.setState({
-                    message: errorMsg,
-                    messageType: 'error'
-                });
-            });
-        } else {
-            // Create a new directory.
-            axios.post(targetUrl, payload, {
-                responseType: 'json'
-            }).then(function(response) {
-                //currInstance.saveCallback(response.data, false);
-            }).catch(function(error) {
-                console.error("Error in uploading the content", error);
-                console.error(error.response.data);
-                let errorMsg = 'Error in uploading the content';
-                currInstance.setState({
-                    message: errorMsg,
-                    messageType: 'error'
-                });
-            });
-        }
-		
+		Array.from(this.state.contentFile).forEach(file => {
+			console.log("calling method: " + file.name);
+			const payload = new FormData();
+			Boolean(file) && payload.append('content_file', file);
+			payload.append('name', file.name);
+			payload.append('description', "Please insert a description.");
+			payload.append('updated_time', this.formatDate(this.state.selectedDate));
+			const currInstance = this;
+			if (this.state.id > 0) {
+				// Update an existing directory.
+				payload.append('id', this.state.id);
+				targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id:this.state.id});
+				axios.patch(targetUrl, payload, {
+					responseType: 'json'
+				}).then(function(response) {
+					//currInstance.saveCallback(response.data, true);
+				}).catch(function(error) {
+					console.error("Error in updating the content", error);
+					console.error(error.response.data);
+					let errorMsg = 'Error in updating the content';
+					currInstance.setState({
+						message: errorMsg,
+						messageType: 'error'
+					});
+				});
+			} else {
+				// Create a new directory.
+				axios.post(targetUrl, payload, {
+					responseType: 'json'
+				}).then(function(response) {
+					//currInstance.saveCallback(response.data, false);
+				}).catch(function(error) {
+					console.error("Error in uploading the content", error);
+					console.error(error.response.data);
+					let errorMsg = 'Error in uploading the content';
+					currInstance.setState({
+						message: errorMsg,
+						messageType: 'error'
+					});
+				});
+			}
+		});
     }
 	
 	is_valid_state(is_save) {
