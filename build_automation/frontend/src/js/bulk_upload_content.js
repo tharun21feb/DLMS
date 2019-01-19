@@ -38,18 +38,7 @@ class BulkUploadContent extends React.Component{
             fieldErrors: {},
 
         };
-		/* this.tags = props.allTags;
-        //this.tagNameTagMap = this.buildTagNameTagMap(props.allTags);
-        this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
-
-        this.handleFileSelection=this.handleFileSelection.bind(this);
-        this.saveContent=this.saveContent.bind(this); */
-		
-		
-		
-		/* super(props);
-        //this.tagIdsTagsMap = this.buildTagIdTagsMap(props.allTags);
-        //const labels = this.getAutoCompleteLabelsFromTagIds(props.content, this.tagIdsTagsMap);
+		/* This is probably what it will look like but with different values
         this.state = {
             id: props.content.id,
             name: props.content.name,
@@ -69,7 +58,8 @@ class BulkUploadContent extends React.Component{
             contentFile: null,
             contentFileName: props.content.originalFileName ? props.content.originalFileName : '',
         }; */
-        /* this.tags = props.allTags;
+        //begin metadata information portion of uploading bulk content
+		this.tags = props.allTags;
         this.tagNameTagMap = this.buildTagNameTagMap(props.allTags);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
         this.handleDateChange=this.handleDateChange.bind(this);
@@ -88,21 +78,14 @@ class BulkUploadContent extends React.Component{
         this.handleKeywordDeletion=this.handleKeywordDeletion.bind(this);
         this.handleWorkareaDeletion=this.handleWorkareaDeletion.bind(this);
         this.handleLanguageDeletion=this.handleLanguageDeletion.bind(this);
-        this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this); */
+        this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this); 
+		
         this.handleFileSelection=this.handleFileSelection.bind(this);
         this.saveContent=this.saveContent.bind(this);
         //this.saveTag=this.saveTag.bind(this);
         this.saveCallback=props.onSave.bind(this);
     }
 	
-	/* buildTagIdTagsMap(tags) {
-        // Builds a map of <Tag Id> - Tag map for each tag type.
-        const tagIdTagMap = {};
-        Object.keys(tags).forEach(eachTagType => {
-            tagIdTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'id');
-        });
-        return tagIdTagMap;
-    } */
     /* buildTagNameTagMap(tags) {
         const tagNameTagMap = {};
         Object.keys(tags).forEach(eachTagType => {
@@ -110,6 +93,16 @@ class BulkUploadContent extends React.Component{
         });
         return tagNameTagMap;
     } */
+	
+	buildTagIdTagsMap(tags) {
+        // Builds a map of <Tag Id> - Tag map for each tag type.
+        const tagIdTagMap = {};
+        Object.keys(tags).forEach(eachTagType => {
+            tagIdTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'id');
+        });
+        return tagIdTagMap;
+    }
+	
     /* getAutoCompleteLabelsFromTagIds(boardInfo, tagIdsTagsMap) {
         const retval = {};
         Object.keys(tagIdsTagsMap).forEach(eachTagType => {
@@ -143,7 +136,7 @@ class BulkUploadContent extends React.Component{
     }
 	
 	formatDate(input) {
-        
+        //this is something that needs to be fixed, i hardcoded a date....
         return '2019' + '-' + '12' + '-' + '12';
     }
 	
@@ -249,6 +242,7 @@ class BulkUploadContent extends React.Component{
      }
 
     render(){
+		//need to add components or hidden value fields with meta information as null
         return (
             <Grid item xs={8}>
                 <AppBar position="static" style={{ height: '50px', margin: 'auto'}}>
