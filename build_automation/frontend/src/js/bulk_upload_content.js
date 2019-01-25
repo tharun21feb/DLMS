@@ -63,22 +63,22 @@ class BulkUploadContent extends React.Component{
         this.tagNameTagMap = this.buildTagNameTagMap(props.allTags);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
         this.handleDateChange=this.handleDateChange.bind(this);
-        this.handleTagAddition=this.handleTagAddition.bind(this);
-        this.handleCreatorAddition=this.handleCreatorAddition.bind(this);
-        this.handleCoverageAddition=this.handleCoverageAddition.bind(this);
-        this.handleSubjectAddition=this.handleSubjectAddition.bind(this);
-        this.handleKeywordAddition=this.handleKeywordAddition.bind(this);
-        this.handleWorkareaAddition=this.handleWorkareaAddition.bind(this);
-        this.handleLanguageAddition=this.handleLanguageAddition.bind(this);
-        this.handleCatalogerAddition=this.handleCatalogerAddition.bind(this);
-        this.handleTagDeletion=this.handleTagDeletion.bind(this);
-        this.handleCreatorDeletion=this.handleCreatorDeletion.bind(this);
-        this.handleCoverageDeletion=this.handleCoverageDeletion.bind(this);
-        this.handleSubjectDeletion=this.handleSubjectDeletion.bind(this);
-        this.handleKeywordDeletion=this.handleKeywordDeletion.bind(this);
-        this.handleWorkareaDeletion=this.handleWorkareaDeletion.bind(this);
-        this.handleLanguageDeletion=this.handleLanguageDeletion.bind(this);
-        this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this); 
+        //this.handleTagAddition=this.handleTagAddition.bind(this);
+        //this.handleCreatorAddition=this.handleCreatorAddition.bind(this);
+        //this.handleCoverageAddition=this.handleCoverageAddition.bind(this);
+        //this.handleSubjectAddition=this.handleSubjectAddition.bind(this);
+        //this.handleKeywordAddition=this.handleKeywordAddition.bind(this);
+        //this.handleWorkareaAddition=this.handleWorkareaAddition.bind(this);
+        //this.handleLanguageAddition=this.handleLanguageAddition.bind(this);
+        //this.handleCatalogerAddition=this.handleCatalogerAddition.bind(this);
+        //this.handleTagDeletion=this.handleTagDeletion.bind(this);
+        //this.handleCreatorDeletion=this.handleCreatorDeletion.bind(this);
+        //this.handleCoverageDeletion=this.handleCoverageDeletion.bind(this);
+        //this.handleSubjectDeletion=this.handleSubjectDeletion.bind(this);
+        //this.handleKeywordDeletion=this.handleKeywordDeletion.bind(this);
+        //this.handleWorkareaDeletion=this.handleWorkareaDeletion.bind(this);
+        //this.handleLanguageDeletion=this.handleLanguageDeletion.bind(this);
+        //this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this); 
 		
         this.handleFileSelection=this.handleFileSelection.bind(this);
         this.saveContent=this.saveContent.bind(this);
@@ -86,13 +86,15 @@ class BulkUploadContent extends React.Component{
         this.saveCallback=props.onSave.bind(this);
     }
 	
-    /* buildTagNameTagMap(tags) {
+    buildTagNameTagMap(tags) {
         const tagNameTagMap = {};
-        Object.keys(tags).forEach(eachTagType => {
-            tagNameTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'name');
-        });
+		if(tags != null) {
+			Object.keys(tags).forEach(eachTagType => {
+				tagNameTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'name');
+			});
+		}
         return tagNameTagMap;
-    } */
+    }
 	
 	buildTagIdTagsMap(tags) {
         // Builds a map of <Tag Id> - Tag map for each tag type.
@@ -137,7 +139,16 @@ class BulkUploadContent extends React.Component{
 	
 	formatDate(input) {
         //this is something that needs to be fixed, i hardcoded a date....
-        return '2019' + '-' + '12' + '-' + '12';
+        const year = input.getFullYear();
+        let month = input.getMonth()+1;
+        if (month < 10) {
+            month = '0' + month;
+        }
+        let date = input.getDate();
+        if (date < 10) {
+            date = '0' + date;
+        }
+        return year + '-' + month + '-' + date;
     }
 	
     saveContent(evt) {
@@ -151,10 +162,11 @@ class BulkUploadContent extends React.Component{
 		Array.from(this.state.contentFile).forEach(file => {
 			console.log("calling method: " + file.name);
 			const payload = new FormData();
+			var currentDate = new Date();
 			Boolean(file) && payload.append('content_file', file);
 			payload.append('name', file.name);
 			payload.append('description', "Please insert a description.");
-			payload.append('updated_time', this.formatDate(this.state.selectedDate));
+			payload.append('updated_time', this.formatDate(currentDate));
 			const currInstance = this;
 			if (this.state.id > 0) {
 				// Update an existing directory.
@@ -214,6 +226,10 @@ class BulkUploadContent extends React.Component{
         }
         return !hasErrors;
     }
+	
+	handleDateChange(date){
+        this.setState({ selectedDate: date });
+    };
 
     handleFileSelection(evt) {
         evt.persist();
