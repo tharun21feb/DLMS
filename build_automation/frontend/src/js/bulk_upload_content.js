@@ -29,63 +29,30 @@ const styles = theme => ({
 class BulkUploadContent extends React.Component{
     constructor(props) {
         super(props);
-		//this.tagIdsTagsMap = this.buildTagIdTagsMap(props.allTags);
-        //const labels = this.getAutoCompleteLabelsFromTagIds(props.content, this.tagIdsTagsMap);
+		
+		/* State contains an array of files, a string representation of filenames,
+			and any errors.
+	
+		*/
         this.state = {
-			//id: props.content.id,
 			contentFile: {},
             contentFileNames: '',
             fieldErrors: {},
 
         };
-		/* This is probably what it will look like but with different values
-        this.state = {
-            id: props.content.id,
-            name: props.content.name,
-            description: props.content.description,
-            creators: labels.creators,
-            coverages: labels.coverages,
-            subjects: labels.subjects,
-            keywords: labels.keywords,
-            workareas: labels.workareas,
-            languages: labels.languages,
-            catalogers: labels.catalogers,
-            fieldErrors: {},
-            selectedDate: props.content.updatedDate,
-            source: props.content.source,
-            copyright: props.content.copyright,
-            rightsStatement: props.content.rightsStatement,
-            contentFile: null,
-            contentFileName: props.content.originalFileName ? props.content.originalFileName : '',
-        }; */
-        //begin metadata information portion of uploading bulk content
+		
 		this.tags = props.allTags;
         this.tagNameTagMap = this.buildTagNameTagMap(props.allTags);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
         this.handleDateChange=this.handleDateChange.bind(this);
-        //this.handleTagAddition=this.handleTagAddition.bind(this);
-        //this.handleCreatorAddition=this.handleCreatorAddition.bind(this);
-        //this.handleCoverageAddition=this.handleCoverageAddition.bind(this);
-        //this.handleSubjectAddition=this.handleSubjectAddition.bind(this);
-        //this.handleKeywordAddition=this.handleKeywordAddition.bind(this);
-        //this.handleWorkareaAddition=this.handleWorkareaAddition.bind(this);
-        //this.handleLanguageAddition=this.handleLanguageAddition.bind(this);
-        //this.handleCatalogerAddition=this.handleCatalogerAddition.bind(this);
-        //this.handleTagDeletion=this.handleTagDeletion.bind(this);
-        //this.handleCreatorDeletion=this.handleCreatorDeletion.bind(this);
-        //this.handleCoverageDeletion=this.handleCoverageDeletion.bind(this);
-        //this.handleSubjectDeletion=this.handleSubjectDeletion.bind(this);
-        //this.handleKeywordDeletion=this.handleKeywordDeletion.bind(this);
-        //this.handleWorkareaDeletion=this.handleWorkareaDeletion.bind(this);
-        //this.handleLanguageDeletion=this.handleLanguageDeletion.bind(this);
-        //this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this); 
-		
         this.handleFileSelection=this.handleFileSelection.bind(this);
         this.saveContent=this.saveContent.bind(this);
-        //this.saveTag=this.saveTag.bind(this);
         this.saveCallback=props.onSave.bind(this);
     }
 	
+	/*	TODO: Insert information about what this method does.
+	
+	*/
     buildTagNameTagMap(tags) {
         const tagNameTagMap = {};
 		if(tags != null) {
@@ -96,6 +63,9 @@ class BulkUploadContent extends React.Component{
         return tagNameTagMap;
     }
 	
+	/*	TODO: Insert information about what this method does.
+	
+	*/
 	buildTagIdTagsMap(tags) {
         // Builds a map of <Tag Id> - Tag map for each tag type.
         const tagIdTagMap = {};
@@ -105,20 +75,9 @@ class BulkUploadContent extends React.Component{
         return tagIdTagMap;
     }
 	
-    /* getAutoCompleteLabelsFromTagIds(boardInfo, tagIdsTagsMap) {
-        const retval = {};
-        Object.keys(tagIdsTagsMap).forEach(eachTagType => {
-            const selectedTagsForDir = boardInfo[eachTagType];
-            const selectedTypeAllTags = tagIdsTagsMap[eachTagType];
-            const labels = [];
-            selectedTagsForDir.forEach(eachTagId => {
-                labels.push(selectedTypeAllTags[eachTagId].name);
-            });
-            retval[eachTagType] = labels;
-        });
-        return retval;
-    } */
+	/*	TODO: Insert information about what this method does.
 	
+	*/
 	componentDidMount() {
         // this.loadData()
     }
@@ -137,8 +96,11 @@ class BulkUploadContent extends React.Component{
         });
     }
 	
+	/*	This method takes in the current date/time and formats it
+		into something that is readable and easy to store in the DB.
+	*/
 	formatDate(input) {
-        //this is something that needs to be fixed, i hardcoded a date....
+        
         const year = input.getFullYear();
         let month = input.getMonth()+1;
         if (month < 10) {
@@ -151,6 +113,12 @@ class BulkUploadContent extends React.Component{
         return year + '-' + month + '-' + date;
     }
 	
+	
+	/*	When this event is triggered based on a button click, this method is 
+		called and sends the selected file(s) to the server via AXIOS and
+		appends to DB table.
+		
+	*/
     saveContent(evt) {
 		if (!this.is_valid_state(!(this.state.id > 0))) {
 			console.log("invalid state bro!!!!: " + this.state.id);
@@ -204,18 +172,18 @@ class BulkUploadContent extends React.Component{
 		});
     }
 	
+	/*	This method takes in a boolean value and checks if there are file names
+		currently selected, if not it returns false. If there are any other
+		errors, the method also returns false.
+		
+		Returns true if the state is valid.
+	
+	*/
 	is_valid_state(is_save) {
         var hasErrors = false;
         const fieldErrors = {};
 		console.log(this.state);
-        /* if (!this.state.name || this.state.name.trim().length === 0) {
-            hasErrors = true;
-            fieldErrors['name'] = 'Name is required.';
-        } */
-        /* if (!this.state.description || this.state.description.trim().length === 0) {
-            hasErrors = true;
-            fieldErrors['description'] = 'Description is required.';
-        } */
+        
 		if(!this.state.contentFileNames.length > 0) {
 			hasErrors = true;
 			fieldErrors['name'] = 'File names are required.';
@@ -227,10 +195,18 @@ class BulkUploadContent extends React.Component{
         return !hasErrors;
     }
 	
+	/*	This method sets the selected date of the current state.
+	
+	*/
 	handleDateChange(date){
         this.setState({ selectedDate: date });
     };
-
+	
+	/*	This method adds the selected files to an array, and sets the state
+		with the new information including: files, filenames, and errors from the
+		previous state.
+	
+	*/
     handleFileSelection(evt) {
         evt.persist();
         const files = evt.target.files;
