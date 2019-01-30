@@ -121,10 +121,13 @@ class ContentManagement extends React.Component{
                             files.splice(files.indexOf(eachFile), 1, content);
                         }
                     });
+					console.log("updated true");
                 }
                 else{
+					console.log("updated false");
                     files.push(content);
                 }
+				console.log(files);
                 return {
                     message: 'Save Successful',
                     messageType: 'info',
@@ -139,7 +142,7 @@ class ContentManagement extends React.Component{
     }
 	
 	saveContentCallbackTwo(content, updated){
-		console.log("save callback in CM.js");
+		console.log("save callback in CM2.js");
         const currInstance = this;
         axios.get(APP_URLS.ALLTAGS_LIST, {
             responseType: 'json'
@@ -153,10 +156,13 @@ class ContentManagement extends React.Component{
                             files.splice(files.indexOf(eachFile), 1, content);
                         }
                     });
+					
                 }
                 else{
                     files.push(content);
                 }
+				
+				
                 return {
                     message: 'Save Successful',
                     messageType: 'info',

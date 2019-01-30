@@ -79,7 +79,7 @@ class BulkUploadContent extends React.Component{
 	
 	*/
 	componentDidMount() {
-        // this.loadData()
+        this.loadData()
     }
 	
 	loadData() {
@@ -95,6 +95,8 @@ class BulkUploadContent extends React.Component{
             // TODO : Show the error message.
         });
     }
+	
+
 	
 	/*	This method takes in the current date/time and formats it
 		into something that is readable and easy to store in the DB.
@@ -126,7 +128,7 @@ class BulkUploadContent extends React.Component{
             return;
         }
         var targetUrl = APP_URLS.CONTENTS_LIST;
-		
+		let promises = [];
 		Array.from(this.state.contentFile).forEach(file => {
 			console.log("calling method: " + file.name);
 			const payload = new FormData();
@@ -144,6 +146,7 @@ class BulkUploadContent extends React.Component{
 					responseType: 'json'
 				}).then(function(response) {
 					currInstance.saveCallback(response.data, true);
+					console.log("success in promise true");
 				}).catch(function(error) {
 					console.error("Error in updating the content", error);
 					console.error(error.response.data);
@@ -155,10 +158,12 @@ class BulkUploadContent extends React.Component{
 				});
 			} else {
 				// Create a new directory.
+				payload.append('id', this.state.id);
 				axios.post(targetUrl, payload, {
 					responseType: 'json'
 				}).then(function(response) {
 					currInstance.saveCallback(response.data, false);
+					console.log("success in promise false");
 				}).catch(function(error) {
 					console.error("Error in uploading the content", error);
 					console.error(error.response.data);
@@ -169,7 +174,9 @@ class BulkUploadContent extends React.Component{
 					});
 				});
 			}
+			
 		});
+		//Promise.all(promises).then(this.saveCallback(response.data, true));
     }
 	
 	/*	This method takes in a boolean value and checks if there are file names
