@@ -170,6 +170,17 @@ class ContentManagement extends React.Component{
             console.error(error);
         });
     }
+    
+    saveMetadataCallback(content, updated) {
+        const currentInstance = this;
+        console.log("saveMetadataCallback called in content_management.js");
+        this.setState((prevState, props)=>{
+            
+            
+            currentView: 'manage';
+        });
+    }
+    
     uploadNewFile(){
         this.setState({
             currentView: 'upload',
@@ -301,7 +312,7 @@ class ContentManagement extends React.Component{
                         {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent onSave={this.saveContentCallbackTwo} 
 						content={this.state.content} />}
                         
-                        {this.state.isLoaded && this.state.currentView === 'bulkMetadataUpload' && <BulkMetadataUpload
+                        {this.state.isLoaded && this.state.currentView === 'bulkMetadataUpload' && <BulkMetadataUpload onSave={this.saveMetadataCallback}
 						content={this.state.content} />}
 						
                         {!this.state.isLoaded && 'loading'}

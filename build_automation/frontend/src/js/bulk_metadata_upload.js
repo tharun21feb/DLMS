@@ -7,7 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import {APP_URLS, get_url} from "./url";
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
- 
+var Papa = require("papaparse");
+
 const style = theme => ({
     root: {
         flexGrow: 1,
@@ -27,30 +28,32 @@ class BulkMetadataUpload extends React.Component {
 		constructor(props) {
             super(props);
             this.state = {
-            /*id: props.content.id,
-            name: props.content.name,
-            source: props.content.source,
-            title: props.content.title,
-            creators: labels.creators,
-            selectedDate: props.content.updatedDate,
-            description: props.content.description,
-            coverages: labels.coverages,
-            libraryVersion: props.content.libraryVersion,
-            menuFolder: props.content.menuFolder,
-            subFolder: props.content.subFolder,
-            subjects: labels.subjects,
-            keywords: labels.keywords,
-            workareas: labels.workareas,
-            languages: labels.languages,
-            catalogers: labels.catalogers,
-            copyright: props.content.copyright,
-            rightsStatement: props.content.rightsStatement,
-            contributorName: props.content.contributorName,*/
+            id: "",
+            name: "",
+            source: "",
+            title: "",
+           // creators: labels.creators,
+            selectedDate: "",
+            description: "Please insert Description",
+           // coverages: labels.coverages,
+            libraryVersion: "",
+            menuFolder: "",
+            subFolder: "",
+           // subjects: labels.subjects,
+            //keywords: labels.keywords,
+            //workareas: labels.workareas,
+          //  languages: labels.languages,
+           // catalogers: labels.catalogers,
+            copyright: "",
+            rightsStatement: "",
+            contributorName: "",
             contentFile: null,
             fieldErrors: {},
-            //contentFileName: props.content.originalFileName ? props.content.originalFileName : '',
+            contentFileName: "", //props.content.originalFileName ? props.content.originalFileName : '',
         };
             this.handleFileSelection = this.handleFileSelection.bind(this);
+            this.saveMetadata = this.saveMetadata.bind(this); 
+            this.saveMetadataCallback = props.onSave.bind(this);
         }
         
         handleFileSelection(evt) {
@@ -66,87 +69,129 @@ class BulkMetadataUpload extends React.Component {
                     fieldErrors: prevState.fieldErrors,
                 };
                 //newState.fieldErrors['file'] = null;
+                
                 return newState;
             });
+            
         }
-        //////ADDED SAVE AND IS_VALID FROM UPLOAD CONTENTS TO ATTEMPT TRANSMISSION OF  METADATA ::: BUSTED
-        saveMetadata(evt) {
-            /*if (!this.is_valid_state(!(this.state.id > 0))) {
-			console.log("invalid state bro!!!!: " + this.state.id);
-			// If it is in an invalid state, do not proceed with the save operation.
-            return;
-            }*/
-            
-            var targetUrl = APP_URLS.CONTENTS_LIST;
-            
-            Array.from(this.state.contentFile).forEach(file => {
-                console.log("calling method: " + file.name);
-                const payload = new FormData();
-                var currentDate = new Date();
-                Boolean(file) && payload.append('content_file', file);
-                payload.append('name', file.name);
-                payload.append('description', "Please insert a description.");
-                payload.append('updated_time', this.formatDate(currentDate));
-                const currInstance = this;
-                if (this.state.id > 0) {
-                    // Update an existing directory.
-                    payload.append('id', this.state.id);
-                    targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id:this.state.id});
-                    axios.patch(targetUrl, payload, {
-                        responseType: 'json'
-                    }).then(function(response) {
-                        currInstance.saveCallback(response.data, true);
-                    }).catch(function(error) {
-                        console.error("Error in updating the content", error);
-                        console.error(error.response.data);
-                        let errorMsg = 'Error in updating the content';
-                        currInstance.setState({
-                            message: errorMsg,
-                            messageType: 'error'
+        
+        saveMetadata() {
+           // var that =  this;
+           var that = this; 
+           var thisData = [];
+            console.log("saveMetadata called"); 
+            console.log(this.state.contentFileName);
+            console.log(this.state.description);
+            Papa.parse(this.state.contentFile, {
+                
+                header:true,
+                complete: function(results) {
+         
+                    for (var i = 0; i < results.data.length-1; i++)  {
+                    
+                        thisData[i] = results.data[i];
+                        console.log(thisData[i]);
+                        var object = thisData[i];
+                        
+                        that.setState({
+                                    contributorName: object["Contributor Name"],
+                                    copyright: object["Copyright"],
+                                    coverages: object["Coverage"],
+                                    creators: object["Creator"],
+                                    description: object["Description"],
+                                    keywords: object["Keywords"],
+                                    languages: object["Language"],
+                                    libraryVersion: object["Library Version"],
+                                    menuFolder: object["Menu Item/Main Folder"],
+                                    rightsStatement: object["Rights Statement"],
+                                    source: object["Source"],
+                                    subFolder: object["Sub-Item/Subfolders"],
+                                    subjects: object["Subject"],
+                                    title: object["Title"],
+                                    workareas: object["Work Area"],}
+                        );
+                        
+                                    
+     
+                    }
+                    var targetUrl = APP_URLS.CONTENTS_LIST;
+
+                    const payload = new FormData();
+                    var currentDate = new Date();
+                    payload.append('content_file', that.state.contentFile);
+                    payload.append('name', that.state.contentFileNamefile);
+                    payload.append('description', that.state.description);
+                    payload.append('updated_time', that.formatDate(currentDate));
+                    payload.append('contributorName', that.state.contributorName);
+                    
+                    const currInstance = that;
+                    if (that.state.id > 0) {
+                        // Update an existing directory.
+                        payload.append('id', that.state.id);
+                        targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id:that.state.id});
+                        axios.patch(targetUrl, payload, {
+                            responseType: 'json'
+                        }).then(function(response) {
+                            currInstance.saveMetadataCallback(response.data, true);
+                        }).catch(function(error) {
+                            console.error("Error in updating the content", error);
+                            console.error(error.response.data);
+                            let errorMsg = 'Error in updating the content';
+                            currInstance.setState({
+                                message: errorMsg,
+                                messageType: 'error'
+                            });
                         });
-                    });
-                } else {
-                    // Create a new directory.
-                    axios.post(targetUrl, payload, {
-                        responseType: 'json'
-                    }).then(function(response) {
-                        currInstance.saveCallback(response.data, false);
-                    }).catch(function(error) {
-                        console.error("Error in uploading the content", error);
-                        console.error(error.response.data);
-                        let errorMsg = 'Error in uploading the content';
-                        currInstance.setState({
-                            message: errorMsg,
-                            messageType: 'error'
+                    } else {
+                        // Create a new directory.
+                        axios.post(targetUrl, payload, {
+                            responseType: 'json'
+                        }).then(function(response) {
+                            currInstance.saveMetadataCallback(response.data, false);
+                        }).catch(function(error) {
+                            console.error("Error in uploading the content", error);
+                            console.error(error.response.data);
+                            let errorMsg = 'Error in uploading the content';
+                            currInstance.setState({
+                                message: errorMsg,
+                                messageType: 'error'
+                            });
                         });
-                    });
+                    }
+                    
+                   /* for (var property in object) {
+                        if(object.hasOwnProperty(property)) {
+                            if(object[property] === "")
+                                object[property] = "No Value";
+                            //console.log(property + " : " + object[property]);
+                            payload.append(property, object[property]);
+                             
+                        }
+                    }
+                    
+                    /*for (var keys of payload.keys()) {
+                        console.log(keys);
+                    }*/
+                    //console.log(that.state);
+                   
                 }
+                
             });
         }
         
-        is_valid_state(is_save) {
-        var hasErrors = false;
-        const fieldErrors = {};
-		console.log(this.state);
-        /* if (!this.state.name || this.state.name.trim().length === 0) {
-            hasErrors = true;
-            fieldErrors['name'] = 'Name is required.';
-        } */
-        /* if (!this.state.description || this.state.description.trim().length === 0) {
-            hasErrors = true;
-            fieldErrors['description'] = 'Description is required.';
-        } */
-		if(!this.state.contentFileNames.length > 0) {
-			hasErrors = true;
-			fieldErrors['name'] = 'File names are required.';
-		}
-		
-        if (hasErrors) {
-            this.setState({fieldErrors});
+        formatDate(input) {
+        //this is something that needs to be fixed, i hardcoded a date....
+        const year = input.getFullYear();
+        let month = input.getMonth()+1;
+        if (month < 10) {
+            month = '0' + month;
         }
-        return !hasErrors;
+        let date = input.getDate();
+        if (date < 10) {
+            date = '0' + date;
+        }
+        return year + '-' + month + '-' + date;
     }
-        
 		render(){
 				return (
                                 <Grid item xs = {8}>
