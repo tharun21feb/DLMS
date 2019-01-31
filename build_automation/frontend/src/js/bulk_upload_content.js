@@ -79,7 +79,7 @@ class BulkUploadContent extends React.Component{
 	
 	*/
 	componentDidMount() {
-        this.loadData()
+        //this.loadData()
     }
 	
 	loadData() {
@@ -162,8 +162,9 @@ class BulkUploadContent extends React.Component{
 				axios.post(targetUrl, payload, {
 					responseType: 'json'
 				}).then(function(response) {
+					// originally currInstance.saveCallback(response.data, false);
 					currInstance.saveCallback(response.data, false);
-					console.log("success in promise false");
+					console.log("response: " + JSON.stringify(response.data));
 				}).catch(function(error) {
 					console.error("Error in uploading the content", error);
 					console.error(error.response.data);

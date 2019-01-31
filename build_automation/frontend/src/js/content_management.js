@@ -72,6 +72,7 @@ class ContentManagement extends React.Component{
         allRequests.push(axios.get(APP_URLS.CONTENTS_LIST, {
             responseType: 'json'}));
         Promise.all(allRequests).then(function(values) {
+			
             currInstance.setState({
                 tags: values[0].data,
                 files: values[1].data, isLoaded: true
@@ -141,12 +142,23 @@ class ContentManagement extends React.Component{
         });
     }
 	
+	componentDidUpdate(prevProps, prevState) {
+		if(prevProps.data !== this.props.data) {
+			this.setState({
+            currentView: 'manage',
+            files
+			})
+		}
+		
+	}
+	
 	saveContentCallbackTwo(content, updated){
 		console.log("save callback in CM2.js");
         const currInstance = this;
         axios.get(APP_URLS.ALLTAGS_LIST, {
             responseType: 'json'
         }).then(function (response) {
+			
             currInstance.tagIdTagsMap=currInstance.buildTagIdTagsMap(response.data);
             currInstance.setState((prevState, props)=>{
                 const {files} = prevState;
@@ -159,10 +171,12 @@ class ContentManagement extends React.Component{
 					
                 }
                 else{
+					//console.log(files);
                     files.push(content);
+					console.log(files);
                 }
 				
-				
+				console.log("props: " + JSON.stringify(props));
                 return {
                     message: 'Save Successful',
                     messageType: 'info',
@@ -276,7 +290,7 @@ class ContentManagement extends React.Component{
                                                                                                  content={this.state.content}/>}
 
                         {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent onSave={this.saveContentCallbackTwo} 
-						content={this.state.content} />}
+						/* content={this.state.content} *//>}
 						
                         {!this.state.isLoaded && 'loading'}
                     </Grid>
