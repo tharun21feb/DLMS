@@ -129,7 +129,69 @@ class BulkUploadContent extends React.Component{
         }
         var targetUrl = APP_URLS.CONTENTS_LIST;
 		let promises = [];
+		var response;
+		//this breaks everything currently.
 		Array.from(this.state.contentFile).forEach(file => {
+			console.log("calling method: " + file.name);
+			const payload = new FormData();
+			var currentDate = new Date();
+			Boolean(file) && payload.append('content_file', file);
+			payload.append('name', file.name);
+			payload.append('description', "Please insert a description.");
+			payload.append('updated_time', this.formatDate(currentDate));
+			const currInstance = this;
+			
+			if (this.state.id > 0) {
+				// Update an existing directory.
+				payload.append('id', this.state.id);
+				targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id:this.state.id});
+				promises.push(axios.patch(targetUrl, payload, {
+					responseType: 'json'
+				}).then(function(response) {
+					//currInstance.saveCallback(response.data, true);
+					console.log("success in promise true");
+				}).catch(function(error) {
+					console.error("Error in updating the content", error);
+					console.error(error.response.data);
+					let errorMsg = 'Error in updating the content';
+					currInstance.setState({
+						message: errorMsg,
+						messageType: 'error'
+					});
+				}));
+			} else {
+				// Create a new directory.
+				payload.append('id', this.state.id);
+				promises.push(axios.post(targetUrl, payload, {
+					responseType: 'json'
+				}).then(function(response) {
+					// originally currInstance.saveCallback(response.data, false);
+					
+					response = response.data;
+					//currInstance.saveCallback(response.data, false);
+					console.log("response: " + JSON.stringify(response.data));
+				}).catch(function(error) {
+					console.error("Error in uploading the content", error);
+					console.error(error.response.data);
+					let errorMsg = 'Error in uploading the content';
+					currInstance.setState({
+						message: errorMsg,
+						messageType: 'error'
+					});
+				}));
+			}
+			
+		})
+		
+		Promise.all(promises).then(this.saveCallback(response, false));
+		
+		
+		
+		
+		
+		
+		
+		/* Array.from(this.state.contentFile).forEach(file => {
 			console.log("calling method: " + file.name);
 			const payload = new FormData();
 			var currentDate = new Date();
@@ -159,7 +221,7 @@ class BulkUploadContent extends React.Component{
 			} else {
 				// Create a new directory.
 				payload.append('id', this.state.id);
-				axios.post(targetUrl, payload, {
+				promises.push(axios.post(targetUrl, payload, {
 					responseType: 'json'
 				}).then(function(response) {
 					// originally currInstance.saveCallback(response.data, false);
@@ -173,11 +235,11 @@ class BulkUploadContent extends React.Component{
 						message: errorMsg,
 						messageType: 'error'
 					});
-				});
+				}));
 			}
 			
-		});
-		//Promise.all(promises).then(this.saveCallback(response.data, true));
+		}); */
+		//Promise.all(promises).then(this.saveCallback(response.data, false));
     }
 	
 	/*	This method takes in a boolean value and checks if there are file names

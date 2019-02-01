@@ -143,12 +143,14 @@ class ContentManagement extends React.Component{
     }
 	
 	componentDidUpdate(prevProps, prevState) {
-		if(prevProps.data !== this.props.data) {
+		//console.log(prevProps.data);
+		//console.log(this.props.data);
+		/* if(prevProps.data !== this.props.data) {
 			this.setState({
             currentView: 'manage',
             files
 			})
-		}
+		} */
 		
 	}
 	
