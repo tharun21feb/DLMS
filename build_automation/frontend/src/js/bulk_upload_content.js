@@ -25,7 +25,11 @@ const styles = theme => ({
     },
 });
 
+/*	This class handles the bulk uploading of content (files) to the solarSPELL
+	manage content section. Using the class you can upload multiple files instead
+	of uploading files one at a time per usual.
 
+*/
 class BulkUploadContent extends React.Component{
     constructor(props) {
         super(props);
@@ -80,8 +84,21 @@ class BulkUploadContent extends React.Component{
 	*/
 	componentDidMount() {
         //this.loadData()
+		//testing this method.
+		console.log(prevProps.data);
+		console.log(this.props.data);
+		if(prevProps.data !== this.props.data) {
+			this.setState({
+            currentView: 'manage',
+            files
+			})
+		}
     }
 	
+	/*	This method is typically called by componentDidMount and is used to reload
+		data if the component changed and needs updating.
+	
+	*/
 	loadData() {
         const currInstance = this;
         axios.get(APP_URLS.TAG_LIST, {
@@ -130,11 +147,15 @@ class BulkUploadContent extends React.Component{
         var targetUrl = APP_URLS.CONTENTS_LIST;
 		let promises = [];
 		var response;
+		//const payload = new FormData();
+		//var currentDate = new Date();
 		//this breaks everything currently.
 		Array.from(this.state.contentFile).forEach(file => {
 			console.log("calling method: " + file.name);
+			
 			const payload = new FormData();
 			var currentDate = new Date();
+			
 			Boolean(file) && payload.append('content_file', file);
 			payload.append('name', file.name);
 			payload.append('description', "Please insert a description.");
@@ -183,14 +204,22 @@ class BulkUploadContent extends React.Component{
 			
 		})
 		
-		Promise.all(promises).then(this.saveCallback(response, false));
+		Promise.all(promises).then(this.saveCallback(response, false)).catch(function(error) {
+					console.error("Error in uploading the content", error);
+					console.error(error.response.data);
+					let errorMsg = 'Error in uploading the content';
+					currInstance.setState({
+						message: errorMsg,
+						messageType: 'error'
+					});
+				});
 		
 		
 		
 		
 		
 		
-		
+		//this is the original method i was working with that somewhat works
 		/* Array.from(this.state.contentFile).forEach(file => {
 			console.log("calling method: " + file.name);
 			const payload = new FormData();
