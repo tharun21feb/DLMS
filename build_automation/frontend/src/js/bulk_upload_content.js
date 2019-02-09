@@ -85,14 +85,14 @@ class BulkUploadContent extends React.Component{
 	componentDidMount() {
         //this.loadData()
 		//testing this method.
-		console.log(prevProps.data);
+		/* console.log(prevProps.data);
 		console.log(this.props.data);
 		if(prevProps.data !== this.props.data) {
 			this.setState({
             currentView: 'manage',
             files
 			})
-		}
+		} */
     }
 	
 	/*	This method is typically called by componentDidMount and is used to reload
@@ -150,7 +150,7 @@ class BulkUploadContent extends React.Component{
 		//const payload = new FormData();
 		//var currentDate = new Date();
 		//this breaks everything currently.
-		Array.from(this.state.contentFile).forEach(file => {
+		/* Array.from(this.state.contentFile).forEach(file => {
 			console.log("calling method: " + file.name);
 			
 			const payload = new FormData();
@@ -213,14 +213,14 @@ class BulkUploadContent extends React.Component{
 						messageType: 'error'
 					});
 				});
-		
+		 */
 		
 		
 		
 		
 		
 		//this is the original method i was working with that somewhat works
-		/* Array.from(this.state.contentFile).forEach(file => {
+		Array.from(this.state.contentFile).forEach(file => {
 			console.log("calling method: " + file.name);
 			const payload = new FormData();
 			var currentDate = new Date();
@@ -267,7 +267,7 @@ class BulkUploadContent extends React.Component{
 				}));
 			}
 			
-		}); */
+		});
 		//Promise.all(promises).then(this.saveCallback(response.data, false));
     }
 	

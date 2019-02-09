@@ -142,15 +142,8 @@ class ContentManagement extends React.Component{
         });
     }
 	
-	componentDidUpdate(prevProps, prevState) {
-		//console.log(prevProps.data);
-		//console.log(this.props.data);
-		/* if(prevProps.data !== this.props.data) {
-			this.setState({
-            currentView: 'manage',
-            files
-			})
-		} */
+	componentDidUpdate() {
+		this.loadData()
 		
 	}
 	
@@ -176,6 +169,9 @@ class ContentManagement extends React.Component{
 					//console.log(files);
                     files.push(content);
 					console.log(files);
+					if(currInstance.state.isLoaded) {
+						currInstance.setState();
+					}
                 }
 				
 				console.log("props: " + JSON.stringify(props));
@@ -183,7 +179,7 @@ class ContentManagement extends React.Component{
                     message: 'Save Successful',
                     messageType: 'info',
                     currentView: 'manage',
-                    files,
+                    content: files,
                     tags: response.data
                 }
             })
