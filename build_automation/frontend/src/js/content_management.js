@@ -40,6 +40,7 @@ class ContentManagement extends React.Component{
             content: null,
             tags: {},
             isLoaded: false,
+			shouldRefresh: false,
         };
         this.setCurrentView = this.setCurrentView.bind(this);
         this.tagIdTagsMap = {};
@@ -52,6 +53,7 @@ class ContentManagement extends React.Component{
     }
 
     componentDidMount() {
+		//console.log("did mount");
         this.loadData()
     }
     buildTagIdTagsMap(tags) {
@@ -79,7 +81,7 @@ class ContentManagement extends React.Component{
             })
         }).catch(function(error) {
             console.error(error);
-            console.error(error.response.data);
+            //console.error(error.response.data);
         });
     }
     handleTextFieldUpdate(stateProperty, evt) {
@@ -142,9 +144,15 @@ class ContentManagement extends React.Component{
         });
     }
 	
-	componentDidUpdate() {
-		this.loadData()
-		
+	componentDidUpdate(prevProps, prevState) {
+		//console.log("prev props:");
+		//console.log(prevProps);
+		//console.log("currentState");
+		if(this.state.shouldRefresh) {
+			console.log(this.state);
+			this.loadData();
+			this.setState({shouldRefresh: false});
+		}
 	}
 	
 	saveContentCallbackTwo(content, updated){
@@ -169,6 +177,7 @@ class ContentManagement extends React.Component{
 					//console.log(files);
                     files.push(content);
 					console.log(files);
+					currInstance.setState({shouldRefresh: true});
 					if(currInstance.state.isLoaded) {
 						currInstance.setState();
 					}
