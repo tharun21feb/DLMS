@@ -6,6 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import {APP_URLS, get_url} from "./url";
 import Snackbar from '@material-ui/core/Snackbar';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -25,6 +29,12 @@ const styles = theme => ({
     },
 });
 
+/* const listItems = this.state.contentFileNames.map((item) =>
+	<li>
+	{item}
+	</li>
+); */
+
 /*	This class handles the bulk uploading of content (files) to the solarSPELL
 	manage content section. Using the class you can upload multiple files instead
 	of uploading files one at a time per usual.
@@ -40,7 +50,7 @@ class BulkUploadContent extends React.Component{
 		*/
         this.state = {
 			contentFile: {},
-            contentFileNames: '',
+            contentFileNames: [],
             fieldErrors: {},
 
         };
@@ -342,18 +352,15 @@ class BulkUploadContent extends React.Component{
                     </Typography>
                 </AppBar>
                 <div style={{marginTop: '20px'}}> </div>
-                <TextField
-                    id="contentFiles"
-                    label="Content Files"
-                    multiline
-                    disabled
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    error={this.state.fieldErrors.file ? true : false}
-                    value={this.state.contentFileNames.toString()}
-                    margin="normal"
-                />
+                <h4>Selected Files</h4>
+				<div style={{maxHeight: '50%', width: '100%'}}>
+					<List style={{listStyleType: 'none', paddingLeft: '0', textIndent: '10px', overflow: 'auto', margin: '0', padding: '0', maxHeight: '50%', marginBottom: '25px'}} >
+					  {this.state.contentFileNames.map(item => (
+						<ListItem divider style={{lineHeight: '15px', background: '#b2dbfb'}} key={item}>{item}</ListItem>
+						
+					  ))}
+					</List>
+				</div>
                 <input
                     accept="*"
                     className={'hidden'}
