@@ -364,4 +364,5 @@ class DiskSpace:
 
         free_space = block_size * avail_blocks
         total_space = total_blocks * block_size
+
         return (free_space, total_space)
