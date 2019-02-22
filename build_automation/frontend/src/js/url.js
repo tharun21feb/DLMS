@@ -23,7 +23,9 @@ const APP_URLS = {
     CATALOGERS_DETAIL:'/api/catalogers/${id}/',
     START_BUILD: '/api/dirlayouts/${id}/build/',
     VIEW_BUILD: '/api/builds/',
-    DISKSPACE: '/api/diskspace/'
+    DISKSPACE: '/api/diskspace/',
+    METADATA_UPLOAD: '/api/metadata/'
+    
 };
 
 function get_url(templateStringLiteral, context) {

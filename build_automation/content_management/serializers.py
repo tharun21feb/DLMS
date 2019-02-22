@@ -399,3 +399,17 @@ class BuildSerializer(serializers.ModelSerializer):
     def __get_as_local_time(self, datetime_obj):
         local_time_zone = timezone(settings.TIME_ZONE)
         return datetime_obj.astimezone(local_time_zone)
+
+        
+class MetadataSheetSerializer(serializers.ModelSerializer): 
+    def create(self, validated_data):
+        metadata = Metadata(**validated_data_copy)
+        metadata = self.__create_update(metadata)
+        return metadata
+    
+    def __create_update(self, metadata):
+        request = self.context['request']
+        if 'metadata_file' in request.FILES:
+            metadata.metadata_file_uploaded = True
+        metadata.save()
+        return metadata

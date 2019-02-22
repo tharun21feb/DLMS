@@ -281,3 +281,12 @@ class MetadataSheet(models.Model):
         "Content updated on",
         help_text='Date when the content was last updated'
     )
+    
+    metadata_file_uploaded = False
+    
+     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.original_file = self.content_file
+    
+    class Meta:
+        ordering = ['pk']

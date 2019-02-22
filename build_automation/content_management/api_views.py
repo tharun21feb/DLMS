@@ -9,12 +9,12 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from content_management.exceptions import DuplicateContentFileException
 from content_management.models import (
-    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea
+    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea, MetadataSheet
 )
 from content_management.serializers import (
     BuildSerializer, CatalogerSerializer, ContentSerializer, CoverageSerializer, CreatorSerializer,
     DirectoryLayoutSerializer, DirectorySerializer, KeywordSerializer, LanguageSerializer, SubjectSerializer,
-    WorkareaSerializer
+    WorkareaSerializer, MetadataSheetSerializer
 )
 from content_management.tasks import start_dirlayout_build
 from content_management.utils import DiskSpace, LibraryVersionBuildUtil
@@ -25,7 +25,7 @@ class ContentApiViewset(ModelViewSet):
     serializer_class = ContentSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'description')
-
+ 
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)
@@ -90,7 +90,6 @@ class LanguageViewSet(ModelViewSet):
 class CatalogerViewSet(ModelViewSet):
     serializer_class = CatalogerSerializer
     queryset = Cataloger.objects.all()
-
 
 class DirectoryLayoutViewSet(ModelViewSet):
     serializer_class = DirectoryLayoutSerializer
@@ -233,3 +232,11 @@ class DiskSpaceViewSet(ViewSet):
             'total_space': dp.getfreespace()[1]
         }
         return Response(data)
+        
+
+class MetadataSheetApiViewSet(ModelViewSet):
+    serializer_class = MetadataSheetSerializer
+    queryset = MetadataSheet.objects.all()
+    
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)

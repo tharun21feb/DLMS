@@ -49,6 +49,7 @@ class ContentManagement extends React.Component{
 		this.saveContentCallbackTwo = this.saveContentCallbackTwo.bind(this);
         this.saveMetadataCallback = this.saveMetadataCallback.bind(this);
         this.uploadNewFile = this.uploadNewFile.bind(this);
+        this.uploadBulkMetadata = this.uploadBulkMetadata.bind(this);
         this.handleContentEdit = this.handleContentEdit.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
     }
@@ -194,8 +195,7 @@ class ContentManagement extends React.Component{
                     message: 'Save Successful',
                     messageType: 'info',
                     currentView: 'manage',
-                    files,
-                    tags: response.data
+                    
                 }
             })
         }).catch(function (error) {
