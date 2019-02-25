@@ -79,33 +79,31 @@ class MainScreen extends React.Component {
                         <Grid item>
                             <img src={solarSpellLogo} className="spellLogo" />
                         </Grid>
+						
+							
+								<Tabs
+									value={currentTab}
+									indicatorColor="secondary"
+									onChange={this.handleTabClick}
+									textColor="secondary"
+									centered
+								>
+									<Tab value="tags" label="Metadata" />
+									<Tab value="contents" label="Contents" />
+									<Tab value="dirlayout" label="Library Versions" />
+									<Tab value="images" label="SolarSPELL Images" />
+									{ this.state.showBadge ? (<Tab value="sysinfo" label= {
+															<Badge className= {classes.padding} color="secondary" badgeContent={'!'}>
+															System Info
+															</Badge>
+														}/>) : (<Tab value="sysinfo" label="System Info" />)
+									}
+								</Tabs>
+						
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid container style={{overflow: 'hidden', flexGrow: 1}}>
-                <Grid item xs={12}>
-                    <Paper>
-                        <Tabs
-                            value={currentTab}
-                            indicatorColor="secondary"
-                            onChange={this.handleTabClick}
-                            textColor="secondary"
-                            centered
-                        >
-                            <Tab value="tags" label="Metadata" />
-                            <Tab value="contents" label="Contents" />
-                            <Tab value="dirlayout" label="Library Versions" />
-                            <Tab value="images" label="SolarSPELL Images" />
-                            { this.state.showBadge ? (<Tab value="sysinfo" label= {
-                                                    <Badge className= {classes.padding} color="secondary" badgeContent={'!'}>
-                                                    System Info
-                                                    </Badge>
-                                                }/>) : (<Tab value="sysinfo" label="System Info" />)
-                            }
-                        </Tabs>
-                    </Paper>
-                </Grid>
-            </Grid>
+            
             <Grid container style={{marginTop: '20px'}}>
                 <Grid item xs={12}>
                     {currentTab == 'dirlayout' && <DirectoryLayoutComponent />}

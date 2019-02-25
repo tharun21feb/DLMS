@@ -40,17 +40,20 @@ class ContentManagement extends React.Component{
             content: null,
             tags: {},
             isLoaded: false,
+			shouldRefresh: false,
         };
         this.setCurrentView = this.setCurrentView.bind(this);
         this.tagIdTagsMap = {};
         this.handleFileDelete = this.handleFileDelete.bind(this);
         this.saveContentCallback = this.saveContentCallback.bind(this);
+		this.saveContentCallbackTwo = this.saveContentCallbackTwo.bind(this);
         this.uploadNewFile = this.uploadNewFile.bind(this);
         this.handleContentEdit = this.handleContentEdit.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
     }
 
     componentDidMount() {
+		//console.log("did mount");
         this.loadData()
     }
     buildTagIdTagsMap(tags) {
@@ -71,13 +74,14 @@ class ContentManagement extends React.Component{
         allRequests.push(axios.get(APP_URLS.CONTENTS_LIST, {
             responseType: 'json'}));
         Promise.all(allRequests).then(function(values) {
+			
             currInstance.setState({
                 tags: values[0].data,
                 files: values[1].data, isLoaded: true
             })
         }).catch(function(error) {
             console.error(error);
-            console.error(error.response.data);
+            //console.error(error.response.data);
         });
     }
     handleTextFieldUpdate(stateProperty, evt) {
@@ -106,6 +110,7 @@ class ContentManagement extends React.Component{
         })
     }
     saveContentCallback(content, updated){
+		console.log("save callback in CM.js");
         const currInstance = this;
         axios.get(APP_URLS.ALLTAGS_LIST, {
             responseType: 'json'
@@ -119,15 +124,71 @@ class ContentManagement extends React.Component{
                             files.splice(files.indexOf(eachFile), 1, content);
                         }
                     });
+					console.log("updated true");
                 }
                 else{
+					console.log("updated false");
                     files.push(content);
                 }
+				console.log(files);
                 return {
                     message: 'Save Successful',
                     messageType: 'info',
                     currentView: 'manage',
                     files,
+                    tags: response.data
+                }
+            })
+        }).catch(function (error) {
+            console.error(error);
+        });
+    }
+	
+	componentDidUpdate(prevProps, prevState) {
+		//console.log("prev props:");
+		//console.log(prevProps);
+		//console.log("currentState");
+		if(this.state.shouldRefresh) {
+			console.log(this.state);
+			this.loadData();
+			this.setState({shouldRefresh: false});
+		}
+	}
+	
+	saveContentCallbackTwo(content, updated){
+		console.log("save callback in CM2.js");
+        const currInstance = this;
+        axios.get(APP_URLS.ALLTAGS_LIST, {
+            responseType: 'json'
+        }).then(function (response) {
+			
+            currInstance.tagIdTagsMap=currInstance.buildTagIdTagsMap(response.data);
+            currInstance.setState((prevState, props)=>{
+                const {files} = prevState;
+                if (updated){
+                    files.forEach(eachFile => {
+                        if (eachFile.id===content.id){
+                            files.splice(files.indexOf(eachFile), 1, content);
+                        }
+                    });
+					
+                }
+                else{
+					//console.log(files);
+                    files.push(content);
+					console.log(files);
+					currInstance.setState({shouldRefresh: true});
+					if(currInstance.state.isLoaded) {
+						currInstance.setState();
+					}
+                }
+				
+				console.log("props: " + JSON.stringify(props));
+                return {
+                    message: 'Save Successful',
+                    messageType: 'info',
+                    currentView: 'manage',
+                    content: files,
                     tags: response.data
                 }
             })
@@ -161,7 +222,23 @@ class ContentManagement extends React.Component{
     uploadBulkFiles() {
         this.setState({
             currentView: 'bulkUploadContent',
-
+			content: {
+                id: -1,
+                name: "",
+                description: "",
+                creators: [],
+                coverages: [],
+                subjects: [],
+                keywords: [],
+                workareas: [],
+                languages: [],
+                catalogers: [],
+                updatedDate: new Date(),
+                source: "",
+                copyright: "",
+                rightsStatement: "",
+                originalFileName: ""
+            }
         })
     }
 
@@ -219,8 +296,9 @@ class ContentManagement extends React.Component{
                                                                                                  tagIdsTagsMap={this.tagIdTagsMap} allTags={this.state.tags}
                                                                                                  content={this.state.content}/>}
 
-                        {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent />}
-
+                        {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent onSave={this.saveContentCallbackTwo} 
+						/* content={this.state.content} *//>}
+						
                         {!this.state.isLoaded && 'loading'}
                     </Grid>
                 </Grid>
