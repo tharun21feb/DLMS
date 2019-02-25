@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from content_management.models import (
-    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea
+    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea, MetadataSheet
 )
 
 
@@ -413,3 +413,10 @@ class MetadataSheetSerializer(serializers.ModelSerializer):
             metadata.metadata_file_uploaded = True
         metadata.save()
         return metadata
+
+    class Meta:
+        model = MetadataSheet
+        fields = ('metadata_file', 'updated_time')
+        extra_kwargs = {
+            'url': {'lookup_field': 'pk'},
+        }

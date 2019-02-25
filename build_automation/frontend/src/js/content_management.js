@@ -173,7 +173,7 @@ class ContentManagement extends React.Component{
         });
     }
     
-    saveMetadataCallback(content, updated) {
+    saveMetadataCallback(metadata, updated) {
         const currInstance = this;
         axios.get(APP_URLS.ALLTAGS_LIST, {
             responseType: 'json'

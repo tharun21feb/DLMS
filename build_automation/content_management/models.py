@@ -284,7 +284,7 @@ class MetadataSheet(models.Model):
     
     metadata_file_uploaded = False
     
-     def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.original_file = self.content_file
     

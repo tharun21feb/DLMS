@@ -239,4 +239,16 @@ class MetadataSheetApiViewSet(ModelViewSet):
     queryset = MetadataSheet.objects.all()
     
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        try:
+            return super().create(request, *args, **kwargs)
+        except DuplicateContentFileException as dup:
+            metadata_url = reverse('metadata', args=[dup.content.pk], request=request)
+            data = {
+                'result': 'error',
+                'error': 'DUPLICATE_FILE_UPLOADED',
+                'existing_metadata': {
+                    'metadata_url': metadata_url,
+                    'file_url': request.build_absolute_uri(dup.content.metadata_file.url)
+                }
+            }
+            return Response(data, status=status.HTTP_409_CONFLICT)

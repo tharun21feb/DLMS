@@ -24,7 +24,7 @@ const APP_URLS = {
     START_BUILD: '/api/dirlayouts/${id}/build/',
     VIEW_BUILD: '/api/builds/',
     DISKSPACE: '/api/diskspace/',
-    METADATA_UPLOAD: '/api/metadata/'
+    METADATA_UPLOAD: '/api/metadata/',
     
 };
 

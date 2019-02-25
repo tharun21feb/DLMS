@@ -30,7 +30,7 @@ class BulkMetadataUpload extends React.Component {
             this.state = {
             id: "",
             name: "", 
-            selectedDate: "",
+            selectedDate: null,
             description: "Please insert Description",
             contentFile: null,
             fieldErrors: {},
@@ -40,6 +40,7 @@ class BulkMetadataUpload extends React.Component {
             this.handleFileSelection = this.handleFileSelection.bind(this);
             this.saveMetadata = this.saveMetadata.bind(this); 
             this.saveMetadataCallback = props.onSave.bind(this);
+            //this.formatDate = this.formatDate.bind(this);
         }
         
         handleFileSelection(evt) {
@@ -61,52 +62,58 @@ class BulkMetadataUpload extends React.Component {
             
         }
         
+        formatDate(input) {
+            //this is something that needs to be fixed, i hardcoded a date....
+            const year = input.getFullYear();
+            let month = input.getMonth()+1;
+            if (month < 10) {
+                month = '0' + month;
+            }
+            let date = input.getDate();
+            if (date < 10) {
+                date = '0' + date;
+            }
+            return year + '-' + month + '-' + date;
+        }
+        
         saveMetadata() {
            // var that =  this;
-            var that = this; 
-            var thisData = [];
+            var targetUrl = get_url(APP_URLS.METADATA_UPLOAD);
+            this.state.selectedDate = new Date("1901-11-25"); 
+
             console.log("saveMetadata called"); 
             console.log(this.state.metadataFileName);
             console.log(this.state.description);
-          
+            console.log(targetUrl);
+            console.log(this.state.selectedDate);
             const payload = new FormData();
-            payload.append('updated_time', this.state.selectedDate);
+      
+            payload.append('updated_time', formatDate(this.state.selectedDate));
             Boolean(this.state.metadataFile) && payload.append('metadata_file', this.state.metadataFile);
             
             const currInstance = this;
-            if (this.state.id > 0) {
-                // Update an existing directory.
-                
-                var targetUrl = APP_URLS.METADATA;
-                axios.post(targetUrl, payload, {
-                    responseType: 'json'
-                }).then(function(response) {
-                    currInstance.saveCallback(response.data, false);
-                }).catch(function(error) {
-                    console.error("Error in uploading the content", error);
-                    console.error(error.response.data);
-                    let errorMsg = 'Error in uploading the content';
-                    currInstance.setState({
-                        message: errorMsg,
-                        messageType: 'error'
-                    });
-                });
+            for (var pair of payload.entries()) {
+                console.log(pair[0] + "<-- date / file --> " + pair[1]);
             }
+            
+                axios.post(targetUrl, payload, {
+                responseType: 'json'
+            }).then(function(response) {
+                currInstance.saveMetadataCallbackCallback(response.data, false);
+            }).catch(function(error) {
+                console.error("Error in uploading the content", error);
+                console.error(error.response.data);
+                let errorMsg = 'Error in uploading the content';
+                currInstance.setState({
+                    message: errorMsg,
+                    messageType: 'error'
+                });
+            });
+            
         }
         
-        /*formatDate(input) {
-        //this is something that needs to be fixed, i hardcoded a date....
-        const year = input.getFullYear();
-        let month = input.getMonth()+1;
-        if (month < 10) {
-            month = '0' + month;
-        }
-        let date = input.getDate();
-        if (date < 10) {
-            date = '0' + date;
-        }
-        return year + '-' + month + '-' + date;
-    }*/
+        
+        
 		render(){
 				return (
                                 <Grid item xs = {8}>
