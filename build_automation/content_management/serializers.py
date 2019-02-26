@@ -403,7 +403,7 @@ class BuildSerializer(serializers.ModelSerializer):
         
 class MetadataSheetSerializer(serializers.ModelSerializer): 
     def create(self, validated_data):
-        metadata = Metadata(**validated_data_copy)
+        metadata = MetadataSheet()
         metadata = self.__create_update(metadata)
         return metadata
     
@@ -416,7 +416,7 @@ class MetadataSheetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MetadataSheet
-        fields = ('metadata_file', 'updated_time')
+        fields = ('metadata_file',)
         extra_kwargs = {
             'url': {'lookup_field': 'pk'},
         }

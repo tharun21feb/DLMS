@@ -88,7 +88,7 @@ class BulkMetadataUpload extends React.Component {
             console.log(this.state.selectedDate);
             const payload = new FormData();
       
-            payload.append('updated_time', formatDate(this.state.selectedDate));
+           // payload.append('updated_time', formatDate(this.state.selectedDate));
             Boolean(this.state.metadataFile) && payload.append('metadata_file', this.state.metadataFile);
             
             const currInstance = this;
@@ -99,7 +99,7 @@ class BulkMetadataUpload extends React.Component {
                 axios.post(targetUrl, payload, {
                 responseType: 'json'
             }).then(function(response) {
-                currInstance.saveMetadataCallbackCallback(response.data, false);
+                currInstance.saveMetadataCallback(response.data, false);
             }).catch(function(error) {
                 console.error("Error in uploading the content", error);
                 console.error(error.response.data);

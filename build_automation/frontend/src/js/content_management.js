@@ -180,17 +180,17 @@ class ContentManagement extends React.Component{
         }).then(function (response) {
             currInstance.tagIdTagsMap=currInstance.buildTagIdTagsMap(response.data);
             currInstance.setState((prevState, props)=>{
-                const {files} = prevState;
+                const {files} = prevState; /*
                 if (updated){
                     files.forEach(eachFile => {
                         if (eachFile.id===content.id){
-                            files.splice(files.indexOf(eachFile), 1, content);
+                            files.splice(files.indexOf(eachFile), 1, metadata);
                         }
                     });
                 }
                 else{
-                    files.push(content);
-                }
+                    files.push(metadata);
+                }*/
                 return {
                     message: 'Save Successful',
                     messageType: 'info',
