@@ -175,7 +175,7 @@ class ContentManagement extends React.Component{
     
     saveMetadataCallback(metadata, updated) {
         const currInstance = this;
-        axios.get(APP_URLS, {
+        axios.get(APP_URLS.ALLTAGS_LIST, {
             responseType: 'json'
         }).then(function (response) {
             currInstance.tagIdTagsMap=currInstance.buildTagIdTagsMap(response.data);
@@ -184,13 +184,12 @@ class ContentManagement extends React.Component{
                 if (updated){
                     files.forEach(eachFile => {
                         if (eachFile.id===content.id){
-                            files.splice(files.indexOf(eachFile), 1, metadata);
+                            files.splice(files.indexOf(eachFile), 1, content);
                         }
                     });
                 }
                 else{
-                    files.push(metadata);
-                    console.log(response);
+                    files.push(content);
                 }
                 return {
                     message: 'Save Successful',
