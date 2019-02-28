@@ -20,7 +20,7 @@ import axios from 'axios';
 import solarSpellLogo from '../images/logo.png';
 import '../css/style.css';
 
-const theme = createMuiTheme({
+/* const theme = createMuiTheme({
       palette: {
         primary: {
 		  main: '#FB8C00', // same as orange[600]
@@ -31,7 +31,7 @@ const theme = createMuiTheme({
 		  main: '#75B2DD'
 		}
       }
-});
+}); */
 
 const styles = theme => ({
     padding: {
@@ -121,11 +121,11 @@ class MainScreen extends React.Component {
 										indicator: classes.indicator
 									}}
 								>
-									<Tab value="tags" label="Metadata" />
-									<Tab value="contents" label="Contents" />
-									<Tab value="dirlayout" label="Library Versions" />
-									<Tab value="images" label="SolarSPELL Images" />
-									{ this.state.showBadge ? (<Tab value="sysinfo" label= {
+									<Tab className = {classes.indicator} value="tags" label="Metadata" />
+									<Tab className = {classes.indicator} value="contents" label="Contents" />
+									<Tab className = {classes.indicator} value="dirlayout" label="Library Versions" />
+									<Tab className = {classes.indicator} value="images" label="SolarSPELL Images" />
+									{ this.state.showBadge ? (<Tab className = {classes.indicator} value="sysinfo" label= {
 															<Badge className= {classes.padding} color="secondary" badgeContent={'!'}>
 															System Info
 															</Badge>
