@@ -20,12 +20,12 @@ import axios from 'axios';
 import solarSpellLogo from '../images/logo.png';
 import '../css/style.css';
 
-/* const theme = createMuiTheme({
+/* const paletteTheme = createMuiTheme({
       palette: {
         primary: {
-		  main: '#FB8C00', // same as orange[600]
-		  dark: '#EF6C00',
-		  contrastText: 'rgb(0,0,0)'
+		  main: '#75B2DD', // same as orange[600]
+		  dark: '#75B2DD',
+		  contrastText: '75B2DD'
 		},
 		secondary: {
 		  main: '#75B2DD'
@@ -39,7 +39,10 @@ const styles = theme => ({
 	},
 	indicator: {
 		color: '#75B2dd',
-	}
+		fontSize: '18px',
+		fontWeight: 'bold',
+		fontFamily: 'Asap',
+	},
 	/* palette: {
 		primary: {
 		  light: orange[200], // same as '#FFCC80',
@@ -103,19 +106,19 @@ class MainScreen extends React.Component {
 
         return (
             <React.Fragment>
-            <Grid container style={{backgroundColor: '#fff0', height: '100px', flexGrow: 1, overflow: 'hidden'}} justify="center">
+			
+            <Grid container style={{backgroundColor: '#ffffff', height: '115px', flexGrow: 1, overflow: 'hidden'}} justify="center">
                 <Grid item xs={12}>
                     <Grid container justify="center" alignItems="center" style={{height: '100%'}}>
                         <Grid item>
                             <img src={solarSpellLogo} className="spellLogo" />
                         </Grid>
 						
-							
+
 								<Tabs
 									value={currentTab}
-									indicatorColor="secondary"
+									TabIndicatorProps={{style: {backgroundColor: '#75B2DD', height: '5px', borderRadius: '5px'}}}
 									onChange={this.handleTabClick}
-									//textColor="secondary"
 									centered
 									classes={{
 										indicator: classes.indicator
@@ -129,10 +132,10 @@ class MainScreen extends React.Component {
 															<Badge className= {classes.padding} color="secondary" badgeContent={'!'}>
 															System Info
 															</Badge>
-														}/>) : (<Tab value="sysinfo" label="System Info" />)
+														}/>) : (<Tab className = {classes.indicator} value="sysinfo" label="System Info" />)
 									}
 								</Tabs>
-						
+
                     </Grid>
                 </Grid>
             </Grid>
