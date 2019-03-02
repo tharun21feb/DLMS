@@ -352,7 +352,7 @@ class BulkUploadContent extends React.Component{
                     </Typography>
                 </AppBar>
                 <div style={{marginTop: '20px'}}> </div>
-                <h4>Selected Files</h4>
+                <h4 style={{color: '#75B2DD'}}>Selected Files</h4>
 				<div style={{maxHeight: '50%', width: '100%'}}>
 					<List style={{listStyleType: 'none', paddingLeft: '0', textIndent: '10px', overflow: 'auto', margin: '0', padding: '0', maxHeight: '50%', marginBottom: '25px'}} >
 					  {this.state.contentFileNames.map(item => (

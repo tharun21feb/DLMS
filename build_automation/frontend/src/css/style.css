@@ -16,6 +16,17 @@ body {
     font-family: "Asap", "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
+table {
+	color: #3592BE;
+	font-weight: bold;
+}
+
+th {
+	color: #3592BE;
+	font-weight: bold;
+	font-size: 20px;
+}
+
 .accordion__title h3::after {
     content: '+';
     float: right;

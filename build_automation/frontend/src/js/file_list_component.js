@@ -192,19 +192,20 @@ class FileListComponent extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Typography gutterBottom variant="h5" component="h2">
+                <Typography gutterBottom variant="h5" component="h2" color="primary">
                     Select individual files
                 </Typography>
                 <Grid
                     rows={this.props.allFiles}
                     columns={this.columns}
+					style={{color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold'}}
                 >
                     <ChippedTagsTypeProvider for={['creators', 'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger']} />
                     <FilteringState defaultFilters={[]} columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]} />
                     <IntegratedFiltering columnExtensions={this.filterExtensions} />
                     <PagingState defaultCurrentPage={0} defaultPageSize={10} />
                     <IntegratedPaging />
-                    <Table rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
+                    <Table style={{color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold'}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
                     <TableColumnResizing
                         defaultColumnWidths={[
                             { columnName: 'name', width: 230 },
