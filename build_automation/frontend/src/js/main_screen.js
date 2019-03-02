@@ -20,18 +20,20 @@ import axios from 'axios';
 import solarSpellLogo from '../images/logo.png';
 import '../css/style.css';
 
-/* const paletteTheme = createMuiTheme({
-      palette: {
-        primary: {
-		  main: '#75B2DD', // same as orange[600]
+
+
+const newPalette = createMuiTheme({
+	palette: {
+		primary: {
+		  main: '#75B2DD',
 		  dark: '#75B2DD',
-		  contrastText: '75B2DD'
+		  contrastText: '#FFFFFF'
 		},
 		secondary: {
-		  main: '#75B2DD'
+		  main: '#FFFFFF'
 		}
       }
-}); */
+});	
 
 const styles = theme => ({
     padding: {
@@ -106,7 +108,7 @@ class MainScreen extends React.Component {
 
         return (
             <React.Fragment>
-			
+			<MuiThemeProvider theme={newPalette}>
             <Grid container style={{backgroundColor: '#ffffff', height: '115px', flexGrow: 1, overflow: 'hidden'}} justify="center">
                 <Grid item xs={12}>
                     <Grid container justify="center" alignItems="center" style={{height: '100%'}}>
@@ -120,9 +122,10 @@ class MainScreen extends React.Component {
 									TabIndicatorProps={{style: {backgroundColor: '#75B2DD', height: '5px', borderRadius: '5px'}}}
 									onChange={this.handleTabClick}
 									centered
-									classes={{
+									indicatorColor="secondary"
+									/* classes={{
 										indicator: classes.indicator
-									}}
+									}} */
 								>
 									<Tab className = {classes.indicator} value="tags" label="Metadata" />
 									<Tab className = {classes.indicator} value="contents" label="Contents" />
@@ -149,6 +152,7 @@ class MainScreen extends React.Component {
                     {currentTab == 'sysinfo' && <DiskSpace/>}
                 </Grid>
             </Grid>
+			</MuiThemeProvider>
             </React.Fragment>
         );
     }
