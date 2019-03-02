@@ -90,7 +90,7 @@ class BulkMetadataUpload extends React.Component {
       
            // payload.append('updated_time', formatDate(this.state.selectedDate));
             Boolean(this.state.metadataFile) && payload.append('metadata_file', this.state.metadataFile);
-            
+            payload.append('name', this.state.metadataFileName)
             const currInstance = this;
             for (var pair of payload.entries()) {
                 console.log(pair[0] + "<-- date / file --> " + pair[1]);

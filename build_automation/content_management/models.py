@@ -276,7 +276,7 @@ class MetadataSheet(models.Model):
     
     # The Actual File
     metadata_file = models.FileField("File", upload_to=set_original_name)
-    
+    name = models.CharField(max_length=400, null=True)
     '''updated_time = models.DateField(
         "Content updated on",
         help_text='Date when the content was last updated'
