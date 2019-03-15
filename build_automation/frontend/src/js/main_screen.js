@@ -17,7 +17,11 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import {APP_URLS} from "./url";
 import axios from 'axios';
 
-import solarSpellLogo from '../images/logo.png';
+//this is the old logo
+//import solarSpellLogo from '../images/logo.png';
+
+//this is the new logo (logo2)
+import solarSpellLogo from '../images/logo2.png'; 
 import '../css/style.css';
 
 
@@ -113,7 +117,8 @@ class MainScreen extends React.Component {
                 <Grid item xs={12}>
                     <Grid container justify="center" alignItems="center" style={{height: '100%'}}>
                         <Grid item>
-                            <img src={solarSpellLogo} className="spellLogo" />
+                           
+						   <img src={solarSpellLogo} className="spellLogo" />
                         </Grid>
 						
 
