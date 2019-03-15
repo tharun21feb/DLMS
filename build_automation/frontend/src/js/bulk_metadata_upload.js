@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import {APP_URLS, get_url} from "./url";
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
-var Papa = require("papaparse");
 
 const style = theme => ({
     root: {
@@ -31,8 +30,6 @@ class BulkMetadataUpload extends React.Component {
             id: "",
             name: "", 
             selectedDate: null,
-            description: "Please insert Description",
-            contentFile: null,
             fieldErrors: {},
             metadataFile: null,
             metadataFileName: "",
@@ -40,7 +37,6 @@ class BulkMetadataUpload extends React.Component {
             this.handleFileSelection = this.handleFileSelection.bind(this);
             this.saveMetadata = this.saveMetadata.bind(this); 
             this.saveMetadataCallback = props.onSave.bind(this);
-            //this.formatDate = this.formatDate.bind(this);
         }
         
         handleFileSelection(evt) {
@@ -55,8 +51,7 @@ class BulkMetadataUpload extends React.Component {
                     metadataFileName: file.name,
                     fieldErrors: prevState.fieldErrors,                   
                 };
-                //newState.fieldErrors['file'] = null;
-                console.log(file.name);
+               
                 return newState;
             });
             
@@ -77,24 +72,16 @@ class BulkMetadataUpload extends React.Component {
         }
         
         saveMetadata() {
-           // var that =  this;
+           
             var targetUrl = get_url(APP_URLS.METADATA_UPLOAD);
             this.state.selectedDate = new Date("1901-11-25"); 
-
-            console.log("saveMetadata called"); 
-            console.log(this.state.metadataFileName);
-            console.log(this.state.description);
-            console.log(targetUrl);
-            console.log(this.state.selectedDate);
+            
             const payload = new FormData();
-      
-           // payload.append('updated_time', formatDate(this.state.selectedDate));
+     
             Boolean(this.state.metadataFile) && payload.append('metadata_file', this.state.metadataFile);
             payload.append('name', this.state.metadataFileName)
             const currInstance = this;
-            for (var pair of payload.entries()) {
-                console.log(pair[0] + "<-- date / file --> " + pair[1]);
-            }
+           
             
                 axios.post(targetUrl, payload, {
                 responseType: 'json'
