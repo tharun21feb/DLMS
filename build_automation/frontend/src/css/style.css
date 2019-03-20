@@ -17,7 +17,7 @@ body {
 }
 
 table {
-	color: #3592BE;
+	color: #3592BE !important;
 	font-weight: bold;
 }
 
@@ -37,8 +37,13 @@ th {
     overflow-x: auto;
 }
 
+.dx-datagrid-headers .dx-header-row {
+  color: #3592BE;
+}
+
 .spellLogo {
-    height: 55px;
+    height: 75px;
+	margin: 10px;
 }
 
 /* React Sortable Tree - Display hand pointer when hovering over the row. */

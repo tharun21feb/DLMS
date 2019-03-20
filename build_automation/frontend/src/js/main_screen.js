@@ -45,10 +45,17 @@ const styles = theme => ({
 	},
 	indicator: {
 		color: '#75B2dd',
-		fontSize: '18px',
+		fontSize: '22px',
 		fontWeight: 'bold',
 		fontFamily: 'Asap',
 	},
+	head: {
+		color: '#75B2dd',
+		fontSize: '18px',
+		fontWeight: 'bold',
+		fontFamily: 'Asap',
+	
+	}
 	/* palette: {
 		primary: {
 		  light: orange[200], // same as '#FFCC80',
@@ -113,7 +120,7 @@ class MainScreen extends React.Component {
         return (
             <React.Fragment>
 			<MuiThemeProvider theme={newPalette}>
-            <Grid container style={{backgroundColor: '#ffffff', height: '115px', flexGrow: 1, overflow: 'hidden'}} justify="center">
+            <Grid container style={{backgroundColor: '#ffffff', height: '150px', flexGrow: 1, overflow: 'hidden'}} justify="center">
                 <Grid item xs={12}>
                     <Grid container justify="center" alignItems="center" style={{height: '100%'}}>
                         <Grid item>

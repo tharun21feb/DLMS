@@ -14,6 +14,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { APP_URLS, get_url } from './url.js';
 
@@ -32,6 +33,48 @@ import {
     TableColumnResizing,
     PagingPanel,
 } from '@devexpress/dx-react-grid-material-ui';
+
+const styles = theme => ({
+	title: {
+		color: '#75B2dd',
+		fontSize: '16px',	
+	}
+});
+
+/* const HighlightedCell = (value) => (
+  <Table.Cell>
+    <span
+      style={{
+        color: '#3592BE',
+      }}
+    >
+      {value}
+    </span>
+  </Table.Cell>
+);
+
+const Cell = (props) => {
+	return <HighlightedCell {...props} />;
+}; */
+
+const styles2 = {
+  customHeaderCell: {
+    '& div': {
+		color: '#3592BE',
+		fontSize: '18px',
+    }
+    /*your styles here*/
+  }
+};
+
+
+const CustomTableHeaderCellBase = ({ classes, ...restProps }) => {
+
+  restProps.value = restProps.column.title || restProps.column.name;
+  return <TableHeaderRow.Cell className={classes.customHeaderCell} {...restProps} />
+}
+export const CustomTableHeaderCell = withStyles(styles2)(CustomTableHeaderCellBase);
+
 
 var __tagIdsTagsMap = {};
 
@@ -187,18 +230,18 @@ class FileListComponent extends React.Component {
             </TableCell>
         );
     }
+	
+
 
 
     render() {
         return (
             <React.Fragment>
-                <Typography gutterBottom variant="h5" component="h2" color="primary">
-                    Select individual files
-                </Typography>
+                
                 <Grid
                     rows={this.props.allFiles}
                     columns={this.columns}
-					style={{color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold'}}
+					style={{color: '#3592BE'}}
                 >
                     <ChippedTagsTypeProvider for={['creators', 'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger']} />
                     <FilteringState defaultFilters={[]} columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]} />
@@ -219,7 +262,7 @@ class FileListComponent extends React.Component {
                             { columnName: 'cataloger', width: 80 },
                             { columnName: 'updated_time', width: 80 },
                         ]} />
-                    <TableHeaderRow />
+                    <TableHeaderRow cellComponent={CustomTableHeaderCell} />
                     <TableFilterRow cellComponent={this.getFilterCellComponent}/>
                     <PagingPanel pageSizes={[5, 10, 20]} />
                 </Grid>
@@ -301,4 +344,4 @@ class FileListComponent extends React.Component {
         })
     }
 }
-export default FileListComponent;
+export default withStyles(styles)(FileListComponent);
