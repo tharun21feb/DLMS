@@ -237,7 +237,9 @@ class DiskSpaceViewSet(ViewSet):
 class MetadataSheetApiViewSet(ModelViewSet):
     serializer_class = MetadataSheetSerializer
     queryset = MetadataSheet.objects.all()
-    
+    content_queryset = Content.objects.values_list('name', flat=True)
+    print(content_queryset)
+
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)
