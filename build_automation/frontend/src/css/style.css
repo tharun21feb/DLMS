@@ -19,6 +19,7 @@ body {
 table {
 	color: #3592BE !important;
 	font-weight: bold;
+	background: white;
 }
 
 th {

@@ -272,23 +272,36 @@ class ContentManagement extends React.Component{
     render(){
         return (
             <div>
-                <Grid container spacing={8} style={{paddingLeft: '20px'}}>
-                    <Grid item xs={3} style={{paddingLeft: '20px'}}>
-                        <h3 style={{color: '#75B2DD'}}>Content Management</h3>
-                        <Button variant="contained" color="primary" onClick={e => {this.setCurrentView('manage')}}>
+			<Grid container style={{justifyContent: 'center', marginBottom: '25px', paddingLeft: '20px'}}>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
+                    <Grid item xs>
+                        <Button variant="contained" color="primary" style={{width: '175px'}} onClick={e => {this.setCurrentView('manage')}}>
                             Manage Content
                         </Button>
-                        <div style={{marginTop: '20px'}}> </div>
-                        <Button variant="contained" color="primary" onClick={e => {this.uploadNewFile()}}>
+					</Grid>
+					
+					<Grid item xs>
+                        <Button variant="contained" color="primary" style={{width: '175px'}} onClick={e => {this.uploadNewFile()}}>
                             Add Content
                         </Button>
-                        <div style={{marginTop: '20px'}}> </div>
-                        <Button variant="raised" color="primary" onClick={e => {this.uploadBulkFiles()}}>
-                            Express Loading
+					</Grid>
+					<Grid item xs>
+                        <Button variant="raised" color="primary" style={{width: '175px'}} onClick={e => {this.uploadBulkFiles()}}>
+                            Express Load
                         </Button>
                     </Grid>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
+				</Grid>
+                <Grid container spacing={0} style={{paddingLeft: '20px', paddingRight: '20px'}}>
+                    
 
-                    <Grid item xs={8}>
+                    <Grid item xs={12}>
                         {this.state.isLoaded && this.state.currentView=='manage'&&<FileListComponent tags={this.state.tags} onEdit={this.handleContentEdit}
                                                                                                      onDelete={this.handleFileDelete} allFiles={this.state.files}
                                                                                                      tagIdsTagsMap={this.tagIdTagsMap} />}

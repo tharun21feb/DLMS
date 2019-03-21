@@ -248,19 +248,19 @@ class FileListComponent extends React.Component {
                     <IntegratedFiltering columnExtensions={this.filterExtensions} />
                     <PagingState defaultCurrentPage={0} defaultPageSize={10} />
                     <IntegratedPaging />
-                    <Table style={{color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold'}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
+                    <Table style={{width: '100%', color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold'}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
                     <TableColumnResizing
                         defaultColumnWidths={[
                             { columnName: 'name', width: 230 },
-                            { columnName: 'description', width: 420 },
-                            { columnName: 'creators', width: 160 },
-                            { columnName: 'coverage', width: 160 },
-                            { columnName: 'subjects', width: 160 },
-                            { columnName: 'keywords', width: 160 },
-                            { columnName: 'workareas', width: 160 },
-                            { columnName: 'language', width: 80 },
-                            { columnName: 'cataloger', width: 80 },
-                            { columnName: 'updated_time', width: 80 },
+                            { columnName: 'description', width: 400 },
+                            { columnName: 'creators', width: 140 },
+                            { columnName: 'coverage', width: 140 },
+                            { columnName: 'subjects', width: 140 },
+                            { columnName: 'keywords', width: 140 },
+                            { columnName: 'workareas', width: 140 },
+                            { columnName: 'language', width: 140 },
+                            { columnName: 'cataloger', width: 140 },
+                            { columnName: 'updated_time', width: 140 },
                         ]} />
                     <TableHeaderRow cellComponent={CustomTableHeaderCell} />
                     <TableFilterRow cellComponent={this.getFilterCellComponent}/>
