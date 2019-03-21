@@ -22,6 +22,7 @@
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
     "chart.js": "^2.7.3",
+    "csv": "^5.1.1",
     "date-fns": "^2.0.0-alpha.16",
     "downshift": "^3.1.4",
     "keycode": "^2.2.0",

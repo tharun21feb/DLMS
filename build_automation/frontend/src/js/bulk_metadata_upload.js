@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import {APP_URLS, get_url} from "./url";
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
+import Papa from 'papaparse';
+
 
 const style = theme => ({
     root: {
@@ -27,12 +29,14 @@ class BulkMetadataUpload extends React.Component {
 		constructor(props) {
             super(props);
             this.state = {
+           
             id: "",
             name: "", 
             selectedDate: null,
             fieldErrors: {},
             metadataFile: null,
             metadataFileName: "",
+            data:[] ,
         };
             this.handleFileSelection = this.handleFileSelection.bind(this);
             this.saveMetadata = this.saveMetadata.bind(this); 
@@ -40,11 +44,14 @@ class BulkMetadataUpload extends React.Component {
         }
         
         handleFileSelection(evt) {
+            var data;
             evt.persist();
             const file = evt.target.files[0];
             if (!Boolean(file)) { // If there is no file selected.
                 return;
             }
+            
+            
             this.setState((prevState, props) => {
                 const newState = {
                     metadataFile: file,
@@ -72,7 +79,15 @@ class BulkMetadataUpload extends React.Component {
         }
         
         saveMetadata() {
-           
+            var data;
+            Papa.parse(this.state.metadataFile, {
+                complete:function(results) {
+                    header:true;
+                    console.log(results);
+                    data = results.data;
+                    console.log(data);
+                }
+            });
             var targetUrl = get_url(APP_URLS.METADATA_UPLOAD);
             this.state.selectedDate = new Date("1901-11-25"); 
             

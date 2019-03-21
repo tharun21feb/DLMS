@@ -239,6 +239,7 @@ class MetadataSheetApiViewSet(ModelViewSet):
     queryset = MetadataSheet.objects.all()
     content_queryset = Content.objects.values_list('name', flat=True)
     print(content_queryset)
+    print(queryset)
 
     def create(self, request, *args, **kwargs):
         try:
