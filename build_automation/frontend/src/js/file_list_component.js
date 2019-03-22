@@ -24,14 +24,17 @@ import {
     IntegratedFiltering,
     IntegratedPaging,
     PagingState,
+	SearchState,
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
     Table,
+	Toolbar,
     TableHeaderRow,
     TableFilterRow,
     TableColumnResizing,
     PagingPanel,
+	SearchPanel,
 } from '@devexpress/dx-react-grid-material-ui';
 
 const styles = theme => ({
@@ -245,6 +248,7 @@ class FileListComponent extends React.Component {
                 >
                     <ChippedTagsTypeProvider for={['creators', 'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger']} />
                     <FilteringState defaultFilters={[]} columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]} />
+					<SearchState defaultValue="" />
                     <IntegratedFiltering columnExtensions={this.filterExtensions} />
                     <PagingState defaultCurrentPage={0} defaultPageSize={10} />
                     <IntegratedPaging />
@@ -263,6 +267,8 @@ class FileListComponent extends React.Component {
                             { columnName: 'updated_time', width: 140 },
                         ]} />
                     <TableHeaderRow cellComponent={CustomTableHeaderCell} />
+					<Toolbar />
+					<SearchPanel />
                     <TableFilterRow cellComponent={this.getFilterCellComponent}/>
                     <PagingPanel pageSizes={[5, 10, 20]} />
                 </Grid>
