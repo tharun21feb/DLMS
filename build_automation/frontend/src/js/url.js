@@ -25,7 +25,7 @@ const APP_URLS = {
     VIEW_BUILD: '/api/builds/',
     DISKSPACE: '/api/diskspace/',
     METADATA_UPLOAD: '/api/metadata/',
-    
+    METADATA_MATCH: '/api/metadata_match',
 };
 
 function get_url(templateStringLiteral, context) {

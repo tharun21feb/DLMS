@@ -1,5 +1,5 @@
 import os
-
+import array
 from django.core.files.base import ContentFile
 from rest_framework import filters, status
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
@@ -237,10 +237,14 @@ class DiskSpaceViewSet(ViewSet):
 class MetadataSheetApiViewSet(ModelViewSet):
     serializer_class = MetadataSheetSerializer
     queryset = MetadataSheet.objects.all()
+    '''
+    content_queryset = Content.objects.values_list('name', flat=True)'''
     content_queryset = Content.objects.values_list('name', flat=True)
-    print(content_queryset)
-    print(queryset)
-
+    '''print(content_queryset)'''
+    fileNameArray = list(content_queryset)
+    print (fileNameArray)
+    
+    
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)
@@ -255,3 +259,8 @@ class MetadataSheetApiViewSet(ModelViewSet):
                 }
             }
             return Response(data, status=status.HTTP_409_CONFLICT)
+
+class MetadataMatchViewSet(ViewSet):
+    queryset = Content.objects.values_list('name', flat=True);
+    fileNameArray = list(queryset)
+    print(fileNameArray)

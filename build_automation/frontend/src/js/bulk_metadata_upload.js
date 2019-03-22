@@ -88,6 +88,8 @@ class BulkMetadataUpload extends React.Component {
                     console.log(data);
                 }
             });
+            console.log(data);
+            
             var targetUrl = get_url(APP_URLS.METADATA_UPLOAD);
             this.state.selectedDate = new Date("1901-11-25"); 
             
