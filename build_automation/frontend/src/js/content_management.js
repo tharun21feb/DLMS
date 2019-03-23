@@ -176,13 +176,11 @@ class ContentManagement extends React.Component{
     saveMetadataCallback(metadata, content) {
 
         const currInstance = this;
-        console.log(content);
         
         axios.get(APP_URLS.CONTENTS_LIST, {
             responseType: 'json'
         }).then(function (response) {
             currInstance.content = response.data;
-            console.log(response.data);
             currInstance.setState((prevState, props)=>{
                 const {files} = prevState; /*
                 if (updated){

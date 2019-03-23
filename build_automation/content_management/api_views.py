@@ -22,7 +22,6 @@ from content_management.utils import DiskSpace, LibraryVersionBuildUtil
 
 class ContentApiViewset(ModelViewSet):
     queryset = Content.objects.all()
-    print(list(queryset))
     serializer_class = ContentSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'description')
@@ -238,14 +237,7 @@ class DiskSpaceViewSet(ViewSet):
 class MetadataSheetApiViewSet(ModelViewSet):
     serializer_class = MetadataSheetSerializer
     queryset = MetadataSheet.objects.all()
-    '''
-    content_queryset = Content.objects.values_list('name', flat=True)'''
-    content_queryset = Content.objects.values_list('name', flat=True)
-    '''print(content_queryset)'''
-    fileNameArray = list(content_queryset)
-    print (fileNameArray)
-    
-    
+   
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)
@@ -269,7 +261,6 @@ class MetadataMatchViewSet(ViewSet):
         data =  {
             content_files: fileNameArray
         }
-        print("FfileNameArray" + fileNameArray)
-        print("Data" + data)
+        
         
         return Response(data)
