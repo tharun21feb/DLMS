@@ -42,6 +42,11 @@ th {
   color: #3592BE;
 }
 
+.SearchPanelInputBase {
+    width: 100%;
+    margin: 0 auto;
+}
+
 .spellLogo {
     height: 75px;
 	margin: 10px;

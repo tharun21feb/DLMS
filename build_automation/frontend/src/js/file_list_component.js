@@ -14,6 +14,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import classNames from "classnames";
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { APP_URLS, get_url } from './url.js';
@@ -69,6 +70,39 @@ const styles2 = {
     /*your styles here*/
   }
 };
+
+const searchStyle = {
+  customSearchCell: {
+    '& div': {
+		width: '35%',
+		marginBottom: '0',
+		marginTop: '0',
+		marginLeft: '0',
+		marginRight: '0',
+    }
+    /*your styles here*/
+  }
+};
+
+const toolbarStyles = {
+  customToolbar: {
+    width: "50%"
+  }
+};
+const ToolbarRootBase = ({ classes, className, ...restProps }) => (
+  <Toolbar.Root
+    className={classNames(className, classes.customToolbar)}
+    {...restProps}
+  />
+);
+
+const ToolbarRoot = withStyles(toolbarStyles)(ToolbarRootBase);
+
+const CustomSearchBase = ({ classes, ...restProps }) => {
+	return <SearchPanel.Cell className={classes.customSearchCell} {...restProps} />
+}
+
+export const CustomSearchCell = withStyles(searchStyle)(CustomSearchBase);
 
 
 const CustomTableHeaderCellBase = ({ classes, ...restProps }) => {
@@ -267,8 +301,8 @@ class FileListComponent extends React.Component {
                             { columnName: 'updated_time', width: 140 },
                         ]} />
                     <TableHeaderRow cellComponent={CustomTableHeaderCell} />
-					<Toolbar />
-					<SearchPanel />
+					<Toolbar rootComponent={ToolbarRoot} />
+					<SearchPanel cellComponent={CustomSearchCell} />
                     <TableFilterRow cellComponent={this.getFilterCellComponent}/>
                     <PagingPanel pageSizes={[5, 10, 20]} />
                 </Grid>
