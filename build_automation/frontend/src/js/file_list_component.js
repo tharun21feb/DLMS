@@ -86,7 +86,9 @@ const searchStyle = {
 
 const toolbarStyles = {
   customToolbar: {
-    width: "50%"
+    width: "100%",
+	backgroundColor: "#FAFAFA",
+	boxShadow: "0 4px 4px -4px rgba(0,0,0,0.21)",
   }
 };
 const ToolbarRootBase = ({ classes, className, ...restProps }) => (
@@ -286,7 +288,7 @@ class FileListComponent extends React.Component {
                     <IntegratedFiltering columnExtensions={this.filterExtensions} />
                     <PagingState defaultCurrentPage={0} defaultPageSize={10} />
                     <IntegratedPaging />
-                    <Table style={{width: '100%', color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold'}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
+                    <Table style={{width: '100%', color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold', borderStyle: 'none',}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
                     <TableColumnResizing
                         defaultColumnWidths={[
                             { columnName: 'name', width: 230 },

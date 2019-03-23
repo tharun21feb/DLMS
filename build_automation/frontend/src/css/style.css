@@ -28,6 +28,17 @@ th {
 	font-size: 20px;
 }
 
+tr {
+	height: 45px;
+}
+
+td {
+    border-bottom: none !important;
+    border-bottom: 0px !important;
+	color: #3592BE !important;
+	font-size: 16px !important;
+}
+
 .accordion__title h3::after {
     content: '+';
     float: right;

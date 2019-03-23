@@ -277,22 +277,30 @@ class ContentManagement extends React.Component{
 					</Grid>
 					<Grid item xs>
 					</Grid>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
                     <Grid item xs>
-                        <Button variant="contained" color="primary" style={{width: '175px'}} onClick={e => {this.setCurrentView('manage')}}>
+                        <Button variant="contained" color="primary" style={{width: '160px'}} onClick={e => {this.setCurrentView('manage')}}>
                             Manage Content
                         </Button>
 					</Grid>
 					
 					<Grid item xs>
-                        <Button variant="contained" color="primary" style={{width: '175px'}} onClick={e => {this.uploadNewFile()}}>
+                        <Button variant="contained" color="primary" style={{width: '160px'}} onClick={e => {this.uploadNewFile()}}>
                             Add Content
                         </Button>
 					</Grid>
 					<Grid item xs>
-                        <Button variant="raised" color="primary" style={{width: '175px'}} onClick={e => {this.uploadBulkFiles()}}>
+                        <Button variant="raised" color="primary" style={{width: '160px'}} onClick={e => {this.uploadBulkFiles()}}>
                             Express Load
                         </Button>
                     </Grid>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
 					<Grid item xs>
 					</Grid>
 					<Grid item xs>
