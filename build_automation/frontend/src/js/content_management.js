@@ -173,12 +173,16 @@ class ContentManagement extends React.Component{
         });
     }
     
-    saveMetadataCallback(metadata, updated) {
+    saveMetadataCallback(metadata, content) {
+
         const currInstance = this;
-        axios.get(APP_URLS.ALLTAGS_LIST, {
+        console.log(content);
+        
+        axios.get(APP_URLS.CONTENTS_LIST, {
             responseType: 'json'
         }).then(function (response) {
-            currInstance.tagIdTagsMap=currInstance.buildTagIdTagsMap(response.data);
+            currInstance.content = response.data;
+            console.log(response.data);
             currInstance.setState((prevState, props)=>{
                 const {files} = prevState; /*
                 if (updated){
@@ -336,7 +340,7 @@ class ContentManagement extends React.Component{
 						content={this.state.content} />}
                         
                         {this.state.isLoaded && this.state.currentView === 'bulkMetadataUpload' && <BulkMetadataUpload onSave={this.saveMetadataCallback}
-						content={this.state.content} />}
+						content={this.state.content}  />}
 						
                         {!this.state.isLoaded && 'loading'}
                     </Grid>

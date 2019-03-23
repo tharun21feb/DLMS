@@ -80,14 +80,33 @@ class BulkMetadataUpload extends React.Component {
         
         saveMetadata() {
             var data;
+            var currentInstance = this;
             Papa.parse(this.state.metadataFile, {
                 complete:function(results) {
                     header:true;
                     console.log(results);
                     data = results.data;
                     console.log(data);
+                    
+                    
                 }
             });
+            
+            axios.get(APP_URLS.CONTENTS_LIST, {
+                        responseType: 'json'
+                    }).then(function (response) {
+                        currInstance.content = response.data;
+                        console.log(response.data);
+                        currInstance.setState((prevState, props)=>{
+                            const {files} = prevState; 
+                            return {
+                                
+                                
+                            }
+                        })
+                    }).catch(function (error) {
+                        console.error(error);
+                    });
             console.log(data);
             
             var targetUrl = get_url(APP_URLS.METADATA_UPLOAD);
