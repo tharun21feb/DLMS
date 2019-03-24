@@ -79,13 +79,13 @@ class BulkMetadataUpload extends React.Component {
         }
         
         saveMetadata() {
-            var data;
+            var parsed;
             var currentInstance = this;
             Papa.parse(this.state.metadataFile, {
                 complete:function(results) {
                     header:true;
-                    fastmode:false;
-                    data = results.data;
+                    deliminter:',';
+                    parsed = results.data;
                     
                     
                     axios.get(APP_URLS.CONTENTS_LIST, {
@@ -93,11 +93,14 @@ class BulkMetadataUpload extends React.Component {
                     }).then(function (response) {
                         currInstance.content = response.data;
                         console.log(currInstance.content);
-                        console.log(data);
-                        for(var i = 0; i < data.length;i++) {
-                            for (var j = 0; j < response.data.length; j++) {
-                                
-                            }
+                        console.log(parsed);
+                        
+                        for(var i = 0; i < parsed.length;i++) {
+                            for (var j = 0; j < currInstance.content.length; j++) {
+                                if(parsed[i][0] == response.data[j].original_file_name)
+                                    console.log(currentInstance.content[j].original_file_name + " exists");
+                                        }
+                            
                         }
                         /*currInstance.setState((prevState, props)=>{
                             const {files} = prevState; 
@@ -114,7 +117,6 @@ class BulkMetadataUpload extends React.Component {
             });
             
             
-            console.log(data);
             
             var targetUrl = get_url(APP_URLS.METADATA_UPLOAD);
             this.state.selectedDate = new Date("1901-11-25"); 
