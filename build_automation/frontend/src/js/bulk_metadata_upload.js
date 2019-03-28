@@ -8,7 +8,7 @@ import {APP_URLS, get_url} from "./url";
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
 import Papa from 'papaparse';
-
+import UploadContent from './upload_content';
 
 const style = theme => ({
     root: {
@@ -37,6 +37,24 @@ class BulkMetadataUpload extends React.Component {
             metadataFile: null,
             metadataFileName: "",
             data:[] ,
+            /*Below is the state of the upload content module; use this to adjust the metadata updates
+            id: props.content.id,
+            name: props.content.name,
+            description: props.content.description,
+            creators: labels.creators,
+            coverages: labels.coverages,
+            subjects: labels.subjects,
+            keywords: labels.keywords,
+            workareas: labels.workareas,
+            languages: labels.languages,
+            catalogers: labels.catalogers,
+            fieldErrors: {},
+            selectedDate: props.content.updatedDate,
+            source: props.content.source,
+            copyright: props.content.copyright,
+            rightsStatement: props.content.rightsStatement,
+            contentFile: null,
+            contentFileName: props.content.originalFileName ? props.content.originalFileName : '',*/
         };
             this.handleFileSelection = this.handleFileSelection.bind(this);
             this.saveMetadata = this.saveMetadata.bind(this); 
@@ -79,12 +97,16 @@ class BulkMetadataUpload extends React.Component {
         }
         
         saveMetadata() {
+            
             var parsed;
             var currentInstance = this;
+            
+            
             Papa.parse(this.state.metadataFile, {
+                header:true,
+                delimiter:",",
                 complete:function(results) {
-                    header:true;
-                    deliminter:',';
+                    
                     parsed = results.data;
                     
                     
@@ -97,19 +119,11 @@ class BulkMetadataUpload extends React.Component {
                         
                         for(var i = 0; i < parsed.length;i++) {
                             for (var j = 0; j < currInstance.content.length; j++) {
-                                if(parsed[i][0] == response.data[j].original_file_name)
+                                if(parsed[i]["File Name"] == currInstance.content[j].original_file_name)
                                     console.log(currentInstance.content[j].original_file_name + " exists");
-                                        }
-                            
+                                        }             
                         }
-                        /*currInstance.setState((prevState, props)=>{
-                            const {files} = prevState; 
-                            return {
-                                
-                                
-                            }
-                        })*/
-                        
+                         
                     }).catch(function (error) {
                         console.error(error);
                     });
@@ -162,7 +176,7 @@ class BulkMetadataUpload extends React.Component {
                                         margin="normal"
                                     />
 									<input 
-									accept=".csv"
+									accept=".csv, .xlsx, .txt"
 									className={"hidden"}
 									id="metadata-upload-input"
 									multiple
