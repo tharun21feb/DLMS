@@ -45,19 +45,25 @@ import { TAG_SAVE_TYPE } from './constants.js';
 
 const ExpansionPanel = withStyles({
   root: {
-    border: '5px solid rgba(0,0,0,.125)',
     boxShadow: 'none',
-    '&:not(:last-child)': {
-      borderBottom: 0,
-    },
+    border: '1.5px solid rgba(0,0,0,1)',
+    borderRadius: '20px !important',
+    margin: '20px',
+    marginLeft: '15%',
+    marginRight: '15%',
     '&:before': {
       display: 'none',
     },
   },
-  expanded: {
-    margin: 'auto',
-  },
 })(MuiExpansionPanel);
+
+const styles = theme => ({
+  paragraph: {
+    color: '#75B2dd',
+    fontSize: '25px',
+	fontWeight: '800',
+  },
+});
 
 class TagManagementComponent extends React.Component {
     constructor(props) {
@@ -340,7 +346,7 @@ class TagManagementComponent extends React.Component {
                         <Grid item xs={12}>
                             <ExpansionPanel expanded={expanded === 'creator'} onChange={this.handleChange('creator')} onClick={e => { this.handleAccordionClick('creator') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.CREATORS_LIST, APP_URLS.CREATORS_DETAIL) }}>
-                                    <Typography>Creators</Typography>
+                                    <Typography className={styles.paragraph}>Creators</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
@@ -610,4 +616,4 @@ class TagManagementComponent extends React.Component {
     }
 }
 
-export default TagManagementComponent;
+export default withStyles(styles)(TagManagementComponent);
