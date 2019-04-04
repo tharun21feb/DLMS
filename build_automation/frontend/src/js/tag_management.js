@@ -15,6 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel'; 
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 
@@ -45,9 +46,9 @@ import { TAG_SAVE_TYPE } from './constants.js';
 
 const ExpansionPanel = withStyles({
   root: {
-    boxShadow: 'none',
-    border: '1.5px solid rgba(0,0,0,1)',
-    borderRadius: '20px !important',
+	boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+    border: '1px solid rgba(0,0,0,1)',
+    borderRadius: '10px !important',
     margin: '20px',
     marginLeft: '15%',
     marginRight: '15%',
@@ -56,6 +57,27 @@ const ExpansionPanel = withStyles({
     },
   },
 })(MuiExpansionPanel);
+
+const theme = createMuiTheme({
+  typography: {
+    // Use the system font instead of the default Roboto font.
+    fontFamily: "Asap",
+	fontSize: "18",
+	h6: {
+		fontWeight: "800",
+	},
+  },
+  palette: {
+		primary: {
+		  main: '#3592BE',
+		  dark: '#75B2DD',
+		  contrastText: '#FFFFFF'
+		},
+		secondary: {
+		  main: '#FFFFFF'
+		}
+  },
+});
 
 const styles = theme => ({
   paragraph: {
@@ -333,6 +355,7 @@ class TagManagementComponent extends React.Component {
 
 
         return (
+		<MuiThemeProvider theme={theme}>
             <Grid container spacing={0}>
                 <Grid item xs={4}>
                     {/* <Button variant="contained" color="primary" onClick={e => {this.setCurrentView('manage')}}>
@@ -341,12 +364,12 @@ class TagManagementComponent extends React.Component {
 
                 </Grid>
                 {this.state.currentView == 'manage' && (
-
+					
                     <Grid container spacing={0}>
                         <Grid item xs={12}>
                             <ExpansionPanel expanded={expanded === 'creator'} onChange={this.handleChange('creator')} onClick={e => { this.handleAccordionClick('creator') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.CREATORS_LIST, APP_URLS.CREATORS_DETAIL) }}>
-                                    <Typography className={styles.paragraph}>Creators</Typography>
+                                    <Typography variant="h6" color="primary" className={styles.paragraph}>Creators</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
@@ -603,6 +626,7 @@ class TagManagementComponent extends React.Component {
                 }
 
             </Grid>
+			</MuiThemeProvider>
         )
 
 
