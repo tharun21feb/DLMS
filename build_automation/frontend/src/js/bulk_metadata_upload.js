@@ -100,7 +100,10 @@ class BulkMetadataUpload extends React.Component {
             
             var parsed;
             var currentInstance = this;
-            
+            var matchedRecords = 0;
+            var unmatchedRecords = 0; 
+            var unmatchedArray = [];
+            var matchedArray = [];
             
             Papa.parse(this.state.metadataFile, {
                 header:true,
@@ -119,11 +122,63 @@ class BulkMetadataUpload extends React.Component {
                         
                         for(var i = 0; i < parsed.length;i++) {
                             for (var j = 0; j < currInstance.content.length; j++) {
-                                if(parsed[i]["File Name"] == currInstance.content[j].original_file_name)
+                                if(parsed[i]["File Name"] == currInstance.content[j].original_file_name) {
                                     console.log(currentInstance.content[j].original_file_name + " exists");
-                                        }             
+                                    matchedRecords++;
+                                    /////////////////////////////
+                                    const payload = new FormData();
+                                    payload.append('name', parsed[i][["Title"]]);
+                                    payload.append('description', parsed[i]["Description"]);
+                                    payload.append('creators', [parsed[i]["Creator"]]);
+                                    payload.append('coverage', [parsed[i]["Coverage"]]);
+                                    payload.append('subjects', [parsed[i]["Subject"]]);
+                                    payload.append('language', [parsed[i]["Language"]]);
+                                    payload.append('cataloger', [parsed[i]["Cataloger"]]);
+                                    //payload.append('updated_time', this.formatDate(this.state.selectedDate));
+                                    payload.append('content_file', currInstance.content[j].content_file);
+                                    payload.append('source', parsed[i]["Source"]);
+                                    payload.append('copyright', parsed[i]["License/Copyright"]);
+                                    payload.append('rights_statement', parsed[i]["Rights Statement"]);
+                                    //const currInstance = this;
+                                    //if (this.state.id > 0) {
+                                        // Update an existing directory.
+                                        payload.append('id', currInstance.content[j].id);
+                                        targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id:currInstance.content[j].id});
+                                        axios.patch(targetUrl, payload, {
+                                            responseType: 'json'
+                                        }).then(function(response) {
+                                            currInstance.saveCallback(response.data, true);
+                                        }).catch(function(error) {
+                                            console.error("Error in updating the content", error);
+                                            console.error(error.response.data);
+                                            let errorMsg = 'Error in updating the content';
+                                            currInstance.setState({
+                                                message: errorMsg,
+                                                messageType: 'error'
+                                            });
+                                        });
+                                    //}
+                                    //////////////////////SaveFromUploadContent
+                                    if(matchedArray.indexOf(parsed[i]["File Name"]) == -1)
+                                        matchedArray.push(parsed[i]["File Name"]);
+                                }
+                                else {
+                                    if(unmatchedArray.indexOf(parsed[i]["File Name"]) == -1 &&
+                                         matchedArray.indexOf(parsed[i]["File Name"]) == -1) {
+                                        unmatchedRecords++;
+                                        unmatchedArray.push(parsed[i]["File Name"]);
+                                    }
+                                }                                    
+     
+                            }             
                         }
-                         
+                        
+                        
+                        console.log("Matched " + matchedRecords + " records");
+                        console.log("Unmatched records: " + unmatchedRecords);
+                        console.log(unmatchedArray);
+                        console.log(matchedArray);
+                        
                     }).catch(function (error) {
                         console.error(error);
                     });

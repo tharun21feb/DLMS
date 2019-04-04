@@ -177,6 +177,7 @@ class ContentManagement extends React.Component{
 
         const currInstance = this;
         
+        
         axios.get(APP_URLS.CONTENTS_LIST, {
             responseType: 'json'
         }).then(function (response) {
@@ -194,7 +195,7 @@ class ContentManagement extends React.Component{
                     files.push(metadata);
                 }*/
                 return {
-                    message: 'Save Successful',
+                    message: 'Metadata File Save Successful',
                     messageType: 'info',
                     currentView: 'manage',
                     
