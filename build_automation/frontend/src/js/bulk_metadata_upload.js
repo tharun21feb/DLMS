@@ -8,7 +8,7 @@ import {APP_URLS, get_url} from "./url";
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
 import Papa from 'papaparse';
-import UploadContent from './upload_content';
+import * as uploadFuncs from './upload_content';
 
 const style = theme => ({
     root: {
@@ -28,6 +28,7 @@ const style = theme => ({
 class BulkMetadataUpload extends React.Component {	    
 		constructor(props) {
             super(props);
+            console.log(props);
             this.state = {
            
             id: "",
@@ -37,24 +38,22 @@ class BulkMetadataUpload extends React.Component {
             metadataFile: null,
             metadataFileName: "",
             data:[] ,
-            /*Below is the state of the upload content module; use this to adjust the metadata updates
-            id: props.content.id,
-            name: props.content.name,
-            description: props.content.description,
-            creators: labels.creators,
-            coverages: labels.coverages,
-            subjects: labels.subjects,
-            keywords: labels.keywords,
-            workareas: labels.workareas,
-            languages: labels.languages,
-            catalogers: labels.catalogers,
-            fieldErrors: {},
+            //Below is the state of the upload content module; use this to adjust the metadata updates
+            description: "",
+            creators: props.content.creators,
+            coverages: props.content.coverages,
+            subjects: props.content.subjects,
+            keywords: props.content.keywords,
+            workareas: props.content.workareas,
+            languages: props.content.languages,
+            catalogers: props.content.catalogers,
+            //fieldErrors: {},
             selectedDate: props.content.updatedDate,
             source: props.content.source,
             copyright: props.content.copyright,
             rightsStatement: props.content.rightsStatement,
-            contentFile: null,
-            contentFileName: props.content.originalFileName ? props.content.originalFileName : '',*/
+            //contentFile: null,
+            //contentFileName: props.content.originalFileName ? props.content.originalFileName : '',//*/
         };
             this.handleFileSelection = this.handleFileSelection.bind(this);
             this.saveMetadata = this.saveMetadata.bind(this); 
@@ -97,14 +96,14 @@ class BulkMetadataUpload extends React.Component {
         }
         
         saveMetadata() {
-            
+            console.dir("State: " + this.state);
             var parsed;
             var currentInstance = this;
             var matchedRecords = 0;
             var unmatchedRecords = 0; 
             var unmatchedArray = [];
             var matchedArray = [];
-            
+
             Papa.parse(this.state.metadataFile, {
                 header:true,
                 delimiter:",",
@@ -127,13 +126,13 @@ class BulkMetadataUpload extends React.Component {
                                     matchedRecords++;
                                     /////////////////////////////
                                     const payload = new FormData();
-                                    payload.append('name', parsed[i][["Title"]]);
+                                    payload.append('name', parsed[i]["Title"]);
                                     payload.append('description', parsed[i]["Description"]);
-                                    payload.append('creators', [parsed[i]["Creator"]]);
-                                    payload.append('coverage', [parsed[i]["Coverage"]]);
-                                    payload.append('subjects', [parsed[i]["Subject"]]);
-                                    payload.append('language', [parsed[i]["Language"]]);
-                                    payload.append('cataloger', [parsed[i]["Cataloger"]]);
+                                    payload.append('creators', parsed[i]["Creator"]);
+                                    payload.append('coverage', parsed[i]["Coverage"]);
+                                    payload.append('subjects', parsed[i]["Subject"]);
+                                    payload.append('language', parsed[i]["Language"]);
+                                    payload.append('cataloger', parsed[i]["Cataloger"]);
                                     //payload.append('updated_time', this.formatDate(this.state.selectedDate));
                                     payload.append('content_file', currInstance.content[j].content_file);
                                     payload.append('source', parsed[i]["Source"]);
