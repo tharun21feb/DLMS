@@ -14,7 +14,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Chart from 'chart.js';
 import {Doughnut} from 'react-chartjs-2';
 
-
+/*
+* Default styles for the diskspace page and graphic
+*/
 const styles = {
     root: {
     flexGrow: 1
@@ -33,7 +35,9 @@ const styles = {
       fontWeight: 'bold',
     }
 };
-
+/*
+* Constructor for diskspace page
+*/
 class DiskSpace extends React.Component {
     constructor(props) {
         super(props);
@@ -48,7 +52,9 @@ class DiskSpace extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.changeView = this.changeView.bind(this);
     }
-
+    /*
+    * Handle the change in units(MB or GB)
+    */
     handleChange(event) {
         this.setState({ multiplier: event.target.value, [event.target.name]: event.target.value });
         if(event.target.value == 1048576) {
@@ -58,15 +64,22 @@ class DiskSpace extends React.Component {
         this.unit = " GB";
         }
     }
-
+    /*
+    * Update the page
+    */
     changeView(event) {
         this.setState({value: event.target.value});
 
     }
-
+    /*
+    * Mount the data gathered from the drive(s)
+    */
     componentDidMount() {
         this.loadData();
     }
+    /*
+    * Get data from the drive(s)
+    */
     loadData() {
         const that = this;
         axios
@@ -81,14 +94,16 @@ class DiskSpace extends React.Component {
                 // TODO : Show the error message.
             });
     }
-
+    /*
+    * Render class to load all the graphics
+    */
     render() {
         const { classes } = this.props;
         var options = {
             percentageInnerCutout: 50,
             responsive: true,
             animationEasing : 'easeOutBack',
-        }
+        };
 
         return (
             <div className={classes.root}>

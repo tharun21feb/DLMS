@@ -341,7 +341,9 @@ class BulkUploadContent extends React.Component{
         });
 
      }
-
+    /*
+    * Render function for bulk upload
+    */
     render(){
 		//need to add components or hidden value fields with meta information as null
         return (
@@ -399,10 +401,15 @@ class BulkUploadContent extends React.Component{
             </Grid>
         )
     }
+    /*
+    * Class to handle errors from this file
+    */
     getErrorClass() {
         return this.state.messageType === "error" ? {backgroundColor: '#B71C1C', fontWeight: 'normal'} : {};
     }
-
+    /*
+    * Close snackbar method
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,

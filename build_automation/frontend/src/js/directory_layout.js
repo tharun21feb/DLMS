@@ -78,6 +78,9 @@ const BOARD_TYPES = {
  *
  * }
  */
+/*
+* Constructor for DirectoryLayout
+*/
 class DirectoryLayoutComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -115,16 +118,22 @@ class DirectoryLayoutComponent extends React.Component {
         this.handleMenuClose = this.handleMenuClose.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
     }
-
+    /*
+    * Populate the data
+    */
     componentDidMount() {
         this.loadData();
     }
-
+    /*
+    * Clear the timeout
+    */
     componentWillUnmount() {
         // clearInterval(this.timerID);
         clearTimeout(this.timerID);
     }
-
+    /*
+    * Changes file tags to a tree
+    */
     transformTagsToTreeData(tags) {
         const allTagInfo = {};
         const topLevelTags = [];
@@ -164,7 +173,9 @@ class DirectoryLayoutComponent extends React.Component {
         });
         return treeData;
     }
-
+    /*
+    * Turn directories into a tree
+    */
     transformDirectoriesToTreeData(dirLayouts, inputData) {
         const directoryLayoutInfo = {};
 
@@ -240,7 +251,9 @@ class DirectoryLayoutComponent extends React.Component {
 
         return retval;
     }
-
+    /*
+    * Retrieve and load components with data
+    */
     loadData() {
         const currInstance = this;
         const allRequests = [];
@@ -286,7 +299,9 @@ class DirectoryLayoutComponent extends React.Component {
             console.error(error.response.data);
         });
     }
-
+    /*
+    * Handle a directory layout click
+    */
     handleDirectoryLayoutClick(targetDirLayout, evt) {
         this.setState((prevState, props) => {
             const newState = {
@@ -308,7 +323,9 @@ class DirectoryLayoutComponent extends React.Component {
             return newState;
         });
     }
-
+    /*
+    * Retrieve breadcrumbs
+    */
     getBreadCrumbs(dirLayout, currentDir) {
         const breadCrumbs = [];
         while (currentDir) {
@@ -318,7 +335,9 @@ class DirectoryLayoutComponent extends React.Component {
         breadCrumbs.unshift(dirLayout.name);
         return breadCrumbs;
     }
-
+    /*
+    * Handle a left click
+    */
     handleDirectoryLeftClick(nodeInfo, evt) {
         const evtTarget = evt.target;
         /* This is used to determine whether the click event was directed at the tree node,
@@ -333,7 +352,9 @@ class DirectoryLayoutComponent extends React.Component {
             });
         }
     }
-
+    /*
+    * Right click options
+    */
     handleDirectoryRightClick(nodeInfo, evt) {
         const evtTarget = evt.target;
         /* This is used to determine whether the click event was directed at the tree node,
@@ -348,7 +369,9 @@ class DirectoryLayoutComponent extends React.Component {
         }
         evt.preventDefault();
     }
-
+    /*
+    * Close menu
+    */
     handleMenuClose(evt) {
         this.setState({
             dirContextMenu: {
@@ -357,7 +380,9 @@ class DirectoryLayoutComponent extends React.Component {
             }
         });
     }
-
+    /*
+    * Create a new directory
+    */
     createDirectory(dirLayout, parentDir) {
         /*
          * If the parentDirId is null, there is no parent directory and will be created at the root.
@@ -391,7 +416,9 @@ class DirectoryLayoutComponent extends React.Component {
             }
         }});
     }
-
+    /*
+    * Create a directory layout
+    */
     createDirectoryLayout(evt) {
         this.setState({
             breadCrumb: [],
@@ -405,7 +432,9 @@ class DirectoryLayoutComponent extends React.Component {
             }
         });
     }
-
+    /*
+    * render method
+    */
     render() {
         var elements = null;
         if (this.state.isLoaded) {
@@ -518,14 +547,18 @@ class DirectoryLayoutComponent extends React.Component {
 
         return elements;
     }
-
+    /*
+    * Close snackbar
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,
             messageType: 'info'
         })
     }
-
+    /*
+    * Clone or create a directory
+    */
     saveDirLayoutCallback(savedInfo, saveType) {
         if (saveType == DIRLAYOUT_SAVE_TYPE.CLONE) {
             // TODO : Create a new endpoint for getting the directories associated with a layout, and reload just them.
@@ -570,7 +603,9 @@ class DirectoryLayoutComponent extends React.Component {
             });
         }
     }
-
+    /*
+    * Delete an old library
+    */
     deleteDirLayoutCallback(deletedItemId) {
         this.setState((prevState, props) => {
             const newState = {
@@ -595,7 +630,9 @@ class DirectoryLayoutComponent extends React.Component {
             return newState;
         });
     }
-
+    /*
+    * Update file/subdirectory
+    */
     updateDirectoryEntry(directoryId, array, newValue, created) {
         for (var i=0; i<array.length; i++) {
             if (array[i].id == directoryId) {
@@ -660,7 +697,9 @@ class DirectoryLayoutComponent extends React.Component {
         }
         return false;
     }
-
+    /*
+    * Update displayed data
+    */
     updateBoardData(boardData, directory) {
         boardData.id = directory.id;
         boardData.name = directory.name;
@@ -684,7 +723,9 @@ class DirectoryLayoutComponent extends React.Component {
         boardData.catalogersNeedAll = directory.catalogers_need_all;
         boardData.parent = directory.parent;
     }
-
+    /*
+    * Save updated data to directory
+    */
     saveDirectoryCallback(savedInfo, created=false) {
         this.setState((prevState, props) => {
             const dirLayoutId = savedInfo.dir_layout;
@@ -753,7 +794,9 @@ class DirectoryLayoutComponent extends React.Component {
         }
         return false;
     }
-
+    /*
+    * Delete a directory
+    */
     deleteDirectoryCallback(dirLayoutId, directoryId) {
         this.setState((prevState, props) => {
             const newState = {

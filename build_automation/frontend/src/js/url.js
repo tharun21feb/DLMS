@@ -25,7 +25,9 @@ const APP_URLS = {
     VIEW_BUILD: '/api/builds/',
     DISKSPACE: '/api/diskspace/'
 };
-
+/*
+* This function returns a URL
+*/
 function get_url(templateStringLiteral, context) {
     context = context || {};
     Object.keys(context).forEach(eachKey => {

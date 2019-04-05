@@ -26,7 +26,9 @@ import { APP_URLS, get_url } from './url.js';
 import { buildMapFromArray } from './utils.js';
 
 import 'react-sortable-tree/style.css';
-
+/*
+* Constructor for Directory info board
+*/
 class DirectoryInfoBoard extends React.Component {
     constructor(props) {
         super(props);
@@ -78,7 +80,9 @@ class DirectoryInfoBoard extends React.Component {
         this.confirmDeleteDirectory = this.confirmDeleteDirectory.bind(this);
         this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
     }
-
+    /*
+    * Build a map containing tag ids
+    */
     buildTagIdTagsMap(tags) {
         // Builds a map of <Tag Id> - Tag map for each tag type.
         const tagIdTagMap = {};
@@ -87,7 +91,9 @@ class DirectoryInfoBoard extends React.Component {
         });
         return tagIdTagMap;
     }
-
+    /*
+    * Build a map containing tag names
+    */
     buildTagNameTagMap(tags) {
         const tagNameTagMap = {};
         Object.keys(tags).forEach(eachTagType => {
@@ -95,7 +101,9 @@ class DirectoryInfoBoard extends React.Component {
         });
         return tagNameTagMap;
     }
-
+    /*
+    * Return autocomplete items based off tag ids
+    */
     getAutoCompleteLabelsFromTagIds(boardInfo, tagIdsTagsMap) {
         const retval = {};
         Object.keys(tagIdsTagsMap).forEach(eachTagType => {
@@ -109,7 +117,9 @@ class DirectoryInfoBoard extends React.Component {
         });
         return retval;
     }
-
+    /*
+    * Filter criteria from the user's string
+    */
     getFilterCriteriaInfoFromString(filterCriteria, tagIdTagsMap) {
         if (!filterCriteria || filterCriteria.length == 0) {
             return {operator: 'AND' , selectedItems: []};
@@ -122,10 +132,12 @@ class DirectoryInfoBoard extends React.Component {
         const retval = {
             operator: filterCriteriaInfo.operator,
             selectedItems: selectedItems
-        }
+        };
         return retval;
     }
-
+    /*
+    * Components will receive data
+    */
     componentWillReceiveProps(props) {
         this.tagIdsTagsMap = this.buildTagIdTagsMap(props.tags);
         const labels = this.getAutoCompleteLabelsFromTagIds(props.boardData, this.tagIdsTagsMap);
@@ -158,7 +170,9 @@ class DirectoryInfoBoard extends React.Component {
         this.tagNameTagMap = this.buildTagNameTagMap(props.tags);
         this.fileIdFileMap = props.fileIdFileMap;
     }
-
+    /*
+    * Get the selected tags based of the tag names
+    */
     getSelectedTagsIdsFromName(tagType) {
         const matchingTagIds = [];
         this.state[tagType].forEach(eachLabel => {
@@ -166,7 +180,9 @@ class DirectoryInfoBoard extends React.Component {
         });
         return matchingTagIds;
     }
-
+    /*
+    * Get the selected tags
+    */
     getSelectedTags() {
         const tagTypeSelectedTagsMap = {};
         Object.keys(this.props.tags).forEach(eachTagType => {
@@ -174,7 +190,9 @@ class DirectoryInfoBoard extends React.Component {
         });
         return tagTypeSelectedTagsMap;
     }
-
+    /*
+    * Save the directory
+    */
     saveDirectory(evt) {
         if (!this.is_valid_state(!(this.state.id > 0))) {
             // If it is in an invalid state, do not proceed with the save operation.
@@ -251,7 +269,9 @@ class DirectoryInfoBoard extends React.Component {
             });
         }
     }
-
+    /*
+    * Check to see if everything required is present to save
+    */
     is_valid_state(is_save) {
         var hasErrors = false;
         const fieldErrors = {};
@@ -264,13 +284,17 @@ class DirectoryInfoBoard extends React.Component {
         }
         return !hasErrors;
     }
-
+    /*
+    * Confirm the user's desire to delete the selected directory
+    */
     confirmDeleteDirectory() {
         this.setState({
             confirmDelete: true
         })
     }
-
+    /*
+    * Delete the selected directory
+    */
     deleteDirectory() {
         const targetUrl = get_url(APP_URLS.DIRECTORY_DETAIL, {id:this.state.id});
         const currentInstance = this;
@@ -286,7 +310,9 @@ class DirectoryInfoBoard extends React.Component {
             });
         });
     }
-
+    /*
+    * Process a change in a text field
+    */
     handleTextFieldUpdate(stateProperty, evt) {
         const targetVal = evt.target.value;
         const newState = {
@@ -298,7 +324,9 @@ class DirectoryInfoBoard extends React.Component {
             return newState;
         })
     }
-
+    /*
+    * Process a change in operators
+    */
     handleOperatorChange(evt, targetElem) {
         this.setState({
             [targetElem]: evt.target.value
@@ -313,7 +341,9 @@ class DirectoryInfoBoard extends React.Component {
             return {[tagType]: selectedTags};
         });
     }
-
+    /*
+    * Process a chip deletion
+    */
     handleChipDeletion(deletedChip, tagType) {
         this.setState((prevState, props) => {
             const selectedTags = prevState[tagType];
@@ -321,7 +351,9 @@ class DirectoryInfoBoard extends React.Component {
             return {[tagType]: selectedTags};
         });
     }
-
+    /*
+    * Recall previous files selected
+    */
     fileSelectionCallback(file) {
         this.setState((prevState, props) => {
             const {selectedFiles} = prevState;
@@ -331,7 +363,9 @@ class DirectoryInfoBoard extends React.Component {
             return {selectedFiles};
         });
     }
-
+    /*
+    * Recall the last deselection
+    */
     fileDeselectionCallback(file) {
         this.setState((prevState, props) => {
             const {selectedFiles} = prevState;
@@ -339,11 +373,15 @@ class DirectoryInfoBoard extends React.Component {
             return {selectedFiles};
         });
     }
-
+    /*
+    * Set confirm delete to false if window is closed
+    */
     closeConfirmDialog() {
         this.setState({confirmDelete: false})
     }
-
+    /*
+    * Handle the selection of a banner image
+    */
     handleBannerSelection(evt) {
         evt.persist();
         const file = evt.target.files[0];
@@ -360,7 +398,9 @@ class DirectoryInfoBoard extends React.Component {
             return newState;
         });
     }
-
+    /*
+    * Render function
+    */
     render() {
         return (
             <Grid container spacing={24}>
@@ -627,18 +667,24 @@ class DirectoryInfoBoard extends React.Component {
             </Grid>
         );
     }
-
+    /*
+    * Error handler
+    */
     getErrorClass() {
         return this.state.messageType === "error" ? {backgroundColor: '#B71C1C', fontWeight: 'normal'} : {};
     }
-
+    /*
+    * Close snackbar
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,
             messageType: 'info'
         })
     }
-
+    /*
+    * Click options for tags
+    */
     handleTagClick(nodeInfo, evt) {
         const evtTarget = evt.target;
         if (!(evtTarget.className.includes('expandButton') || evtTarget.className.includes('collapseButton'))) {

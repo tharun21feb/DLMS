@@ -14,7 +14,9 @@ import OpenInNew from '@material-ui/icons/OpenInNew';
 
 import { DIRLAYOUT_SAVE_TYPE, HTTP_STATUS } from './constants.js';
 import { APP_URLS, get_url } from './url.js';
-
+/*
+* Constructor for DirectoryLayoutInfoBoard
+*/
 class DirlayoutInfoBoard extends React.Component {
     constructor(props) {
         super(props);
@@ -40,7 +42,9 @@ class DirlayoutInfoBoard extends React.Component {
         this.confirmDeleteDirLayout = this.confirmDeleteDirLayout.bind(this);
         this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
     }
-
+    /*
+    * Each component will load the required files
+    */
     componentWillReceiveProps(props) {
         this.setState({
             id: props.boardData.id,
@@ -52,7 +56,9 @@ class DirlayoutInfoBoard extends React.Component {
             confirmDelete: false,
         });
     }
-
+    /*
+    * Update the value for the given text field
+    */
     handleTextFieldUpdate(stateProperty, evt) {
         const targetVal = evt.target.value;
         this.setState((prevState, props) => {
@@ -64,7 +70,9 @@ class DirlayoutInfoBoard extends React.Component {
             return newState;
         })
     }
-
+    /*
+    * Change the banner for the current library
+    */
     handleBannerSelection(evt) {
         evt.persist();
         const file = evt.target.files[0];
@@ -81,7 +89,9 @@ class DirlayoutInfoBoard extends React.Component {
             return newState;
         });
     }
-
+    /*
+    * Save changes to the current library
+    */
     saveDirLayout(evt) {
         if (!this.is_valid_state(!(this.state.id > 0))) {
             // If it is in an invalid state, do not proceed with the save operation.
@@ -142,28 +152,36 @@ class DirlayoutInfoBoard extends React.Component {
             })
         }
     }
-
+    /*
+    * Check to make sure all the required files are present
+    */
     is_valid_state(is_save) {
         var hasErrors = false;
         const fieldErrors = {};
+        //Name is missing
         if (!this.state.name || this.state.name.trim().length === 0) {
             hasErrors = true;
             fieldErrors['name'] = 'Name is required.';
         }
+        //Description is missing
         if (!this.state.description || this.state.description.trim().length === 0) {
             hasErrors = true;
             fieldErrors['description'] = 'Description is required.';
         }
+        //Banner image is missing
         if (is_save && !this.state.bannerFile) {
             hasErrors = true;
             fieldErrors['banner'] = 'Banner file is required.';
         }
+        //Any other error
         if (hasErrors) {
             this.setState({fieldErrors});
         }
         return !hasErrors;
     }
-
+    /*
+    * Clone a library
+    */
     cloneDirLayout(evt) {
         const targetUrl = get_url(APP_URLS.DIRLAYOUT_CLONE, {id: this.state.id});
         const currentInstance = this;
@@ -184,13 +202,17 @@ class DirlayoutInfoBoard extends React.Component {
             });
         })
     }
-
+    /*
+    * Send a confirmation message for deletion
+    */
     confirmDeleteDirLayout() {
         this.setState({
             confirmDelete: true
         })
     }
-
+    /*
+    * Delete a library
+    */
     deleteDirLayout() {
         const targetUrl = get_url(APP_URLS.DIRLAYOUT_DETAIL, {id:this.state.id});
         const currentInstance = this;
@@ -206,11 +228,15 @@ class DirlayoutInfoBoard extends React.Component {
             });
         });
     }
-
+    /*
+    * Confirm the user wishes to exit the current library
+    */
     closeConfirmDialog() {
         this.setState({confirmDelete: false})
     }
-
+    /*
+    * Render function for libraries page
+    */
     render() {
         return (
             <div>
@@ -313,11 +339,15 @@ class DirlayoutInfoBoard extends React.Component {
             </div>
         );
     }
-
+    /*
+    * Handle errors
+    */
     getErrorClass() {
         return this.state.messageType === "error" ? {backgroundColor: '#B71C1C', fontWeight: 'normal'} : {};
     }
-
+    /*
+    * Close snackbar
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,

@@ -26,7 +26,9 @@ const styles = theme => ({
     },
 });
 
-
+/*
+* Constructor for Content Management
+*/
 class ContentManagement extends React.Component{
     constructor(props) {
         super(props);
@@ -51,11 +53,14 @@ class ContentManagement extends React.Component{
         this.handleContentEdit = this.handleContentEdit.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
     }
-
+    /*
+    * Populate page with all uploaded content
+    */
     componentDidMount() {
 		//console.log("did mount");
         this.loadData()
     }
+
     buildTagIdTagsMap(tags) {
         // Builds a map of <Tag Id> - Tag
         const tagIdTagMap = {};
@@ -64,6 +69,9 @@ class ContentManagement extends React.Component{
         });
         return tagIdTagMap;
     }
+    /*
+    * Get all uploaded content
+    */
     loadData() {
         const currInstance = this;
         const allRequests = [];
@@ -84,6 +92,9 @@ class ContentManagement extends React.Component{
             //console.error(error.response.data);
         });
     }
+    /*
+    * Process updates to text fields
+    */
     handleTextFieldUpdate(stateProperty, evt) {
         const targetVal = evt.target.value;
         this.setState((prevState, props) => {
@@ -95,9 +106,15 @@ class ContentManagement extends React.Component{
             return newState;
         })
     }
+    /*
+    * Current view(current window)
+    */
     setCurrentView(viewName){
         this.setState({currentView: viewName})
     }
+    /*
+    * Delete content
+    */
     handleFileDelete(file){
         this.setState((prevState, props)=>{
             const {files} = prevState;
@@ -109,6 +126,9 @@ class ContentManagement extends React.Component{
             return {files, message: 'Delete Successful', messageType: 'info',};
         })
     }
+    /*
+    * Save content
+    */
     saveContentCallback(content, updated){
 		console.log("save callback in CM.js");
         const currInstance = this;
@@ -143,7 +163,9 @@ class ContentManagement extends React.Component{
             console.error(error);
         });
     }
-	
+    /*
+    * Should the page refresh?
+    */
 	componentDidUpdate(prevProps, prevState) {
 		//console.log("prev props:");
 		//console.log(prevProps);
@@ -196,6 +218,9 @@ class ContentManagement extends React.Component{
             console.error(error);
         });
     }
+    /*
+    Basic upload screen
+    */
     uploadNewFile(){
         this.setState({
             currentView: 'upload',
@@ -218,7 +243,9 @@ class ContentManagement extends React.Component{
             }
         })
     }
-
+    /*
+    Upload screen for bulk upload
+    */
     uploadBulkFiles() {
         this.setState({
             currentView: 'bulkUploadContent',
@@ -241,7 +268,9 @@ class ContentManagement extends React.Component{
             }
         })
     }
-
+    /*
+    Screen for editing already uploaded content
+    */
     handleContentEdit(content){
         this.setState({
             currentView: 'upload',
@@ -264,11 +293,16 @@ class ContentManagement extends React.Component{
             }
         })
     }
+    /*
+    * Function to parse dates
+    */
     parseDate(inputStr) {
         let splitval = inputStr.split("-");
         return new Date(splitval[0], splitval[1] - 1, splitval[2]);
     }
-
+    /*
+    Main screen for content management
+    */
     render(){
         return (
             <div>
@@ -317,11 +351,15 @@ class ContentManagement extends React.Component{
             </div>
         )
     }
-
+    /*
+    * Error class
+    */
     getErrorClass() {
         return this.state.messageType === "error" ? {backgroundColor: '#B71C1C', fontWeight: 'normal'} : {};
     }
-
+    /*
+    * Close Snackbar
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,

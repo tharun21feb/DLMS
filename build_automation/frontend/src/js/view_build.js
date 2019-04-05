@@ -11,10 +11,12 @@ import Typography from '@material-ui/core/Typography';
 
 import { APP_URLS } from './url.js';
 import DownloadBuild from './download_build.js';
-
+/*
+* Constructor for View Build
+*/
 class ViewBuildComponent extends React.Component{
     constructor(props){
-        super(props)
+        super(props);
         this.state = {
             id: -1,
             name: '',
@@ -30,10 +32,15 @@ class ViewBuildComponent extends React.Component{
         };
         this.handleCheckChange = this.handleCheckChange.bind(this)
     }
+    /*
+    * Get an inital state
+    */
     getInitialState() {
         return {checked: true}
     }
-
+    /*
+    * Load data
+    */
     componentDidMount() {
         this.loadData();
 
@@ -42,14 +49,20 @@ class ViewBuildComponent extends React.Component{
             10000
         );
     }
-
+    /*
+    * Unload everything
+    */
     componentWillUnmount() {
         clearInterval(this.intervalId);
     }
-
+    /*
+    * TODO
+    */
     handleCheckChange(){
     }
-
+    /*
+    * Populate data
+    */
     loadData() {
         const currInstance = this;
         axios.get(APP_URLS.VIEW_BUILD, {
@@ -74,10 +87,10 @@ class ViewBuildComponent extends React.Component{
                 if(response.data[0].completion_state == 1){
                     const latestBuild = response.data[0];
                     currInstance.setState({latestBuild:latestBuild});
-                    let build_file = currInstance.state.latestBuild.build_file
-                    let build_split = build_file.split("/")
-                    let file_name = build_split[build_split.length - 1]
-                    let file = decodeURI(file_name)
+                    let build_file = currInstance.state.latestBuild.build_file;
+                    let build_split = build_file.split("/");
+                    let file_name = build_split[build_split.length - 1];
+                    let file = decodeURI(file_name);
                     const res = file.replace((/ \d{4}[_]\d{2}[_]\d{2} \d{2}[_]\d{2}[_]\d{2}\.tar\.gz/i),"");
 
                     currInstance.setState({
@@ -89,7 +102,7 @@ class ViewBuildComponent extends React.Component{
                         name: currInstance.state.name,
                         currTime: currInstance.state.latestBuild.end_time,
                         download: currInstance.state.latestBuild.build_file
-                    }
+                    };
                      currInstance.setState({
                        data:data
                     });
@@ -107,7 +120,7 @@ class ViewBuildComponent extends React.Component{
                                 {currInstance.state.name}
                             </Typography>
                         </div>
-                    )
+                    );
 
                         currInstance.setState({currBuild:currBuild});
                 }
@@ -122,9 +135,11 @@ class ViewBuildComponent extends React.Component{
             console.error(error)
         });
     };
-
+    /*
+    * Render Image creation
+    */
     render(){
-        var elements=null
+        var elements=null;
         if(this.state.isLoaded && !this.state.completionState){
             elements = (
                 <div>
