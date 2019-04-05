@@ -46,9 +46,9 @@ import { TAG_SAVE_TYPE } from './constants.js';
 
 const ExpansionPanel = withStyles({
   root: {
-	boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-    border: '1px solid rgba(0,0,0,1)',
-    borderRadius: '10px !important',
+	boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    border: '1.2px solid rgba(0,0,0,1)',
+    borderRadius: '15px !important',
     margin: '20px',
     marginLeft: '15%',
     marginRight: '15%',
@@ -62,9 +62,9 @@ const theme = createMuiTheme({
   typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: "Asap",
-	fontSize: "18",
+	fontSize: "20",
 	h6: {
-		fontWeight: "800",
+		fontWeight: "600",
 	},
   },
   palette: {
@@ -395,7 +395,7 @@ class TagManagementComponent extends React.Component {
                             </ExpansionPanel>
                             <ExpansionPanel expanded={expanded === 'coverage'} onChange={this.handleChange('coverage')} onClick={e => { this.handleAccordionClick('coverage') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.COVERAGES_LIST, APP_URLS.COVERAGES_DETAIL) }}>
-                                    <Typography>Coverages</Typography>
+                                    <Typography variant="h6" color="primary" className={styles.paragraph}>Coverages</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
@@ -424,7 +424,7 @@ class TagManagementComponent extends React.Component {
                             </ExpansionPanel>
                             <ExpansionPanel expanded={expanded === 'subject'} onChange={this.handleChange('subject')} onClick={e => { this.handleAccordionClick('subject') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.SUBJECTS_LIST, APP_URLS.SUBJECTS_DETAIL) }}>
-                                    <Typography>Subjects</Typography>
+                                    <Typography variant="h6" color="primary" className={styles.paragraph}>Subjects</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
@@ -451,7 +451,7 @@ class TagManagementComponent extends React.Component {
                             </ExpansionPanel>
                             <ExpansionPanel expanded={expanded === 'keyword'} onChange={this.handleChange('keyword')} onClick={e => { this.handleAccordionClick('keyword') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.KEYWORDS_LIST, APP_URLS.KEYWORDS_DETAIL) }}>
-                                    <Typography>Keywords</Typography>
+                                    <Typography variant="h6" color="primary" className={styles.paragraph}>Keywords</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
@@ -477,7 +477,7 @@ class TagManagementComponent extends React.Component {
                             </ExpansionPanel>
                             <ExpansionPanel expanded={expanded === 'workarea'} onChange={this.handleChange('workarea')} onClick={e => { this.handleAccordionClick('workarea') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.WORKAREAS_LIST, APP_URLS.WORKAREAS_DETAIL) }}>
-                                    <Typography>Work Areas</Typography>
+                                    <Typography variant="h6" color="primary" className={styles.paragraph}>Work Areas</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
@@ -504,7 +504,7 @@ class TagManagementComponent extends React.Component {
                             </ExpansionPanel>
                             <ExpansionPanel expanded={expanded === 'language'} onChange={this.handleChange('language')} onClick={e => { this.handleAccordionClick('language') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.LANGUAGES_LIST, APP_URLS.LANGUAGES_DETAIL) }}>
-                                    <Typography>Languages</Typography>
+                                    <Typography variant="h6" color="primary" className={styles.paragraph}>Languages</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
@@ -531,7 +531,7 @@ class TagManagementComponent extends React.Component {
                             </ExpansionPanel>
                             <ExpansionPanel expanded={expanded === 'cataloger'} onChange={this.handleChange('cataloger')} onClick={e => { this.handleAccordionClick('cataloger') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.CATALOGERS_LIST, APP_URLS.CATALOGERS_DETAIL) }}>
-                                    <Typography>Catalogers</Typography>
+                                    <Typography variant="h6" color="primary" className={styles.paragraph}>Catalogers</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
