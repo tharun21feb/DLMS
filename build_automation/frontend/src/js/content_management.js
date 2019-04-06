@@ -41,6 +41,7 @@ class ContentManagement extends React.Component{
             content: null,
             tags: {},
             isLoaded: false,
+			shouldRefresh: false,
         };
         this.setCurrentView = this.setCurrentView.bind(this);
         this.tagIdTagsMap = {};
@@ -55,6 +56,7 @@ class ContentManagement extends React.Component{
     }
 
     componentDidMount() {
+		//console.log("did mount");
         this.loadData()
     }
     buildTagIdTagsMap(tags) {
@@ -76,13 +78,14 @@ class ContentManagement extends React.Component{
         allRequests.push(axios.get(APP_URLS.CONTENTS_LIST, {
             responseType: 'json'}));
         Promise.all(allRequests).then(function(values) {
+			
             currInstance.setState({
                 tags: values[0].data,
                 files: values[1].data, isLoaded: true
             })
         }).catch(function(error) {
             console.error(error);
-            console.error(error.response.data);
+            //console.error(error.response.data);
         });
     }
     handleTextFieldUpdate(stateProperty, evt) {
@@ -125,10 +128,13 @@ class ContentManagement extends React.Component{
                             files.splice(files.indexOf(eachFile), 1, content);
                         }
                     });
+					console.log("updated true");
                 }
                 else{
+					console.log("updated false");
                     files.push(content);
                 }
+				console.log(files);
                 return {
                     message: 'Save Successful',
                     messageType: 'info',
@@ -142,12 +148,24 @@ class ContentManagement extends React.Component{
         });
     }
 	
+	componentDidUpdate(prevProps, prevState) {
+		//console.log("prev props:");
+		//console.log(prevProps);
+		//console.log("currentState");
+		if(this.state.shouldRefresh) {
+			console.log(this.state);
+			this.loadData();
+			this.setState({shouldRefresh: false});
+		}
+	}
+	
 	saveContentCallbackTwo(content, updated){
-		console.log("save callback in CM.js");
+		console.log("save callback in CM2.js");
         const currInstance = this;
         axios.get(APP_URLS.ALLTAGS_LIST, {
             responseType: 'json'
         }).then(function (response) {
+			
             currInstance.tagIdTagsMap=currInstance.buildTagIdTagsMap(response.data);
             currInstance.setState((prevState, props)=>{
                 const {files} = prevState;
@@ -157,15 +175,24 @@ class ContentManagement extends React.Component{
                             files.splice(files.indexOf(eachFile), 1, content);
                         }
                     });
+					
                 }
                 else{
+					//console.log(files);
                     files.push(content);
+					console.log(files);
+					currInstance.setState({shouldRefresh: true});
+					if(currInstance.state.isLoaded) {
+						currInstance.setState();
+					}
                 }
+				
+				console.log("props: " + JSON.stringify(props));
                 return {
                     message: 'Save Successful',
                     messageType: 'info',
                     currentView: 'manage',
-                    files,
+                    content: files,
                     tags: response.data
                 }
             })
@@ -307,19 +334,29 @@ class ContentManagement extends React.Component{
     render(){
         return (
             <div>
-                <Grid container spacing={8} style={{paddingLeft: '20px'}}>
-                    <Grid item xs={3} style={{paddingLeft: '20px'}}>
-                        <h3>Content Management</h3>
-                        <Button variant="contained" color="primary" onClick={e => {this.setCurrentView('manage')}}>
+			<Grid container style={{justifyContent: 'center', marginBottom: '25px', paddingLeft: '20px'}}>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
+                    <Grid item xs>
+                        <Button variant="contained" color="primary" style={{width: '160px'}} onClick={e => {this.setCurrentView('manage')}}>
                             Manage Content
                         </Button>
-                        <div style={{marginTop: '20px'}}> </div>
-                        <Button variant="contained" color="primary" onClick={e => {this.uploadNewFile()}}>
+					</Grid>
+					
+					<Grid item xs>
+                        <Button variant="contained" color="primary" style={{width: '160px'}} onClick={e => {this.uploadNewFile()}}>
                             Add Content
                         </Button>
-                        <div style={{marginTop: '20px'}}> </div>
-                        <Button variant="raised" color="primary" onClick={e => {this.uploadBulkFiles()}}>
-                            Express Loading
+					</Grid>
+					<Grid item xs>
+                        <Button variant="raised" color="primary" style={{width: '160px'}} onClick={e => {this.uploadBulkFiles()}}>
+                            Express Load
                         </Button>
                          <div style={{marginTop: '20px'}}> </div>
                         <Button variant="raised" color="primary" onClick={e => {this.uploadBulkMetadata()}}>
@@ -327,8 +364,19 @@ class ContentManagement extends React.Component{
                         </Button>
                         
                     </Grid>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
+					<Grid item xs>
+					</Grid>
+				</Grid>
+                <Grid container spacing={0} style={{paddingLeft: '20px', paddingRight: '20px'}}>
+                    
 
-                    <Grid item xs={8}>
+                    <Grid item xs={12}>
                         {this.state.isLoaded && this.state.currentView=='manage'&&<FileListComponent tags={this.state.tags} onEdit={this.handleContentEdit}
                                                                                                      onDelete={this.handleFileDelete} allFiles={this.state.files}
                                                                                                      tagIdsTagsMap={this.tagIdTagsMap} />}

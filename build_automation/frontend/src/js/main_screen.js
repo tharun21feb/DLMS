@@ -13,17 +13,63 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import {APP_URLS} from "./url";
 import axios from 'axios';
 
-import solarSpellLogo from '../images/logo.png';
+//this is the old logo
+//import solarSpellLogo from '../images/logo.png';
+
+//this is the new logo (logo2)
+import solarSpellLogo from '../images/logo2.png'; 
 import '../css/style.css';
+
+
+
+const newPalette = createMuiTheme({
+	palette: {
+		primary: {
+		  main: '#75B2DD',
+		  dark: '#75B2DD',
+		  contrastText: '#FFFFFF'
+		},
+		secondary: {
+		  main: '#FFFFFF'
+		}
+      }
+});	
 
 const styles = theme => ({
     padding: {
-     padding: `0 ${theme.spacing.unit * 2}px`,
-   },
+		padding: `0 ${theme.spacing.unit * 2}px`,
+	},
+	indicator: {
+		color: '#75B2dd',
+		fontSize: '22px',
+		fontWeight: 'bold',
+		fontFamily: 'Asap',
+	},
+	head: {
+		color: '#75B2dd',
+		fontSize: '18px',
+		fontWeight: 'bold',
+		fontFamily: 'Asap',
+	
+	}
+	/* palette: {
+		primary: {
+		  light: orange[200], // same as '#FFCC80',
+		  main: '#FB8C00', // same as orange[600]
+		  dark: '#EF6C00',
+		  contrastText: 'rgb(0,0,0)'
+		},
+		secondary: {
+		  main: '#75B2DD'
+		}
+	} */
 });
+
+
 
 class MainScreen extends React.Component {
     constructor(props) {
@@ -73,39 +119,42 @@ class MainScreen extends React.Component {
 
         return (
             <React.Fragment>
-            <Grid container style={{backgroundColor: '#2196f3', height: '100px', flexGrow: 1, overflow: 'hidden'}} justify="center">
+			<MuiThemeProvider theme={newPalette}>
+            <Grid container style={{backgroundColor: '#ffffff', height: '150px', flexGrow: 1, overflow: 'hidden'}} justify="center">
                 <Grid item xs={12}>
                     <Grid container justify="center" alignItems="center" style={{height: '100%'}}>
                         <Grid item>
-                            <img src={solarSpellLogo} className="spellLogo" />
+                           
+						   <img src={solarSpellLogo} className="spellLogo" />
                         </Grid>
+						
+
+								<Tabs
+									value={currentTab}
+									TabIndicatorProps={{style: {backgroundColor: '#75B2DD', height: '5px', borderRadius: '5px'}}}
+									onChange={this.handleTabClick}
+									centered
+									indicatorColor="secondary"
+									/* classes={{
+										indicator: classes.indicator
+									}} */
+								>
+									<Tab className = {classes.indicator} value="tags" label="Metadata" />
+									<Tab className = {classes.indicator} value="contents" label="Contents" />
+									<Tab className = {classes.indicator} value="dirlayout" label="Library Versions" />
+									<Tab className = {classes.indicator} value="images" label="SolarSPELL Images" />
+									{ this.state.showBadge ? (<Tab className = {classes.indicator} value="sysinfo" label= {
+															<Badge className= {classes.padding} color="secondary" badgeContent={'!'}>
+															System Info
+															</Badge>
+														}/>) : (<Tab className = {classes.indicator} value="sysinfo" label="System Info" />)
+									}
+								</Tabs>
+
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid container style={{overflow: 'hidden', flexGrow: 1}}>
-                <Grid item xs={12}>
-                    <Paper>
-                        <Tabs
-                            value={currentTab}
-                            indicatorColor="secondary"
-                            onChange={this.handleTabClick}
-                            textColor="secondary"
-                            centered
-                        >
-                            <Tab value="tags" label="Metadata" />
-                            <Tab value="contents" label="Contents" />
-                            <Tab value="dirlayout" label="Library Versions" />
-                            <Tab value="images" label="SolarSPELL Images" />
-                            { this.state.showBadge ? (<Tab value="sysinfo" label= {
-                                                    <Badge className= {classes.padding} color="secondary" badgeContent={'!'}>
-                                                    System Info
-                                                    </Badge>
-                                                }/>) : (<Tab value="sysinfo" label="System Info" />)
-                            }
-                        </Tabs>
-                    </Paper>
-                </Grid>
-            </Grid>
+            
             <Grid container style={{marginTop: '20px'}}>
                 <Grid item xs={12}>
                     {currentTab == 'dirlayout' && <DirectoryLayoutComponent />}
@@ -115,6 +164,7 @@ class MainScreen extends React.Component {
                     {currentTab == 'sysinfo' && <DiskSpace/>}
                 </Grid>
             </Grid>
+			</MuiThemeProvider>
             </React.Fragment>
         );
     }

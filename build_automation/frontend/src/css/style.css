@@ -13,7 +13,30 @@
 */
 
 body {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: "Asap", "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+table {
+	color: #3592BE !important;
+	font-weight: bold;
+	background: white;
+}
+
+th {
+	color: #3592BE;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+tr {
+	height: 45px;
+}
+
+td {
+    border-bottom: none !important;
+    border-bottom: 0px !important;
+	color: #3592BE !important;
+	font-size: 16px !important;
 }
 
 .accordion__title h3::after {
@@ -26,8 +49,18 @@ body {
     overflow-x: auto;
 }
 
+.dx-datagrid-headers .dx-header-row {
+  color: #3592BE;
+}
+
+.SearchPanelInputBase {
+    width: 100%;
+    margin: 0 auto;
+}
+
 .spellLogo {
-    height: 55px;
+    height: 75px;
+	margin: 10px;
 }
 
 /* React Sortable Tree - Display hand pointer when hovering over the row. */
