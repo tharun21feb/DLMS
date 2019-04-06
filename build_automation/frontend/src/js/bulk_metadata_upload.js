@@ -58,6 +58,7 @@ class BulkMetadataUpload extends React.Component {
             this.handleFileSelection = this.handleFileSelection.bind(this);
             this.saveMetadata = this.saveMetadata.bind(this); 
             this.saveMetadataCallback = props.onSave.bind(this);
+            this.saveCallback = props.saveCallback.bind(this);
         }
         
         handleFileSelection(evt) {
@@ -96,7 +97,8 @@ class BulkMetadataUpload extends React.Component {
         }
         
         saveMetadata() {
-            console.dir("State: " + this.state);
+            //console.dir("State: " + JSON.stringify(this.state));
+            console.log(this.tagIdsTagsMap);
             var parsed;
             var currentInstance = this;
             var matchedRecords = 0;
@@ -124,11 +126,12 @@ class BulkMetadataUpload extends React.Component {
                                 if(parsed[i]["File Name"] == currInstance.content[j].original_file_name) {
                                     console.log(currentInstance.content[j].original_file_name + " exists");
                                     matchedRecords++;
+                                    currInstance.state.creators.push(parsed[i]["Creator"]);
                                     /////////////////////////////
                                     const payload = new FormData();
                                     payload.append('name', parsed[i]["Title"]);
                                     payload.append('description', parsed[i]["Description"]);
-                                    payload.append('creators', parsed[i]["Creator"]);
+                                    /*payload.append('creators', parsed[i]["Creator"]);
                                     payload.append('coverage', parsed[i]["Coverage"]);
                                     payload.append('subjects', parsed[i]["Subject"]);
                                     payload.append('language', parsed[i]["Language"]);
@@ -137,7 +140,7 @@ class BulkMetadataUpload extends React.Component {
                                     payload.append('content_file', currInstance.content[j].content_file);
                                     payload.append('source', parsed[i]["Source"]);
                                     payload.append('copyright', parsed[i]["License/Copyright"]);
-                                    payload.append('rights_statement', parsed[i]["Rights Statement"]);
+                                    payload.append('rights_statement', parsed[i]["Rights Statement"]);*/
                                     //const currInstance = this;
                                     //if (this.state.id > 0) {
                                         // Update an existing directory.

@@ -63,6 +63,7 @@ class ContentManagement extends React.Component{
         Object.keys(tags).forEach(eachKey => {
             tagIdTagMap[eachKey] = buildMapFromArray(tags[eachKey], 'id');
         });
+        console.log(tagIdTagMap);
         return tagIdTagMap;
     }
     loadData() {
@@ -173,7 +174,7 @@ class ContentManagement extends React.Component{
         });
     }
     
-    saveMetadataCallback(metadata, content) {
+    saveMetadataCallback(content, updated, parsed) {
 
         const currInstance = this;
         
@@ -339,7 +340,8 @@ class ContentManagement extends React.Component{
 						content={this.state.content} />}
                         
                         {this.state.isLoaded && this.state.currentView === 'bulkMetadataUpload' && <BulkMetadataUpload onSave={this.saveMetadataCallback}
-						content={this.state.content}  />}
+                                                                                                 tagIdsTagsMap={this.tagIdTagsMap} allTags={this.state.tags}
+						content={this.state.content} saveCallback={this.saveContentCallback} />}
 						
                         {!this.state.isLoaded && 'loading'}
                     </Grid>
