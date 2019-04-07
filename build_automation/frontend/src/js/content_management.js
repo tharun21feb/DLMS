@@ -358,13 +358,13 @@ class ContentManagement extends React.Component{
                         <Button variant="raised" color="primary" style={{width: '160px'}} onClick={e => {this.uploadBulkFiles()}}>
                             Express Load
                         </Button>
-                         <div style={{marginTop: '20px'}}> </div>
-                        <Button variant="raised" color="primary" onClick={e => {this.uploadBulkMetadata()}}>
-                            Metadata Loading
-                        </Button>
+                        
                         
                     </Grid>
 					<Grid item xs>
+                        <Button variant="raised" color="primary" style={{width: '160px'}} onClick={e => {this.uploadBulkMetadata()}}>
+                            Metadata Load
+                        </Button>
 					</Grid>
 					<Grid item xs>
 					</Grid>
@@ -387,7 +387,7 @@ class ContentManagement extends React.Component{
                         {this.state.isLoaded && this.state.currentView === 'bulkUploadContent' && <BulkUploadContent onSave={this.saveContentCallbackTwo} 
 						content={this.state.content} />}
                         
-                        {this.state.isLoaded && this.state.currentView === 'bulkMetadataUpload' && <BulkMetadataUpload onSave={this.saveMetadataCallback}
+                        {this.state.isLoaded && this.state.currentView === 'bulkMetadataUpload' && <BulkMetadataUpload onSave={this.saveContentCallback}
                                                                                                  tagIdsTagsMap={this.tagIdTagsMap} allTags={this.state.tags}
 						content={this.state.content} saveCallback={this.saveContentCallback} />}
 						

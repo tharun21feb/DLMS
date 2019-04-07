@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import {creatMuiTheme} from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import {APP_URLS, get_url} from "./url";
-import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
 import Papa from 'papaparse';
-import * as uploadFuncs from './upload_content';
 
 const style = theme => ({
     root: {
@@ -219,39 +224,45 @@ class BulkMetadataUpload extends React.Component {
         
 		render(){
 				return (
-                                <Grid item xs = {8}>
-                                    <TextField
-                                        id="metadataFile"
-                                        label="Metadata File"
-                                        multiline
-                                        disabled
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                       // error={this.state.fieldErrors.file ? true : false}
-                                        value = {this.state.metadataFileName}
-                                        margin="normal"
-                                    />
-									<input 
-									accept=".csv, .xlsx, .txt"
-									className={"hidden"}
-									id="metadata-upload-input"
-									multiple
-									type="file" 
-									ref={input => {this.fileInput = input;}} 
-                                    onChange={this.handleFileSelection}
-									/>
-	
-								<label htmlFor="metadata-upload-input">
-								<Button variant="contained" component="span">
-                                    Browse
-								</Button>
-								</label>
+                            <Grid item xs = {8}>
+                                
+                                <AppBar position="static" style={{ height: '50px', margin: 'auto'}}>
+                                    <Typography gutterBottom variant="subtitle1" style={{color: '#ffffff', textAlign: 'center'}}>
+                                        Metadata Loading
+                                    </Typography>
+                                </AppBar>
                                 <div style={{marginTop: '20px'}}> </div>
+                                
+                                <h4 style={{color: '#75B2DD'}}>Selected Files</h4>
+                                
+                                <div style={{maxHeight: '50%', width: '100%'}}>
+                                    <List style={{listStyleType: 'none', paddingLeft: '0', textIndent: '10px', overflow: 'auto', margin: '0', padding: '0', maxHeight: '50%', marginBottom: '25px'}} >    
+                                        <ListItem divider style={{lineHeight: '15px', background: '#b2dbfb'}}>{this.state.metadataFileName}</ListItem>
+                                    </List>
+                                </div>
+                                
+                                <input 
+                                accept=".csv"
+                                className={"hidden"}
+                                id="metadata-upload-input"
+                                multiple
+                                type="file" 
+                                ref={input => {this.fileInput = input;}} 
+                                onChange={this.handleFileSelection}
+                                />
+
+                                <label htmlFor="metadata-upload-input">
+                                    <Button variant="contained" component="span">
+                                        Browse
+                                    </Button>
+                                </label>
+                                
+                                <div style={{marginTop: '20px'}}> </div>
+                                
                                 <Button variant="contained" component="span" onClick={this.saveMetadata}>
                                     Save
                                 </Button>
-                                </Grid>
+                            </Grid>
 					
 			);
 		}
