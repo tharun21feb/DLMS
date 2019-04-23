@@ -10,6 +10,9 @@ import { APP_URLS, get_url } from './url.js';
 
 import Typography from '@material-ui/core/Typography';
 import { TAG_SAVE_TYPE, HTTP_STATUS } from './constants.js';
+/*
+* Constructor for new tags
+*/
 class TagCreation extends React.Component {
     constructor(props) {
         super(props);
@@ -23,18 +26,24 @@ class TagCreation extends React.Component {
         this.saveCallback = props.onSave.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
     }
-
+    /*
+    * This method handles changes made to fields in metadata files
+    */
     handleTextFieldUpdate(stateProperty, evt) {
         this.setState({
             [stateProperty]: evt.target.value
         })
     }
-
+    /*
+    * General error class
+    */
     getErrorClass() {
         return this.state.messageType === "error" ? { backgroundColor: '#B71C1C', fontWeight: 'normal' } : {};
     }
 
-
+    /*
+    * A method to populate the files data
+    */
     componentWillReceiveProps(props) {
 
         this.setState({
@@ -43,7 +52,9 @@ class TagCreation extends React.Component {
 
         });
     }
-
+    /*
+    * Method to either update or create a new piece of metadata
+    */
     saveTag(evt) {
         var targetUrl = this.props.listUrl;
         const payload = { name: this.state.name, description: this.state.description };
@@ -59,6 +70,7 @@ class TagCreation extends React.Component {
                 console.error("Error in updating the tag.", error);
                 console.error(error.response.data);
                 let errorMsg = 'Error in creating the tag.';
+                //Handle bad requests
             if (error.response.status === HTTP_STATUS.BAD_REQUEST) {
                 errorMsg = (<React.Fragment><b>ERROR:</b> This metadata already exists. Please rename it before trying to update.</React.Fragment>);
             }
@@ -78,6 +90,7 @@ class TagCreation extends React.Component {
                 console.error("Error in creating a new Tag", error);
                 console.error(error.response.data);
                 let errorMsg = 'Error in creating the tag.';
+                //Handle bad requests
             if (error.response.status === HTTP_STATUS.BAD_REQUEST) {
                 errorMsg = (<React.Fragment><b>ERROR:</b> This metadata already exists. Please rename it before trying to add.</React.Fragment>);
             }
@@ -91,10 +104,9 @@ class TagCreation extends React.Component {
         }
     }
 
-
-
-
-
+    /*
+    * Render class for the add metadata screen
+    */
     render() {
         return (
             <Grid container spacing={0} style={{ paddingLeft: '20px' }}>
@@ -146,9 +158,10 @@ class TagCreation extends React.Component {
             </Grid>
         );
 
-
-
     }
+    /*
+    * Close snackbar
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,

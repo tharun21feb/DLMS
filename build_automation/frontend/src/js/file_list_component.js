@@ -34,13 +34,16 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 
 var __tagIdsTagsMap = {};
-
+/*
+* Format tags
+*/
 function ChippedTagsFormatter(input) {
     const {row, column, value} = input;
     if (!value){
         return "";
     }
     const allChips = [];
+    //If value equals number
     if (typeof(value)=='number') {
         allChips.push(<Chip key={row.id + '_' + column['name'] + '_' + value} label={__tagIdsTagsMap[column['name']
         +'s'][value]['name']} />);
@@ -53,11 +56,15 @@ function ChippedTagsFormatter(input) {
     }
     return allChips;
 }
-
+/*
+* What data type is the tag?
+*/
 function ChippedTagsTypeProvider(props) {
     return (<DataTypeProvider formatterComponent={ChippedTagsFormatter} {...props} />);
 }
-
+/*
+* Filter through an array of tags
+*/
 function filterThroughArray(value, filter) {
     if ( value && filter && Array.isArray(filter.value)) {
         if(!Array.isArray(value)) {
@@ -70,7 +77,9 @@ function filterThroughArray(value, filter) {
         return allTagsPresent;
     }
 }
-
+/*
+* Constructor for file list
+*/
 class FileListComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -113,12 +122,16 @@ class FileListComponent extends React.Component {
             {columnName: 'cataloger', predicate: filterThroughArray},
         ];
     }
-
+    /*
+    * Components will load data
+    */
     componentWillReceiveProps(props) {
         __tagIdsTagsMap = props.tagIdsTagsMap;
         this.setState({allFiles: props.allFiles})
     }
-
+    /*
+    * Right click options
+    */
     handleFilesRightClick(evt, row, menuName) {
         this.setState({
             [menuName]: {
@@ -129,7 +142,9 @@ class FileListComponent extends React.Component {
         });
         evt.preventDefault();
     }
-
+    /*
+    * Close menu
+    */
     handleMenuClose(evt, menuName) {
         this.setState({
             [menuName]: {
@@ -138,12 +153,16 @@ class FileListComponent extends React.Component {
             }
         });
     }
-
+    /*
+    * Rows
+    */
     tableRowComponent(obj, menuName)  {
         const {row, children} = obj;
         return(<tr onContextMenu={evt => this.handleFilesRightClick(evt, row, menuName)}>{children}</tr>);
     }
-
+    /*
+    * Delete a file
+    */
     deleteFile(file) {
         const targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id: file.id});
         const currentInstance = this;
@@ -155,17 +174,23 @@ class FileListComponent extends React.Component {
             console.error("Error in deleting the file ", error);
         });
     }
-
+    /*
+    * Confirm request for deletion
+    */
     confirmDeleteContent() {
         this.setState({
             confirmDelete: true
         })
     }
-
+    /*
+    * Abort confirmation
+    */
     closeConfirmDialog() {
         this.setState({confirmDelete: false})
     }
-
+    /*
+    * Get filtered items
+    */
     getFilterCellComponent(props) {
         const {filter, onFilter, column, filteringEnabled} = props;
         if (column.filterType === "autocomplete") {
@@ -188,7 +213,9 @@ class FileListComponent extends React.Component {
         );
     }
 
-
+    /*
+    * Render class for file list
+    */
     render() {
         return (
             <React.Fragment>
@@ -289,10 +316,15 @@ class FileListComponent extends React.Component {
             </React.Fragment>
         );
     }
+    /*
+    * Error class
+    */
     getErrorClass() {
         return this.state.messageType === "error" ? {backgroundColor: '#B71C1C', fontWeight: 'normal'} : {};
     }
-
+    /*
+    * Close snackbar
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,

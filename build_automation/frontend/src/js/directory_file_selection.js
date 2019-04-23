@@ -34,7 +34,9 @@ import OpenInNew from '@material-ui/icons/OpenInNew';
 import AutoCompleteFilter from './autocomplete_filter.js';
 
 var __tagIdsTagsMap = {};
-
+/*
+* Format chipped tags
+*/
 function ChippedTagsFormatter(input) {
     if (!input) {
         return [];
@@ -51,23 +53,31 @@ function ChippedTagsFormatter(input) {
         allChips.push(<Chip key={row.id + '_' + columnName + '_' + input} label={__tagIdsTagsMap[columnName][value]['name']} />);
     }
     return allChips;
-};
-
+}
+/*
+* Return chipped tags
+*/
 function ChippedTagsTypeProvider(props) {
     return (<DataTypeProvider formatterComponent={ChippedTagsFormatter} {...props} />);
-};
-
+}
+/*
+* Open new window
+*/
 // TODO : Delete this when it is finalized that this piece of code is not needed.
 function OpenInNewWindowFormatter(input) {
     const {row, value} = input;
     const targetUrl = value;
     return <OpenInNew onClick={evt => window.open(targetUrl, "_blank")} className="handPointer" title="Open in new window"/>;
 }
-
+/*
+* Return a link
+*/
 function LinkTypeProvider(props) {
     return (<DataTypeProvider formatterComponent={OpenInNewWindowFormatter} {...props} />);
-};
-
+}
+/*
+* Filter through an array of tags
+*/
 function filterThroughArray(value, filter) {
     if ( value && filter && Array.isArray(filter.value)) {
         if(!Array.isArray(value)) {
@@ -80,7 +90,9 @@ function filterThroughArray(value, filter) {
         return allTagsPresent;
     }
 }
-
+/*
+* Constructor for file selection component
+*/
 class FileSelectionComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -146,7 +158,9 @@ class FileSelectionComponent extends React.Component {
     getSelectedFilesFromFileIds(fileIds, fileIdFileMap) {
         return fileIds.map(eachFileId => fileIdFileMap[eachFileId]);
     }
-
+    /*
+    * Components will receive data
+    */
     componentWillReceiveProps(props) {
         const selectedFiles = this.getSelectedFilesFromFileIds(props.selectedFiles, props.fileIdFileMap);
         this.setState({
@@ -154,7 +168,9 @@ class FileSelectionComponent extends React.Component {
         });
         __tagIdsTagsMap = props.tagIdsTagsMap;
     }
-
+    /*
+    * Right click options
+    */
     handleFilesRightClick(evt, row, menuName) {
         this.setState({
             [menuName]: {
@@ -164,7 +180,9 @@ class FileSelectionComponent extends React.Component {
         });
         evt.preventDefault();
     }
-
+    /*
+    * Menu closed
+    */
     handleMenuClose(evt, menuName) {
         this.setState({
             [menuName]: {
@@ -173,24 +191,32 @@ class FileSelectionComponent extends React.Component {
             }
         });
     }
-
+    /*
+    * Add a file to current selection
+    */
     addFileToSelection(file) {
         if (this.selectCallback) {
             this.selectCallback(file);
         }
     }
-
+    /*
+    * Remove a file from the current selection
+    */
     removeFileFromSelection(file) {
         if (this.deselectCallback) {
             this.deselectCallback(file);
         }
     }
-
+    /*
+    * Table rows
+    */
     tableRowComponent(obj, menuName)  {
         const {row, children} = obj;
         return(<TableRow onContextMenu={evt => this.handleFilesRightClick(evt, row, menuName)}>{children}</TableRow>);
     }
-
+    /*
+    * Get filtered cells
+    */
     getFilterCellComponent(props) {
         const {filter, onFilter, column, filteringEnabled} = props;
         if (column.filterType === "autocomplete") {
@@ -212,7 +238,9 @@ class FileSelectionComponent extends React.Component {
             </TableCell>
         );
     }
-
+    /*
+    * Render method
+    */
     render() {
         return (
             <React.Fragment>
