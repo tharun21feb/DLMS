@@ -201,7 +201,7 @@ class ContentManagement extends React.Component{
         });
     }
     
-    saveMetadataCallback(content, updated, parsed) {
+    saveMetadataCallback(content, updated) {
 
         const currInstance = this;
         
@@ -211,17 +211,15 @@ class ContentManagement extends React.Component{
         }).then(function (response) {
             currInstance.content = response.data;
             currInstance.setState((prevState, props)=>{
-                const {files} = prevState; /*
+                const {files} = prevState; 
                 if (updated){
                     files.forEach(eachFile => {
                         if (eachFile.id===content.id){
-                            files.splice(files.indexOf(eachFile), 1, metadata);
+                            files.splice(files.indexOf(eachFile), 1, content);
                         }
                     });
                 }
-                else{
-                    files.push(metadata);
-                }*/
+                currInstance.forceUpdate();
                 return {
                     message: 'Metadata File Save Successful',
                     messageType: 'info',

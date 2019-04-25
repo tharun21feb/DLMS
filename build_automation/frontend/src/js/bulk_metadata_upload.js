@@ -33,6 +33,7 @@ const style = theme => ({
 class BulkMetadataUpload extends React.Component {	    
 		constructor(props) {
             super(props);
+            console.log("props:\n");
             console.log(props);
             this.state = {
            
@@ -101,10 +102,22 @@ class BulkMetadataUpload extends React.Component {
             return year + '-' + month + '-' + date;
         }
         
+        handleTagAddition(tag, tagType){
+            this.setState((prevState, props) => {
+                const selectedTags = prevState[tagType];
+                const fieldErrors = prevState.fieldErrors;
+                selectedTags.push(tag.name);
+                fieldErrors[tagType] = null;
+                const value = {[tagType]: selectedTags, fieldErrors};
+                return value;
+            })
+        }
+        
         saveMetadata() {
             //console.dir("State: " + JSON.stringify(this.state));
-            console.log(this.tagIdsTagsMap);
+            console.log(this.props);
             var parsed;
+            const currInstance = this;
             var currentInstance = this;
             var matchedRecords = 0;
             var unmatchedRecords = 0; 
@@ -123,29 +136,77 @@ class BulkMetadataUpload extends React.Component {
                         responseType: 'json'
                     }).then(function (response) {
                         currInstance.content = response.data;
+                        console.log("currant content");
                         console.log(currInstance.content);
+                        console.log("Parse:");
                         console.log(parsed);
                         
                         for(var i = 0; i < parsed.length;i++) {
                             for (var j = 0; j < currInstance.content.length; j++) {
                                 if(parsed[i]["File Name"] == currInstance.content[j].original_file_name) {
-                                    console.log(currentInstance.content[j].original_file_name + " exists");
+                                    console.log(currInstance.content[j].original_file_name + " exists");
                                     matchedRecords++;
-                                    currInstance.state.creators.push(parsed[i]["Creator"]);
-                                    /////////////////////////////
+                                    console.log("props in parse callback");
+                                    console.log(currInstance.props);
+                                    
                                     const payload = new FormData();
                                     payload.append('name', parsed[i]["Title"]);
-                                    payload.append('description', parsed[i]["Description"]);
-                                    /*payload.append('creators', parsed[i]["Creator"]);
-                                    payload.append('coverage', parsed[i]["Coverage"]);
-                                    payload.append('subjects', parsed[i]["Subject"]);
-                                    payload.append('language', parsed[i]["Language"]);
-                                    payload.append('cataloger', parsed[i]["Cataloger"]);
-                                    //payload.append('updated_time', this.formatDate(this.state.selectedDate));
-                                    payload.append('content_file', currInstance.content[j].content_file);
-                                    payload.append('source', parsed[i]["Source"]);
+                                    if (parsed[i]["Description"] == "")
+                                        payload.append('description', "No Description in Spreadsheet");
+                                    else
+                                        payload.append('description', parsed[i]["Description"]);
+                               
+                                  
+                     
+                                   for (var x = 0; x < currInstance.props.allTags.languages.length; x++){
+                                      if (parsed[i]["Language"] == currInstance.props.allTags.languages[x].name) {
+                                          
+                                      payload.append('language', currInstance.props.allTags.languages[x].id);
+                                      //currInstance.props.allTags.languages[x].name;
+                                     
+                                      }
+                                         
+                                   }
+                                   
+                                    for (var x = 0; x < currInstance.props.allTags.subjects.length; x++){
+                                      if (parsed[i]["Subject"] == currInstance.props.allTags.subjects[x].name) {
+                                          
+                                      payload.append('subjects', currInstance.props.allTags.subjects[x].id);
+                                      
+                                      }
+                                   }
+                                   
+                                    for (var x = 0; x < currInstance.props.allTags.coverages.length; x++){
+                                      if (parsed[i]["Coverage"] == currInstance.props.allTags.coverages[x].name) {
+                                          
+                                      payload.append('coverage', currInstance.props.allTags.coverages[x].id);
+                                      
+                                      }
+                                   }
+                                   
+                                    for (var x = 0; x < currInstance.props.allTags.catalogers.length; x++){
+                                      if (parsed[i]["Cataloger"] == currInstance.props.allTags.catalogers[x].name) {
+                                          
+                                      payload.append('cataloger', currInstance.props.allTags.catalogers[x].id);
+                                      
+                                      }
+                                   }
+                                   
+                                    for (var x = 0; x < currInstance.props.allTags.creators.length; x++){
+                                      if (parsed[i]["Creator"] == currInstance.props.allTags.creators[x].name) {
+                                      console.log("creator: " + currInstance.props.allTags.creators[x].name);
+                                      payload.append('creator', currInstance.props.allTags.creators[x].id);
+                                      
+                                      }
+                                   }
+                                    ////payload.append('subjects', parsed[i]["Subject"]);
+                                    //payload.append('language', currInstance.props.language);
+                                    //payload.append('cataloger', parsed[i]["Cataloger"]);
+                                    //payload.append('updated_time', formatDate(this.state.selectedDate));
+                                    //payload.append('content_file', currInstance.content[j].content_file);
+                                    //payload.append('source', parsed[i]["Source"]);
                                     payload.append('copyright', parsed[i]["License/Copyright"]);
-                                    payload.append('rights_statement', parsed[i]["Rights Statement"]);*/
+                                    payload.append('rights_statement', parsed[i]["Rights Statement"]);
                                     //const currInstance = this;
                                     //if (this.state.id > 0) {
                                         // Update an existing directory.
@@ -154,7 +215,7 @@ class BulkMetadataUpload extends React.Component {
                                         axios.patch(targetUrl, payload, {
                                             responseType: 'json'
                                         }).then(function(response) {
-                                            currInstance.saveCallback(response.data, true);
+                                            //currInstance.saveCallback(response.data, true);
                                         }).catch(function(error) {
                                             console.error("Error in updating the content", error);
                                             console.error(error.response.data);
@@ -169,21 +230,13 @@ class BulkMetadataUpload extends React.Component {
                                     if(matchedArray.indexOf(parsed[i]["File Name"]) == -1)
                                         matchedArray.push(parsed[i]["File Name"]);
                                 }
-                                else {
-                                    if(unmatchedArray.indexOf(parsed[i]["File Name"]) == -1 &&
-                                         matchedArray.indexOf(parsed[i]["File Name"]) == -1) {
-                                        unmatchedRecords++;
-                                        unmatchedArray.push(parsed[i]["File Name"]);
-                                    }
-                                }                                    
+                                                           
      
                             }             
                         }
                         
                         
-                        console.log("Matched " + matchedRecords + " records");
-                        console.log("Unmatched records: " + unmatchedRecords);
-                        console.log(unmatchedArray);
+                        console.log("Matched " + matchedRecords + " records:");
                         console.log(matchedArray);
                         
                     }).catch(function (error) {
@@ -195,19 +248,17 @@ class BulkMetadataUpload extends React.Component {
             
             
             var targetUrl = get_url(APP_URLS.METADATA_UPLOAD);
-            this.state.selectedDate = new Date("1901-11-25"); 
             
             const payload = new FormData();
      
             Boolean(this.state.metadataFile) && payload.append('metadata_file', this.state.metadataFile);
             payload.append('name', this.state.metadataFileName)
-            const currInstance = this;
-           
+            
             
                 axios.post(targetUrl, payload, {
                 responseType: 'json'
             }).then(function(response) {
-                currInstance.saveMetadataCallback(response.data, false);
+                currInstance.saveMetadataCallback(response.data, true);
             }).catch(function(error) {
                 console.error("Error in uploading the content", error);
                 console.error(error.response.data);
@@ -237,7 +288,9 @@ class BulkMetadataUpload extends React.Component {
                                 
                                 <div style={{maxHeight: '50%', width: '100%'}}>
                                     <List style={{listStyleType: 'none', paddingLeft: '0', textIndent: '10px', overflow: 'auto', margin: '0', padding: '0', maxHeight: '50%', marginBottom: '25px'}} >    
-                                        <ListItem divider style={{lineHeight: '15px', background: '#b2dbfb'}}>{this.state.metadataFileName}</ListItem>
+                                     
+                                    
+                                     <ListItem divider style={{lineHeight: '15px', background: '#b2dbfb' }} key={this.state.metadataFileName}>{this.state.metadataFileName}</ListItem>
                                     </List>
                                 </div>
                                 
