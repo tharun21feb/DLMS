@@ -146,8 +146,7 @@ class BulkMetadataUpload extends React.Component {
                                 if(parsed[i]["File Name"] == currInstance.content[j].original_file_name) {
                                     console.log(currInstance.content[j].original_file_name + " exists");
                                     matchedRecords++;
-                                    console.log("props in parse callback");
-                                    console.log(currInstance.props);
+                                    
                                     
                                     const payload = new FormData();
                                     payload.append('name', parsed[i]["Title"]);
@@ -177,7 +176,7 @@ class BulkMetadataUpload extends React.Component {
                                    }
                                    
                                     for (var x = 0; x < currInstance.props.allTags.coverages.length; x++){
-                                      if (parsed[i]["Coverage"] == currInstance.props.allTags.coverages[x].name) {
+                                      if (parsed[i]["Coverage (Spatial)"] == currInstance.props.allTags.coverages[x].name) {
                                           
                                       payload.append('coverage', currInstance.props.allTags.coverages[x].id);
                                       
@@ -195,7 +194,7 @@ class BulkMetadataUpload extends React.Component {
                                     for (var x = 0; x < currInstance.props.allTags.creators.length; x++){
                                       if (parsed[i]["Creator"] == currInstance.props.allTags.creators[x].name) {
                                       console.log("creator: " + currInstance.props.allTags.creators[x].name);
-                                      payload.append('creator', currInstance.props.allTags.creators[x].id);
+                                      payload.append('creators', currInstance.props.allTags.creators[x].id);
                                       
                                       }
                                    }
@@ -215,7 +214,7 @@ class BulkMetadataUpload extends React.Component {
                                         axios.patch(targetUrl, payload, {
                                             responseType: 'json'
                                         }).then(function(response) {
-                                            //currInstance.saveCallback(response.data, true);
+                                            currInstance.saveMetadataCallback(response.data, true);
                                         }).catch(function(error) {
                                             console.error("Error in updating the content", error);
                                             console.error(error.response.data);
@@ -235,6 +234,8 @@ class BulkMetadataUpload extends React.Component {
                             }             
                         }
                         
+                        console.log("props in parse callback");
+                                    console.log(currInstance.props);
                         
                         console.log("Matched " + matchedRecords + " records:");
                         console.log(matchedArray);
