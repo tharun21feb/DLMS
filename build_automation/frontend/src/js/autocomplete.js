@@ -17,6 +17,9 @@ const MAX_COUNT = 10;
  * This file is a modified version of https://github.com/mui-org/material-ui/blob/e61ffeab3c432506829d118fb173b0dc336e224a/docs/src/pages/demos/autocomplete/IntegrationDownshift.js
  */
 
+/*
+* Render the user's input
+*/
 function renderInput(inputProps) {
     const { InputProps, classes, ref, ...other } = inputProps;
 
@@ -24,7 +27,9 @@ function renderInput(inputProps) {
         <TextField InputProps={{ inputRef: ref, classes: { root: classes.inputRoot, }, ...InputProps, }} {...other} />
     );
 }
-
+/*
+* Render suggestions for items that are in the defaults
+*/
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem, searchKey }) {
     const isHighlighted = highlightedIndex === index;
     const isSelected = (selectedItem || '').indexOf(suggestion[searchKey]) > -1;
@@ -35,7 +40,9 @@ function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, sele
         </MenuItem>
     );
 }
-
+/*
+* Render suggestions for props that aren't default
+*/
 renderSuggestion.propTypes = {
     highlightedIndex: PropTypes.number,
     index: PropTypes.number,
@@ -43,7 +50,9 @@ renderSuggestion.propTypes = {
     selectedItem: PropTypes.string,
     suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
 };
-
+/*
+* Get autocomplete suggestions based off of inputValue
+*/
 function getSuggestions(suggestions, inputValue, maxCount, searchKey) {
     let count = 0;
 
@@ -59,7 +68,9 @@ function getSuggestions(suggestions, inputValue, maxCount, searchKey) {
         return keep;
     });
 }
-
+/*
+* Constructor for autocomplete
+*/
 class AutoCompleteWithChips extends React.Component {
     constructor(props) {
         super(props);
@@ -72,14 +83,18 @@ class AutoCompleteWithChips extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
-
+    /*
+    * Load all the components with the appropriate data
+    */
     componentWillReceiveProps(props) {
         this.setState({
             inputValue: '',
             selectedItem: props.selectedItem
         })
     }
-
+    /*
+    * Handle the user partially deleting their input
+    */
     handleKeyDown(evt) {
         const { inputValue, selectedItem } = this.state;
         if (selectedItem.length && !inputValue.length && keycode(evt) === 'backspace') {
@@ -88,19 +103,23 @@ class AutoCompleteWithChips extends React.Component {
             });
         }
     };
-
+    /*
+    * Handle the change in the user's input
+    */
     handleInputChange(evt) {
         this.setState({ inputValue: evt.target.value });
     };
-
+    /*
+    * Edit an item in the autocomplete list
+    */
     handleChange(item) {
         let { selectedItem } = this.state;
         const maxChips = this.props.maxChips;
-
+        //Is max chips greater than 0
         if (maxChips > 0 && selectedItem.length >= maxChips) {
             return;
         }
-
+        //Handle nulls
         if (selectedItem.indexOf(item) === -1) {
             if (this.props.onAddition) {
                 var selectedSuggestion = null;
@@ -117,7 +136,9 @@ class AutoCompleteWithChips extends React.Component {
             }
         }
     };
-
+    /*
+    * Delete an item from the autocomplete list
+    */
     handleDelete(item) {
         if (this.props.onDeletion) {
             var removedChip = null;
@@ -133,7 +154,9 @@ class AutoCompleteWithChips extends React.Component {
             this.setState({ selectedItem });
         }
     };
-
+    /*
+    * Render function for autocomplete
+    */
     render() {
         const { classes } = this.props;
         const { inputValue, selectedItem } = this.state;
@@ -202,7 +225,9 @@ class AutoCompleteWithChips extends React.Component {
         );
     }
 }
-
+/*
+* Autocomplete for our specific chips
+*/
 AutoCompleteWithChips.propTypes = {
     classes: PropTypes.object.isRequired,
     suggestions: PropTypes.array,
@@ -214,14 +239,18 @@ AutoCompleteWithChips.propTypes = {
     searchKey: PropTypes.string,
     maxChips: PropTypes.number,
 };
-
+/*
+* Default chips
+*/
 AutoCompleteWithChips.defaultProps = {
     required: false,
     errorMsg: null,
     searchKey: 'name',
     maxChips: 0,
 };
-
+/*
+* Default styles for autocomplete
+*/
 const styles = theme => ({
   root: {
     flexGrow: 1,

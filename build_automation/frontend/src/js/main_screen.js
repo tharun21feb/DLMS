@@ -69,7 +69,9 @@ const styles = theme => ({
 	} */
 });
 
-
+/*
+* Main screen constructor
+*/
 
 class MainScreen extends React.Component {
     constructor(props) {
@@ -80,22 +82,28 @@ class MainScreen extends React.Component {
         };
         this.handleTabClick = this.handleTabClick.bind(this);
     }
-
+    /*
+    * Event for switching tabs
+    */
     handleTabClick(event, selectedTab) {
         this.setState({ currentTab: selectedTab });
       };
-
+    /*
+    * Call showBadge method
+    */
     componentDidMount() {
         this.showBadge();
         this.timerID = setInterval(
             () => this.showBadge(),1000*60*60
         );
     }
-
+    /*
+    * Clear
+    */
     componentWillUnmount() {
         clearInterval(this.timerID);
     }
-
+    /*Load axios items(diskspace)*/
     showBadge() {
         axios
             .get(APP_URLS.DISKSPACE, {responseType: 'json'})
@@ -112,7 +120,9 @@ class MainScreen extends React.Component {
                 // TODO : Show the error message.
             });
     }
-
+    /*
+    * Render main screen
+    */
     render() {
         const currentTab = this.state.currentTab;
         const { classes } = this.props;

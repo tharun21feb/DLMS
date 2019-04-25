@@ -6,7 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import ViewBuildComponent from './view_build.js';
-
+/*
+* Constructor for Build Process
+*/
 class BuildProcessComponent extends React.Component{
   constructor(props) {
         super(props);
@@ -16,11 +18,15 @@ class BuildProcessComponent extends React.Component{
         };
         this.handleTabClick = this.handleTabClick.bind(this);
     }
-
+    /*
+     * Change the current tab with click
+     */
   handleTabClick(event, selectedTab) {
         this.setState({ currentTab: selectedTab });
       };
-
+    /*
+    * Render class
+    */
   render() {
     const currentTab = this.state.currentTab;
     return (

@@ -87,6 +87,10 @@ const styles = theme => ({
   },
 });
 
+/*
+* Tag management constructor
+*/
+
 class TagManagementComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -155,20 +159,29 @@ class TagManagementComponent extends React.Component {
         this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
     }
-
+    /*
+    * Error method
+    */
     getErrorClass() {
         return this.state.messageType === "error" ? { backgroundColor: '#B71C1C', fontWeight: 'normal' } : {};
     }
+    /*
+    * File deleted
+    */
     confirmDeleteTag() {
         this.setState({
             confirmDelete: true
         })
     }
-
+    /*
+    * Close delete window(file won't be deleted)
+    */
     closeConfirmDialog() {
         this.setState({ confirmDelete: false })
     }
-
+    /*
+    * Handle an edit
+    */
     handleChange(panel) {
         const thisInstance = this
         return function (event, expanded) {
@@ -178,27 +191,35 @@ class TagManagementComponent extends React.Component {
             });
         }
     }
-
+    /*
+    * Handle drop downs
+    */
     handleAccordionClick(panel) {
         this.setState({
             currentPanel: panel
         });
     }
-
+    /*
+    * Designate url to file
+    */
     setUrls(listUrl, detailUrl) {
         this.setState({
             listUrl: listUrl,
             detailUrl: detailUrl
         })
     }
-
+    /*
+    * Change the view(window)
+    */
     setCurrentView(viewName, selectedPanel) {
         this.setState({
             currentView: viewName,
             currentTitle: selectedPanel
         })
     }
-
+    /*
+    * Handle the addition of new metadata
+    */
     addNewTag(selectedPanel) {
         this.setState({
             currentView: 'addTag',
@@ -211,10 +232,15 @@ class TagManagementComponent extends React.Component {
 
         })
     }
+    /*
+    * If everything went as expected load inputted data
+    */
     componentDidMount() {
         this.loadData()
     }
-
+    /*
+    * Load the data given by the user
+    */
     loadData() {
         const currInstance = this;
         axios.get(APP_URLS.ALLTAGS_LIST, {
@@ -235,12 +261,16 @@ class TagManagementComponent extends React.Component {
             // TODO : Show the error message.
         });
     }
-
+    /*
+    * Make rows with all the data for a file
+    */
     tableRowComponent(obj, menuName) {
         const { row, children } = obj;
         return (<TableRow onContextMenu={evt => this.handleTagsRightClick(evt, row, menuName)}>{children}</TableRow>);
     }
-
+    /*
+    * Method to handle right clicks
+    */
     handleTagsRightClick(evt, row, menuName) {
         this.setState({
             selectedTag: row,
@@ -254,7 +284,9 @@ class TagManagementComponent extends React.Component {
 
     }
 
-
+    /*
+    * Method to help deleting metadata
+    */
     deleteTagCallback(deletedItemId) {
         var tagDataKey = this.state.currentPanel + "Rows";
         this.setState((prevState, props) => {
@@ -273,7 +305,9 @@ class TagManagementComponent extends React.Component {
             return newState;
         });
     }
-
+    /*
+    * Delete a metadata file
+    */
     deleteTag() {
         const selectedTagId = this.state.selectedTag.id;
         const targetUrl = get_url(this.state.detailUrl, { id: selectedTagId });
@@ -286,7 +320,9 @@ class TagManagementComponent extends React.Component {
             console.error("Error in deleting the meta data", error);
         })
     }
-
+    /*
+    * Change the current state when a menu is closed
+    */
     handleMenuClose(evt, menuName) {
         this.setState({
             [menuName]: {
@@ -295,7 +331,9 @@ class TagManagementComponent extends React.Component {
             }
         });
     }
-
+    /*
+    * Save the info given by the user and create a row
+    */
     saveTagCallback(savedTag, saveType) {
         var tagDataKey = this.state.currentPanel + "Rows";
 
@@ -328,7 +366,9 @@ class TagManagementComponent extends React.Component {
         });
 
     }
-
+    /*
+    * Edit a specific file
+    */
     handleTagEdit() {
         const selectedTag = this.state.selectedTagsMenu.selectedTag;
         const currentInstance = this;
@@ -341,7 +381,9 @@ class TagManagementComponent extends React.Component {
             }
         })
     }
-
+    /*
+    * Render the metadata page
+    */
     render() {
         const { classes } = this.props;
         const { expanded } = this.state;
@@ -632,6 +674,9 @@ class TagManagementComponent extends React.Component {
 
 
     }
+    /*
+    * Close the snackbar
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,

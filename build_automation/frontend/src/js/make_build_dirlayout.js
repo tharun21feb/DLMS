@@ -11,7 +11,9 @@ import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import { APP_URLS, get_url } from './url.js';
-
+/*
+* Constructor for MakeBuildDirlayoutInfo
+*/
 class MakeBuildDirlayoutInfo extends React.Component{
     constructor(props){
         super(props);
@@ -30,7 +32,9 @@ class MakeBuildDirlayoutInfo extends React.Component{
         this.confirmBuildDirectory = this.confirmBuildDirectory.bind(this);
         this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
     }
-
+    /*
+    * Components will receive data
+    */
      componentWillReceiveProps(props) {
         this.setState({
             id: props.info.id,
@@ -39,7 +43,9 @@ class MakeBuildDirlayoutInfo extends React.Component{
             confirmBuild: false,
         });
     }
-
+    /*
+    * State to the user whether the build was successful or not
+    */
     buildHandler(evt){
         const url = get_url(APP_URLS.START_BUILD, {id: this.state.id});
         const currentInstance = this;
@@ -68,15 +74,23 @@ class MakeBuildDirlayoutInfo extends React.Component{
             }
         })
     }
-
+    /*
+    * Build confirmed
+    */
     confirmBuildDirectory() {
         this.setState({
             confirmBuild: true
         })
     }
+    /*
+    * Close confirmation page(set confirm to false)
+    */
     closeConfirmDialog() {
         this.setState({confirmBuild: false})
     }
+    /*
+    * Render class
+    */
     render(){
 
         return(
@@ -136,11 +150,15 @@ class MakeBuildDirlayoutInfo extends React.Component{
             </div>
         )
     }
-
+    /*
+    * Error class for make_build_dirlayout
+    */
     getErrorClass() {
         return this.state.messageType === "error" ? {backgroundColor: '#B71C1C', fontWeight: 'normal'} : {};
     }
-
+    /*
+    * Close the snackbar
+    */
     handleCloseSnackbar() {
         this.setState({
             message: null,

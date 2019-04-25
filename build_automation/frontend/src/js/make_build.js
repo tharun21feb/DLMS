@@ -13,7 +13,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 
 import { APP_URLS } from './url.js';
 import MakeBuildDirlayoutInfo from './make_build_dirlayout.js';
-
+/*
+* Make build constructor
+*/
 class MakeBuildComponent extends React.Component{
     constructor (props) {
         super(props)
@@ -26,24 +28,32 @@ class MakeBuildComponent extends React.Component{
 
     this.handleClick = this.handleClick.bind(this)
     }
-
+    /*
+    * Load data
+    */
     componentDidMount() {
         this.timerID = setTimeout(
             () => this.loadData(),
             1000
         );
     }
-
+    /*
+    * Unload everything
+    */
     componentWillUnmount() {
         clearTimeout(this.timerID);
     }
-
+    /*
+    * Left click options
+    */
     handleClick(layout, event){
         this.setState({
             currentLayout: event.target.value,
             info:layout});
     }
-
+    /*
+    * Populate data
+    */
     loadData() {
         const currInstance = this;
         axios.get(APP_URLS.DIRLAYOUT_LIST, {
@@ -58,9 +68,11 @@ class MakeBuildComponent extends React.Component{
             console.error(error)
         });
     };
-
+    /*
+    * Render Library versions
+    */
     render(){
-        var elements=null
+        var elements=null;
         if(this.state.isLoaded){
             elements=(
                 <Grid container spacing={8}>

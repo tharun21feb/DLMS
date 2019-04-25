@@ -27,7 +27,9 @@ const APP_URLS = {
     METADATA_UPLOAD: '/api/metadata/',
     METADATA_MATCH: '/api/metadata_match',
 };
-
+/*
+* This function returns a URL
+*/
 function get_url(templateStringLiteral, context) {
     context = context || {};
     Object.keys(context).forEach(eachKey => {
