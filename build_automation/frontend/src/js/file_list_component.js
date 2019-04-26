@@ -14,6 +14,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import classNames from "classnames";
+import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { APP_URLS, get_url } from './url.js';
 
@@ -23,15 +25,95 @@ import {
     IntegratedFiltering,
     IntegratedPaging,
     PagingState,
+	SearchState,
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
     Table,
+	Toolbar,
     TableHeaderRow,
     TableFilterRow,
     TableColumnResizing,
     PagingPanel,
+	SearchPanel,
 } from '@devexpress/dx-react-grid-material-ui';
+
+const styles = theme => ({
+	title: {
+		color: '#75B2dd',
+		fontSize: '16px',	
+	}
+});
+
+/* const HighlightedCell = (value) => (
+  <Table.Cell>
+    <span
+      style={{
+        color: '#3592BE',
+      }}
+    >
+      {value}
+    </span>
+  </Table.Cell>
+);
+
+const Cell = (props) => {
+	return <HighlightedCell {...props} />;
+}; */
+
+const styles2 = {
+  customHeaderCell: {
+    '& div': {
+		color: '#3592BE',
+		fontSize: '18px',
+    }
+    /*your styles here*/
+  }
+};
+
+const searchStyle = {
+  customSearchCell: {
+    '& div': {
+		width: '35%',
+		marginBottom: '0',
+		marginTop: '0',
+		marginLeft: '0',
+		marginRight: '0',
+    }
+    /*your styles here*/
+  }
+};
+
+const toolbarStyles = {
+  customToolbar: {
+    width: "100%",
+	backgroundColor: "#FAFAFA",
+	boxShadow: "0 4px 4px -4px rgba(0,0,0,0.21)",
+  }
+};
+const ToolbarRootBase = ({ classes, className, ...restProps }) => (
+  <Toolbar.Root
+    className={classNames(className, classes.customToolbar)}
+    {...restProps}
+  />
+);
+
+const ToolbarRoot = withStyles(toolbarStyles)(ToolbarRootBase);
+
+const CustomSearchBase = ({ classes, ...restProps }) => {
+	return <SearchPanel.Cell className={classes.customSearchCell} {...restProps} />
+}
+
+export const CustomSearchCell = withStyles(searchStyle)(CustomSearchBase);
+
+
+const CustomTableHeaderCellBase = ({ classes, ...restProps }) => {
+
+  restProps.value = restProps.column.title || restProps.column.name;
+  return <TableHeaderRow.Cell className={classes.customHeaderCell} {...restProps} />
+}
+export const CustomTableHeaderCell = withStyles(styles2)(CustomTableHeaderCellBase);
+
 
 var __tagIdsTagsMap = {};
 /*
@@ -212,6 +294,8 @@ class FileListComponent extends React.Component {
             </TableCell>
         );
     }
+	
+
 
     /*
     * Render class for file list
@@ -219,33 +303,35 @@ class FileListComponent extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Typography gutterBottom variant="h5" component="h2">
-                    Select individual files
-                </Typography>
+                
                 <Grid
                     rows={this.props.allFiles}
                     columns={this.columns}
+					style={{color: '#3592BE'}}
                 >
                     <ChippedTagsTypeProvider for={['creators', 'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger']} />
                     <FilteringState defaultFilters={[]} columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]} />
+					<SearchState defaultValue="" />
                     <IntegratedFiltering columnExtensions={this.filterExtensions} />
                     <PagingState defaultCurrentPage={0} defaultPageSize={10} />
                     <IntegratedPaging />
-                    <Table rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
+                    <Table style={{width: '100%', color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold', borderStyle: 'none',}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
                     <TableColumnResizing
                         defaultColumnWidths={[
                             { columnName: 'name', width: 230 },
-                            { columnName: 'description', width: 420 },
-                            { columnName: 'creators', width: 160 },
-                            { columnName: 'coverage', width: 160 },
-                            { columnName: 'subjects', width: 160 },
-                            { columnName: 'keywords', width: 160 },
-                            { columnName: 'workareas', width: 160 },
-                            { columnName: 'language', width: 80 },
-                            { columnName: 'cataloger', width: 80 },
-                            { columnName: 'updated_time', width: 80 },
+                            { columnName: 'description', width: 400 },
+                            { columnName: 'creators', width: 140 },
+                            { columnName: 'coverage', width: 140 },
+                            { columnName: 'subjects', width: 140 },
+                            { columnName: 'keywords', width: 140 },
+                            { columnName: 'workareas', width: 140 },
+                            { columnName: 'language', width: 140 },
+                            { columnName: 'cataloger', width: 140 },
+                            { columnName: 'updated_time', width: 140 },
                         ]} />
-                    <TableHeaderRow />
+                    <TableHeaderRow cellComponent={CustomTableHeaderCell} />
+					<Toolbar rootComponent={ToolbarRoot} />
+					<SearchPanel cellComponent={CustomSearchCell} />
                     <TableFilterRow cellComponent={this.getFilterCellComponent}/>
                     <PagingPanel pageSizes={[5, 10, 20]} />
                 </Grid>
@@ -332,4 +418,4 @@ class FileListComponent extends React.Component {
         })
     }
 }
-export default FileListComponent;
+export default withStyles(styles)(FileListComponent);

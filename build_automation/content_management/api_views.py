@@ -1,5 +1,5 @@
 import os
-
+import array
 from django.core.files.base import ContentFile
 from rest_framework import filters, status
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
@@ -9,12 +9,12 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from content_management.exceptions import DuplicateContentFileException
 from content_management.models import (
-    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea
+    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea, MetadataSheet
 )
 from content_management.serializers import (
     BuildSerializer, CatalogerSerializer, ContentSerializer, CoverageSerializer, CreatorSerializer,
     DirectoryLayoutSerializer, DirectorySerializer, KeywordSerializer, LanguageSerializer, SubjectSerializer,
-    WorkareaSerializer
+    WorkareaSerializer, MetadataSheetSerializer
 )
 from content_management.tasks import start_dirlayout_build
 from content_management.utils import DiskSpace, LibraryVersionBuildUtil
@@ -25,7 +25,7 @@ class ContentApiViewset(ModelViewSet):
     serializer_class = ContentSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'description')
-
+ 
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)
@@ -90,7 +90,6 @@ class LanguageViewSet(ModelViewSet):
 class CatalogerViewSet(ModelViewSet):
     serializer_class = CatalogerSerializer
     queryset = Cataloger.objects.all()
-
 
 class DirectoryLayoutViewSet(ModelViewSet):
     serializer_class = DirectoryLayoutSerializer
@@ -232,4 +231,36 @@ class DiskSpaceViewSet(ViewSet):
             'available_space': dp.getfreespace()[0],
             'total_space': dp.getfreespace()[1]
         }
+        return Response(data)
+        
+
+class MetadataSheetApiViewSet(ModelViewSet):
+    serializer_class = MetadataSheetSerializer
+    queryset = MetadataSheet.objects.all()
+   
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except DuplicateContentFileException as dup:
+            metadata_url = reverse('metadata', args=[dup.content.pk], request=request)
+            data = {
+                'result': 'error',
+                'error': 'DUPLICATE_FILE_UPLOADED',
+                'existing_metadata': {
+                    'metadata_url': metadata_url,
+                    'file_url': request.build_absolute_uri(dup.content.metadata_file.url)
+                }
+            }
+            return Response(data, status=status.HTTP_409_CONFLICT)
+
+class MetadataMatchViewSet(ViewSet):
+    queryset = Content.objects.values_list('name', flat=True);
+    '''print(list(queryset))'''
+    def getNames(self, request):    
+        fileNameArray = list(queryset)
+        data =  {
+            content_files: fileNameArray
+        }
+        
+        
         return Response(data)

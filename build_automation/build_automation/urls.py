@@ -22,7 +22,7 @@ from rest_framework import routers
 from content_management.api_views import (
     AllTagsApiViewSet, BuildLibraryVersionViewSet, CatalogerViewSet, ContentApiViewset, CoverageViewSet,
     CreatorViewSet, DirectoryCloneApiViewSet, DirectoryLayoutViewSet, DirectoryViewSet, DiskSpaceViewSet,
-    KeywordViewSet, LanguageViewSet, SubjectViewSet, WorkareaViewSet
+    KeywordViewSet, LanguageViewSet, SubjectViewSet, WorkareaViewSet, MetadataSheetApiViewSet, MetadataMatchViewSet
 )
 
 router = routers.SimpleRouter()
@@ -39,6 +39,8 @@ router.register(r'languages', LanguageViewSet)
 router.register(r'catalogers', CatalogerViewSet)
 router.register(r'alltags', AllTagsApiViewSet, base_name='alltag')
 router.register(r'diskspace', DiskSpaceViewSet, base_name='diskspace')
+router.register(r'metadata', MetadataSheetApiViewSet)
+router.register(r'metadata_match', MetadataMatchViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),

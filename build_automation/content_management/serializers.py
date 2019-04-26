@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from content_management.models import (
-    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea
+    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea, MetadataSheet
 )
 
 
@@ -399,3 +399,25 @@ class BuildSerializer(serializers.ModelSerializer):
     def __get_as_local_time(self, datetime_obj):
         local_time_zone = timezone(settings.TIME_ZONE)
         return datetime_obj.astimezone(local_time_zone)
+
+        
+class MetadataSheetSerializer(serializers.ModelSerializer): 
+    def create(self, validated_data):
+        validated_data_copy = dict(validated_data)
+        metadata = MetadataSheet(**validated_data_copy)
+        metadata = self.__create_update(metadata)
+        return metadata
+    
+    def __create_update(self, metadata):
+        request = self.context['request']
+        if 'metadata_file' in request.FILES:
+            metadata.metadata_file_uploaded = True
+        metadata.save()
+        return metadata
+
+    class Meta:
+        model = MetadataSheet
+        fields = ('metadata_file', 'name',)
+        extra_kwargs = {
+            'url': {'lookup_field': 'pk'},
+        }
