@@ -282,3 +282,6 @@ typings/
 
 # SolarSPELL Specific Settings
 build_automation/frontend/static
+
+#vscode settings
+.vscode/

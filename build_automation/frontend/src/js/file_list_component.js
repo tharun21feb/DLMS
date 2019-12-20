@@ -17,15 +17,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import classNames from "classnames";
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import { APP_URLS, get_url } from './url.js';
+import { APP_URLS } from './url.js';
 
 import {
     DataTypeProvider,
     FilteringState,
     IntegratedFiltering,
-    IntegratedPaging,
     PagingState,
-	SearchState,
+    SearchState,
+    CustomPaging,
+    SortingState,
+    IntegratedSorting
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
@@ -159,20 +161,24 @@ function filterThroughArray(value, filter) {
         return allTagsPresent;
     }
 }
+
 /*
 * Constructor for file list
 */
 class FileListComponent extends React.Component {
     constructor(props) {
         super(props);
+
         this.state={
             allFilesMenu: {
                 selectedFile: null,
                 AnchorPos: null
             },
-            allFiles: props.allFiles,
             confirmDelete: false,
-            selectedFile: null
+            selectedFile: null,
+            pageSize: 10,
+            currentPage: 1,
+            filters: []
         };
         __tagIdsTagsMap = props.tagIdsTagsMap;
         this.columns = [
@@ -203,14 +209,30 @@ class FileListComponent extends React.Component {
             {columnName: 'language', predicate: filterThroughArray},
             {columnName: 'cataloger', predicate: filterThroughArray},
         ];
+        this.setCurrentPage = this.setCurrentPage.bind(this)
+        this.setPageSize = this.setPageSize.bind(this)
+        this.setFilters = this.setFilters.bind(this)
+        this.pageSizes = [1, 10, 20]
+    }
+
+    //Initial data grab after mount
+    componentDidMount() {
+        __tagIdsTagsMap = this.props.tagIdsTagsMap;
+        this.props.getFiles(this.state.currentPage, this.state.pageSize, this.state.filters)
     }
     /*
     * Components will load data
     */
-    componentWillReceiveProps(props) {
-        __tagIdsTagsMap = props.tagIdsTagsMap;
-        this.setState({allFiles: props.allFiles})
+    componentDidUpdate(prevProps) {
+        if (this.props.allFiles != prevProps.allFiles) {
+            __tagIdsTagsMap = this.props.tagIdsTagsMap
+        }
     }
+    
+    setFilters(filters) {
+        this.setState({filters}, this.onPagingChanged)
+    }
+
     /*
     * Right click options
     */
@@ -246,7 +268,7 @@ class FileListComponent extends React.Component {
     * Delete a file
     */
     deleteFile(file) {
-        const targetUrl = get_url(APP_URLS.CONTENT_DETAIL, {id: file.id});
+        const targetUrl = APP_URLS.CONTENT_DETAIL(file.id);
         const currentInstance = this;
         axios.delete(targetUrl).then(function (response) {
             if (currentInstance.deleteCallback){
@@ -294,8 +316,20 @@ class FileListComponent extends React.Component {
             </TableCell>
         );
     }
-	
+    
+    onPagingChanged() {
+        this.props.getFiles(this.state.currentPage, this.state.pageSize, this.state.filters)
+    }
 
+    setCurrentPage(newPage) {
+        this.setState({currentPage: newPage + 1}, this.onPagingChanged)
+    }
+    setPageSize(newPageSize) {
+        this.setState({
+            pageSize: newPageSize,
+            currentPage: 1
+        }, this.onPagingChanged)
+    }
 
     /*
     * Render class for file list
@@ -303,18 +337,31 @@ class FileListComponent extends React.Component {
     render() {
         return (
             <React.Fragment>
-                
                 <Grid
                     rows={this.props.allFiles}
                     columns={this.columns}
 					style={{color: '#3592BE'}}
                 >
                     <ChippedTagsTypeProvider for={['creators', 'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger']} />
-                    <FilteringState defaultFilters={[]} columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]} />
-					<SearchState defaultValue="" />
-                    <IntegratedFiltering columnExtensions={this.filterExtensions} />
-                    <PagingState defaultCurrentPage={0} defaultPageSize={10} />
-                    <IntegratedPaging />
+                    <FilteringState
+                        defaultFilters={[]}
+                        columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]}
+                        onFiltersChange={this.setFilters}
+                    />
+                    <DataTypeProvider
+                        for={["updated_time"]}
+                    />
+                    <PagingState
+                        currentPage={this.state.currentPage - 1}
+                        onCurrentPageChange={this.setCurrentPage}
+                        pageSize={this.state.pageSize}
+                        onPageSizeChange={this.setPageSize}
+                    />
+                    <CustomPaging totalCount={this.props.totalCount} />
+                    <SortingState
+                        defaultSorting={[{columnName: "name", direction: "asc"}]}
+                    />
+                    <IntegratedSorting />
                     <Table style={{width: '100%', color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold', borderStyle: 'none',}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
                     <TableColumnResizing
                         defaultColumnWidths={[
@@ -329,11 +376,10 @@ class FileListComponent extends React.Component {
                             { columnName: 'cataloger', width: 140 },
                             { columnName: 'updated_time', width: 140 },
                         ]} />
-                    <TableHeaderRow cellComponent={CustomTableHeaderCell} />
+                    <TableHeaderRow cellComponent={CustomTableHeaderCell} showSortingControls />
 					<Toolbar rootComponent={ToolbarRoot} />
-					<SearchPanel cellComponent={CustomSearchCell} />
                     <TableFilterRow cellComponent={this.getFilterCellComponent}/>
-                    <PagingPanel pageSizes={[5, 10, 20]} />
+                    <PagingPanel pageSizes={this.pageSizes} />
                 </Grid>
                 <Menu
                     id="all-files-menu"

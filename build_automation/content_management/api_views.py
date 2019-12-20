@@ -16,6 +16,7 @@ from content_management.serializers import (
     DirectoryLayoutSerializer, DirectorySerializer, KeywordSerializer, LanguageSerializer, SubjectSerializer,
     WorkareaSerializer, MetadataSheetSerializer
 )
+from content_management.filters import ContentsFilterSet
 from content_management.tasks import start_dirlayout_build
 from content_management.utils import DiskSpace, LibraryVersionBuildUtil
 
@@ -23,9 +24,9 @@ from content_management.utils import DiskSpace, LibraryVersionBuildUtil
 class ContentApiViewset(ModelViewSet):
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
-    filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'description')
- 
+    filterset_class = ContentsFilterSet
+
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)

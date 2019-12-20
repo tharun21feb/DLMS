@@ -40,7 +40,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { APP_URLS, get_url } from "./url";
+import { APP_URLS } from "./url";
 import cloneDeep from 'lodash/fp/cloneDeep';
 import { TAG_SAVE_TYPE } from './constants.js';
 
@@ -62,7 +62,7 @@ const theme = createMuiTheme({
   typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: "Asap",
-	fontSize: "20",
+	fontSize: 20,
 	h6: {
 		fontWeight: "600",
 	},
@@ -310,7 +310,7 @@ class TagManagementComponent extends React.Component {
     */
     deleteTag() {
         const selectedTagId = this.state.selectedTag.id;
-        const targetUrl = get_url(this.state.detailUrl, { id: selectedTagId });
+        const targetUrl = this.state.detailUrl(selectedTagId);
         const currentInstance = this;
         axios.delete(targetUrl, {
             responseType: 'json'
@@ -385,17 +385,6 @@ class TagManagementComponent extends React.Component {
     * Render the metadata page
     */
     render() {
-        const { classes } = this.props;
-        const { expanded } = this.state;
-        const { creatorRows, creatorColumns } = this.state;
-        const { keywordRows, keywordColumns } = this.state;
-        const { coverageRows, coverageColumns } = this.state;
-        const { subjectRows, subjectColumns } = this.state;
-        const { workareaRows, workareaColumns } = this.state;
-        const { languageRows, languageColumns } = this.state;
-        const { catalogerRows, catalogerColumns } = this.state;
-
-
         return (
 		<MuiThemeProvider theme={theme}>
             <Grid container spacing={0}>
@@ -409,7 +398,7 @@ class TagManagementComponent extends React.Component {
 					
                     <Grid container spacing={0}>
                         <Grid item xs={12}>
-                            <ExpansionPanel expanded={expanded === 'creator'} onChange={this.handleChange('creator')} onClick={e => { this.handleAccordionClick('creator') }}>
+                            <ExpansionPanel expanded={this.state.expanded === 'creator'} onChange={this.handleChange('creator')} onClick={e => { this.handleAccordionClick('creator') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.CREATORS_LIST, APP_URLS.CREATORS_DETAIL) }}>
                                     <Typography variant="h6" color="primary" className={styles.paragraph}>Creators</Typography>
                                 </ExpansionPanelSummary>
@@ -419,8 +408,8 @@ class TagManagementComponent extends React.Component {
 
                                         </Grid>
                                         <DataGrid
-                                            rows={creatorRows}
-                                            columns={creatorColumns}
+                                            rows={this.state.creatorRows}
+                                            columns={this.state.creatorColumns}
                                         >
                                             <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
                                             <IntegratedFiltering />
@@ -435,7 +424,7 @@ class TagManagementComponent extends React.Component {
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                            <ExpansionPanel expanded={expanded === 'coverage'} onChange={this.handleChange('coverage')} onClick={e => { this.handleAccordionClick('coverage') }}>
+                            <ExpansionPanel expanded={this.state.expanded === 'coverage'} onChange={this.handleChange('coverage')} onClick={e => { this.handleAccordionClick('coverage') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.COVERAGES_LIST, APP_URLS.COVERAGES_DETAIL) }}>
                                     <Typography variant="h6" color="primary" className={styles.paragraph}>Coverages</Typography>
                                 </ExpansionPanelSummary>
@@ -447,8 +436,8 @@ class TagManagementComponent extends React.Component {
             </Button>
                                         </Grid>
                                         <DataGrid
-                                            rows={coverageRows}
-                                            columns={coverageColumns}
+                                            rows={this.state.coverageRows}
+                                            columns={this.state.coverageColumns}
                                         >
                                             <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
                                             <IntegratedFiltering />
@@ -464,7 +453,7 @@ class TagManagementComponent extends React.Component {
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                            <ExpansionPanel expanded={expanded === 'subject'} onChange={this.handleChange('subject')} onClick={e => { this.handleAccordionClick('subject') }}>
+                            <ExpansionPanel expanded={this.state.expanded === 'subject'} onChange={this.handleChange('subject')} onClick={e => { this.handleAccordionClick('subject') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.SUBJECTS_LIST, APP_URLS.SUBJECTS_DETAIL) }}>
                                     <Typography variant="h6" color="primary" className={styles.paragraph}>Subjects</Typography>
                                 </ExpansionPanelSummary>
@@ -476,8 +465,8 @@ class TagManagementComponent extends React.Component {
             </Button>
                                         </Grid>
                                         <DataGrid
-                                            rows={subjectRows}
-                                            columns={subjectColumns}
+                                            rows={this.state.subjectRows}
+                                            columns={this.state.subjectColumns}
                                         >
                                             <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
                                             <IntegratedFiltering />
@@ -491,7 +480,7 @@ class TagManagementComponent extends React.Component {
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                            <ExpansionPanel expanded={expanded === 'keyword'} onChange={this.handleChange('keyword')} onClick={e => { this.handleAccordionClick('keyword') }}>
+                            <ExpansionPanel expanded={this.state.expanded === 'keyword'} onChange={this.handleChange('keyword')} onClick={e => { this.handleAccordionClick('keyword') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.KEYWORDS_LIST, APP_URLS.KEYWORDS_DETAIL) }}>
                                     <Typography variant="h6" color="primary" className={styles.paragraph}>Keywords</Typography>
                                 </ExpansionPanelSummary>
@@ -501,8 +490,8 @@ class TagManagementComponent extends React.Component {
 
                                         </Grid>
                                         <DataGrid
-                                            rows={keywordRows}
-                                            columns={keywordColumns}
+                                            rows={this.state.keywordRows}
+                                            columns={this.state.keywordColumns}
                                         >
                                             <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
                                             <IntegratedFiltering />
@@ -517,7 +506,7 @@ class TagManagementComponent extends React.Component {
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                            <ExpansionPanel expanded={expanded === 'workarea'} onChange={this.handleChange('workarea')} onClick={e => { this.handleAccordionClick('workarea') }}>
+                            <ExpansionPanel expanded={this.state.expanded === 'workarea'} onChange={this.handleChange('workarea')} onClick={e => { this.handleAccordionClick('workarea') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.WORKAREAS_LIST, APP_URLS.WORKAREAS_DETAIL) }}>
                                     <Typography variant="h6" color="primary" className={styles.paragraph}>Work Areas</Typography>
                                 </ExpansionPanelSummary>
@@ -529,8 +518,8 @@ class TagManagementComponent extends React.Component {
             </Button>
                                         </Grid>
                                         <DataGrid
-                                            rows={workareaRows}
-                                            columns={workareaColumns}
+                                            rows={this.state.workareaRows}
+                                            columns={this.state.workareaColumns}
                                         >
                                             <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
                                             <IntegratedFiltering />
@@ -544,8 +533,8 @@ class TagManagementComponent extends React.Component {
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                            <ExpansionPanel expanded={expanded === 'language'} onChange={this.handleChange('language')} onClick={e => { this.handleAccordionClick('language') }}>
-                                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.LANGUAGES_LIST, APP_URLS.LANGUAGES_DETAIL) }}>
+                            <ExpansionPanel expanded={this.state.expanded === 'language'} onChange={this.handleChange('language')} onClick={e => { this.handleAccordionClick('language') }}>
+                                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.LANGUAGES_LIST, APP_URLS.LANGUAGES_DETAIL)}}>
                                     <Typography variant="h6" color="primary" className={styles.paragraph}>Languages</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
@@ -556,8 +545,8 @@ class TagManagementComponent extends React.Component {
             </Button>
                                         </Grid>
                                         <DataGrid
-                                            rows={languageRows}
-                                            columns={languageColumns}
+                                            rows={this.state.languageRows}
+                                            columns={this.state.languageColumns}
                                         >
                                             <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
                                             <IntegratedFiltering />
@@ -571,7 +560,7 @@ class TagManagementComponent extends React.Component {
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                            <ExpansionPanel expanded={expanded === 'cataloger'} onChange={this.handleChange('cataloger')} onClick={e => { this.handleAccordionClick('cataloger') }}>
+                            <ExpansionPanel expanded={this.state.expanded === 'cataloger'} onChange={this.handleChange('cataloger')} onClick={e => { this.handleAccordionClick('cataloger') }}>
                                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.CATALOGERS_LIST, APP_URLS.CATALOGERS_DETAIL) }}>
                                     <Typography variant="h6" color="primary" className={styles.paragraph}>Catalogers</Typography>
                                 </ExpansionPanelSummary>
@@ -582,8 +571,8 @@ class TagManagementComponent extends React.Component {
             </Button>
                                         </Grid>
                                         <DataGrid
-                                            rows={catalogerRows}
-                                            columns={catalogerColumns}
+                                            rows={this.state.catalogerRows}
+                                            columns={this.state.catalogerColumns}
                                         >
                                             <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
                                             <IntegratedFiltering />
