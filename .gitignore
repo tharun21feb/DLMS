@@ -282,6 +282,10 @@ typings/
 
 # SolarSPELL Specific Settings
 build_automation/frontend/static
+content/contents/
 
 #vscode settings
 .vscode/
+
+#pylama settings
+pylama.ini

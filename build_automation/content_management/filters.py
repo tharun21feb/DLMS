@@ -3,8 +3,10 @@ from django.db.models import ManyToManyField, ForeignKey
 
 from content_management.models import Content
 
+
 class NumberInFilter(BaseInFilter, NumberFilter):
     pass
+
 
 class ContentsFilterSet(FilterSet):
     class Meta:
@@ -21,7 +23,7 @@ class ContentsFilterSet(FilterSet):
             'language': ['in'],
             'cataloger': ['in']
         }
-    
+
     @classmethod
     def filter_for_lookup(cls, f, lookup_type):
         # override in lookups

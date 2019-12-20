@@ -1,7 +1,6 @@
 import os
-import array
 from django.core.files.base import ContentFile
-from rest_framework import filters, status
+from rest_framework import status
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -9,7 +8,8 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from content_management.exceptions import DuplicateContentFileException
 from content_management.models import (
-    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout, Keyword, Language, Subject, Workarea, MetadataSheet
+    Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout,
+    Keyword, Language, Subject, Workarea, MetadataSheet
 )
 from content_management.serializers import (
     BuildSerializer, CatalogerSerializer, ContentSerializer, CoverageSerializer, CreatorSerializer,
@@ -26,6 +26,11 @@ class ContentApiViewset(ModelViewSet):
     serializer_class = ContentSerializer
     search_fields = ('name', 'description')
     filterset_class = ContentsFilterSet
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        self.filterset = self.filterset_class(self.request.GET, queryset=qs)
+        return self.filterset.qs.distinct()
 
     def create(self, request, *args, **kwargs):
         try:
@@ -91,6 +96,7 @@ class LanguageViewSet(ModelViewSet):
 class CatalogerViewSet(ModelViewSet):
     serializer_class = CatalogerSerializer
     queryset = Cataloger.objects.all()
+
 
 class DirectoryLayoutViewSet(ModelViewSet):
     serializer_class = DirectoryLayoutSerializer
@@ -233,12 +239,12 @@ class DiskSpaceViewSet(ViewSet):
             'total_space': dp.getfreespace()[1]
         }
         return Response(data)
-        
+
 
 class MetadataSheetApiViewSet(ModelViewSet):
     serializer_class = MetadataSheetSerializer
     queryset = MetadataSheet.objects.all()
-   
+
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)
@@ -254,14 +260,14 @@ class MetadataSheetApiViewSet(ModelViewSet):
             }
             return Response(data, status=status.HTTP_409_CONFLICT)
 
+
 class MetadataMatchViewSet(ViewSet):
-    queryset = Content.objects.values_list('name', flat=True);
+    queryset = Content.objects.values_list('name', flat=True)
     '''print(list(queryset))'''
-    def getNames(self, request):    
-        fileNameArray = list(queryset)
-        data =  {
-            content_files: fileNameArray
+    def getNames(self, request):
+        fileNameArray = list(self.queryset)
+        data = {
+            "content_files": fileNameArray
         }
-        
-        
+
         return Response(data)

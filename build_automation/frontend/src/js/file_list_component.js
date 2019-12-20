@@ -230,7 +230,10 @@ class FileListComponent extends React.Component {
     }
     
     setFilters(filters) {
-        this.setState({filters}, this.onPagingChanged)
+        this.setState({
+            filters,
+            currentPage: 1
+        }, this.onPagingChanged)
     }
 
     /*
