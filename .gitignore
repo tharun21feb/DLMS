@@ -280,12 +280,13 @@ typings/
 # next.js build output
 .next
 
-# SolarSPELL Specific Settings
-build_automation/frontend/static
-content/contents/
-
-#vscode settings
+# vscode settings
 .vscode/
 
-#pylama settings
+# pylama settings
 pylama.ini
+
+# SolarSPELL Specific Settings
+build_automation/frontend/static/
+build_automation/temp_files/
+content/contents/

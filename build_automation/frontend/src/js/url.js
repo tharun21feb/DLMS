@@ -1,4 +1,4 @@
-import { areArraysEqual } from "./utils"
+import { isEqual } from "lodash"
 
 //Object that contains templates for API endpoints
 //URLs that dont take an id example:    APP_URLS.DIRLAYOUT_LIST
@@ -48,24 +48,27 @@ const FILTER_PARAMS = {
         'keywords': ['in'],
         'workareas': ['in'],
         'language': ['in'],
-        'cataloger': ['in']
+        'cataloger': ['in'],
+        'active': [null]
     }
 }
 
-const get_filter_param = (name, operator, value) => `${name}__${operator}=${encodeURIComponent(value)}`
+const get_filter_param = (name, op, value) => `${name}${op ? "__" + op : ""}=${encodeURIComponent(value)}`
 
 //Takes a devexpress grid filter array and turns it into a string that can be appended to a pagination url
 const get_filter_query = (filters, viewset_params) => {
-    return (filters != [] ? "&" : "") + filters.map(filter => {
+    return filters.map(filter => {
         const name = filter.columnName
         const val = filter.value
-        const operations = viewset_params[filter.columnName]
-        if (areArraysEqual(operations, ['in'])) {
+        const operations = viewset_params[name]
+        if (isEqual(operations, ['in'])) {
             return get_filter_param(name, operations[0], val.join(","))
-        } else if (areArraysEqual(operations, ['lte', 'gte'])) {
+        } else if (isEqual(operations, ['lte', 'gte'])) {
             //Turns filter.value == '12/19/2019-12/21/2019' into dates == ['12-19-2019', '12-19-2019']
             const dates = val.split("-").map(date => date.replace(/\//g, '-'))
             return dates.length !== 2 ? null : operations.map((op, idx) => get_filter_param(name, op, dates[idx])).join("&")
+        } else if (name == "active") {
+            return get_filter_param(name, operations[0], val ? 1 : 0)
         }
         return get_filter_param(name, operations[0], val)
     }).filter(val => val !== null).join("&")

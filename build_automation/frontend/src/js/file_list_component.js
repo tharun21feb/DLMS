@@ -14,6 +14,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Checkbox from "@material-ui/core/Checkbox"
 import classNames from "classnames";
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -182,6 +183,7 @@ class FileListComponent extends React.Component {
         };
         __tagIdsTagsMap = props.tagIdsTagsMap;
         this.columns = [
+            {name: 'actions', title: 'Actions'},
             {name: 'name', title: 'Name', filterType: 'textfield'},
             {name: 'description', title: 'Description', filterType: 'textfield'},
             {name: 'updated_time', title: 'Updated on', filterType: 'textfield'},
@@ -192,6 +194,7 @@ class FileListComponent extends React.Component {
             {name: 'workareas', title: 'Workareas', filterType: 'autocomplete', tagKey: 'workareas'},
             {name: 'language', title: 'Language', filterType: 'autocomplete', tagKey: 'languages'},
             {name: 'cataloger', title: 'Cataloger', filterType: 'autocomplete', tagKey: 'catalogers'},
+            {name: 'active', title: 'Active', filterType: 'boolean'}
         ];
         this.deleteCallback = props.onDelete;
         this.editCallback = props.onEdit;
@@ -300,24 +303,44 @@ class FileListComponent extends React.Component {
     */
     getFilterCellComponent(props) {
         const {filter, onFilter, column, filteringEnabled} = props;
-        if (column.filterType === "autocomplete") {
-            const { tagKey } = column;
-            return (
+        switch(column.filterType) {
+            case "autocomplete":
+                const { tagKey } = column;
+                return (
+                    <TableCell style={{paddingLeft: '10px', paddingRight: '5px'}}>
+                        <AutoCompleteFilter filter={filter} suggestions={this.props.tags[tagKey]} onFilter={onFilter} />
+                    </TableCell>
+                );
+            case "boolean":
+                const [checked, setChecked] = React.useState(true)
+                return (
+                    <TableCell style={{paddingLeft: '10px', paddingRight: '5px'}}>
+                        <Checkbox
+                            checked={checked}
+                            color="primary"
+                            onChange={e => {
+                                setChecked(e.target.checked)
+                                onFilter({
+                                    columnName: column.name,
+                                    operation: 'equal',
+                                    value: e.target.checked
+                                })
+                            }}
+                        />
+                    </TableCell>
+                )
+            case "textfield":
                 <TableCell style={{paddingLeft: '10px', paddingRight: '5px'}}>
-                    <AutoCompleteFilter filter={filter} suggestions={this.props.tags[tagKey]} onFilter={onFilter} />
+                    <Input
+                        fullWidth
+                        value={filter ? filter.value : ''}
+                        placeholder='Filter...'
+                        onChange={evt => onFilter(evt.target.value ? { value: evt.target.value } : null)}
+                    />
                 </TableCell>
-            );
+            default:
+                return null
         }
-        return (
-            <TableCell style={{paddingLeft: '10px', paddingRight: '5px'}}>
-                <Input
-                    fullWidth
-                    value={filter ? filter.value : ''}
-                    placeholder='Filter...'
-                    onChange={evt => onFilter(evt.target.value ? { value: evt.target.value } : null)}
-                />
-            </TableCell>
-        );
     }
     
     onPagingChanged() {
@@ -368,16 +391,18 @@ class FileListComponent extends React.Component {
                     <Table style={{width: '100%', color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold', borderStyle: 'none',}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
                     <TableColumnResizing
                         defaultColumnWidths={[
-                            { columnName: 'name', width: 230 },
-                            { columnName: 'description', width: 400 },
-                            { columnName: 'creators', width: 140 },
-                            { columnName: 'coverage', width: 140 },
-                            { columnName: 'subjects', width: 140 },
-                            { columnName: 'keywords', width: 140 },
-                            { columnName: 'workareas', width: 140 },
-                            { columnName: 'language', width: 140 },
-                            { columnName: 'cataloger', width: 140 },
-                            { columnName: 'updated_time', width: 140 },
+                            { columnName: 'actions', width: 50},
+                            { columnName: 'name', width: 200 },
+                            { columnName: 'description', width: 300 },
+                            { columnName: 'creators', width: 130 },
+                            { columnName: 'coverage', width: 130 },
+                            { columnName: 'subjects', width: 130 },
+                            { columnName: 'keywords', width: 130 },
+                            { columnName: 'workareas', width: 130 },
+                            { columnName: 'language', width: 130 },
+                            { columnName: 'cataloger', width: 130 },
+                            { columnName: 'updated_time', width: 130 },
+                            { columnName: 'active', width: 130 }
                         ]} />
                     <TableHeaderRow cellComponent={CustomTableHeaderCell} showSortingControls />
 					<Toolbar rootComponent={ToolbarRoot} />

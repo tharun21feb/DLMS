@@ -4,3 +4,4 @@ psycopg2-binary==2.7.5
 tox
 celery==4.2.1
 django-filter
+openpyxl

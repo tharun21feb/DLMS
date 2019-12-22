@@ -7,6 +7,7 @@ import BulkUploadContent from './bulk_upload_content';
 import BulkMetadataUpload from './bulk_metadata_upload';
 import FileListComponent from './file_list_component';
 import {buildMapFromArray} from './utils';
+import {DownloadExcelButton} from "./download_excel"
 import {APP_URLS, FILTER_PARAMS, get_pagination_query, get_filter_query} from "./url";
 import axios from 'axios';
 
@@ -46,7 +47,8 @@ class ContentManagement extends React.Component{
             shouldRefresh: false,
             totalCount: 0,
             page_id: 1,
-            page_size: 10
+            page_size: 10,
+            filters: []
         };
         this.defaultLoadParams = [1, 10, []]
 
@@ -85,7 +87,7 @@ class ContentManagement extends React.Component{
             currInstance.tagIdTagsMap=currInstance.buildTagIdTagsMap(response.data);
             return response;
         }));
-        allRequests.push(axios.get(APP_URLS.CONTENTS_LIST + get_pagination_query(page_id, page_size) + get_filter_query(filters, FILTER_PARAMS.CONTENTS), {responseType: 'json'}));
+        allRequests.push(axios.get(APP_URLS.CONTENTS_LIST + get_pagination_query(page_id, page_size) + "&" + get_filter_query(filters, FILTER_PARAMS.CONTENTS), {responseType: 'json'}));
         Promise.all(allRequests).then(function(values) {
             currInstance.setState({
                 tags: values[0].data,
@@ -97,7 +99,7 @@ class ContentManagement extends React.Component{
             console.error(error);
         });
 
-        this.setState({page_id, page_size})
+        this.setState({page_id, page_size, filters})
     }
     /*
     * Process updates to text fields
@@ -415,15 +417,21 @@ class ContentManagement extends React.Component{
                     
 
                     <Grid item xs={12}>
-                        {this.state.isLoaded && this.state.currentView=='manage' && <FileListComponent
-                                                                                        tags={this.state.tags}
-                                                                                        onEdit={this.handleContentEdit}
-                                                                                        onDelete={this.handleFileDelete}
-                                                                                        allFiles={this.state.files}
-                                                                                        tagIdsTagsMap={this.tagIdTagsMap}
-                                                                                        getFiles={this.loadDataByPage}
-                                                                                        totalCount={this.state.totalCount}
-                                                                                    />}
+                        {this.state.isLoaded && this.state.currentView=='manage' && <>
+                            <FileListComponent
+                                tags={this.state.tags}
+                                onEdit={this.handleContentEdit}
+                                onDelete={this.handleFileDelete}
+                                allFiles={this.state.files}
+                                tagIdsTagsMap={this.tagIdTagsMap}
+                                getFiles={this.loadDataByPage}
+                                totalCount={this.state.totalCount}
+                            />
+                            <DownloadExcelButton
+                                filters={this.state.filters}
+                                filter_params={FILTER_PARAMS.CONTENTS}
+                            />
+                        </>}
                         {this.state.isLoaded && this.state.currentView=='upload'&&<UploadContent onSave={this.saveContentCallback}
                                                                                                  tagIdsTagsMap={this.tagIdTagsMap} allTags={this.state.tags}
                                                                                                  content={this.state.content}/>}

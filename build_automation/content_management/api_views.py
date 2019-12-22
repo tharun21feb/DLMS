@@ -1,5 +1,12 @@
 import os
+from openpyxl import Workbook
+from io import BytesIO
+from tempfile import TemporaryFile
+
 from django.core.files.base import ContentFile
+from django.http import Http404, FileResponse
+from django.conf import settings
+
 from rest_framework import status
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
@@ -18,7 +25,7 @@ from content_management.serializers import (
 )
 from content_management.filters import ContentsFilterSet
 from content_management.tasks import start_dirlayout_build
-from content_management.utils import DiskSpace, LibraryVersionBuildUtil
+from content_management.utils import DiskSpace, LibraryVersionBuildUtil, temporary_filename
 
 
 class ContentApiViewset(ModelViewSet):
@@ -27,9 +34,12 @@ class ContentApiViewset(ModelViewSet):
     search_fields = ('name', 'description')
     filterset_class = ContentsFilterSet
 
-    def get_queryset(self):
+    def get_queryset(self, request=None):
         qs = super().get_queryset()
-        self.filterset = self.filterset_class(self.request.GET, queryset=qs)
+        if request is None:
+            self.filterset = self.filterset_class(self.request.GET, queryset=qs)
+        else:
+            self.filterset = self.filterset_class(request.GET, queryset=qs)
         return self.filterset.qs.distinct()
 
     def create(self, request, *args, **kwargs):
@@ -263,7 +273,8 @@ class MetadataSheetApiViewSet(ModelViewSet):
 
 class MetadataMatchViewSet(ViewSet):
     queryset = Content.objects.values_list('name', flat=True)
-    '''print(list(queryset))'''
+
+    # print(list(queryset))
     def getNames(self, request):
         fileNameArray = list(self.queryset)
         data = {
@@ -271,3 +282,79 @@ class MetadataMatchViewSet(ViewSet):
         }
 
         return Response(data)
+
+
+class SpreadsheetView(ViewSet):
+    # order integer is needed because order in a python dictionary is otherwise arbitrary
+    details_map = {
+        'contents': {
+            'viewset_class': ContentApiViewset,
+            'fields': {
+                'name': ['field', 0],
+                'description': ['field', 1],
+                'updated_time': ['field', 2],
+                'creators': ['many', 3],
+                'coverage': ['foreign', 4],
+                'subjects': ['many', 5],
+                'keywords': ['many', 6],
+                'workareas': ['many', 7],
+                'language': ['foreign', 8],
+                'cataloger': ['foreign', 9],
+                'active': ['field', 10]
+            }
+        }
+    }
+
+    # Helper function that returns the string to be placed in the workbook
+    # based on a Content instance, with a given field name and type
+    def get_data_string(self, content, field_name, field_type):
+        if field_type == "field":
+            return getattr(content, field_name, "")
+        elif field_type == "many":
+            all_related = getattr(content, field_name).all()
+            if len(all_related) > 0:
+                return ", ".join([related.name for related in all_related])
+            else:
+                return ""
+        elif field_type == "foreign":
+            return getattr(getattr(content, field_name), 'name', "")
+
+    # View function for django
+    def getSpreadsheet(self, request, *args, **kwargs):
+        sheet_type = str(kwargs['type'])
+        try:
+            details = self.details_map[sheet_type]
+            fields = details["fields"]
+            viewset = details["viewset_class"]().get_queryset(request)
+
+            data_table = [
+                [
+                    str(self.get_data_string(content, field_name, field_type[0]))
+                    for field_name, field_type in fields.items()
+                ]
+                for content in viewset
+            ]
+
+            filename = sheet_type + '.xlsx'
+            return FileResponse(self.build_xlsx(data_table, fields), as_attachment=True, filename=filename)
+        except LookupError:
+            raise Http404()
+
+    # Helper function that takes a data table and column fields and returns bytes for an xlsx file
+    def build_xlsx(self, data_table, fields):
+        with temporary_filename() as filename:
+            wb = Workbook()
+            ws = wb.active
+
+            sorted_fields = sorted(fields.keys(), key=lambda e: fields[e][1])
+
+            for i, field in enumerate(sorted_fields):
+                _ = ws.cell(row=1, column=i+1, value=field)
+
+            for i, row in enumerate(data_table):
+                for k, field_value in enumerate(row):
+                    _ = ws.cell(row=i+2, column=k+1, value=field_value)
+
+            wb.save(filename)
+            with open(filename, mode='rb') as f:
+                return BytesIO(f.read())

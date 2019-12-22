@@ -1,5 +1,5 @@
 from django_filters import FilterSet, BaseInFilter, NumberFilter
-from django.db.models import ManyToManyField, ForeignKey
+from django.db.models import ManyToManyField, ForeignKey, SmallIntegerField
 
 from content_management.models import Content
 
@@ -21,7 +21,8 @@ class ContentsFilterSet(FilterSet):
             'keywords': ['in'],
             'workareas': ['in'],
             'language': ['in'],
-            'cataloger': ['in']
+            'cataloger': ['in'],
+            'active': ['exact']
         }
 
     @classmethod
@@ -29,6 +30,9 @@ class ContentsFilterSet(FilterSet):
         # override in lookups
         if (isinstance(f, ManyToManyField) or isinstance(f, ForeignKey)) and lookup_type == 'in':
             return NumberInFilter, {}
+
+        if (isinstance(f, SmallIntegerField) and lookup_type == 'exact'):
+            return NumberFilter, {}
 
         # use default behavior otherwise
         return super().filter_for_lookup(f, lookup_type)
