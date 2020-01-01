@@ -18,7 +18,10 @@ import Checkbox from "@material-ui/core/Checkbox"
 import classNames from "classnames";
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import { APP_URLS } from './url.js';
+import { APP_URLS } from './url';
+import { ActionPanel } from "./action_panel";
+import { CheckCircleOutline, HighlightOff, Description } from "@material-ui/icons"
+import { get } from "lodash"
 
 import {
     DataTypeProvider,
@@ -63,6 +66,22 @@ const styles = theme => ({
 const Cell = (props) => {
 	return <HighlightedCell {...props} />;
 }; */
+
+//Simple component for displaying information about a given content
+const FileInfoEntry = (props) => {
+    const { name, property, selectedFile } = props
+    const displayFn = props.displayFn || (data => String(data))
+    const data = get(selectedFile, property, null)
+    return (
+        <>
+            <Typography component={'span'} variant="h6" color="primary">{name}</Typography>
+            <br />
+            <Typography component={'span'} variant="body1">{data ? displayFn(data) : ""}</Typography>
+            <br />
+            <br />
+        </>
+    )
+}
 
 const styles2 = {
   customHeaderCell: {
@@ -176,6 +195,7 @@ class FileListComponent extends React.Component {
                 AnchorPos: null
             },
             confirmDelete: false,
+            contentDialogOpen: false,
             selectedFile: null,
             pageSize: 10,
             currentPage: 1,
@@ -183,7 +203,28 @@ class FileListComponent extends React.Component {
         };
         __tagIdsTagsMap = props.tagIdsTagsMap;
         this.columns = [
-            {name: 'actions', title: 'Actions'},
+            {name: 'actions', title: 'Actions', filterType: 'none',
+            getCellValue: row => (
+                <ActionPanel
+                    row={row}
+                    editFn={evt => {props.onEdit(row)}}
+                    deleteFn={evt => {
+                        this.setState({
+                            selectedFile: row,
+                            confirmDelete: true
+                        })
+                    }}
+                    setActive={new_active => {
+                        const payload = new FormData()
+                        payload.append('active', new_active ? 1 : 0)
+                        axios.patch(APP_URLS.CONTENT_DETAIL(row.id), payload, {
+                            responseType: 'json'
+                        }).then(() => {
+                            this.props.getFiles(this.state.currentPage, this.state.pageSize, this.state.filters)
+                        })
+                    }}
+                />
+            )},
             {name: 'name', title: 'Name', filterType: 'textfield'},
             {name: 'description', title: 'Description', filterType: 'textfield'},
             {name: 'updated_time', title: 'Updated on', filterType: 'textfield'},
@@ -194,16 +235,17 @@ class FileListComponent extends React.Component {
             {name: 'workareas', title: 'Workareas', filterType: 'autocomplete', tagKey: 'workareas'},
             {name: 'language', title: 'Language', filterType: 'autocomplete', tagKey: 'languages'},
             {name: 'cataloger', title: 'Cataloger', filterType: 'autocomplete', tagKey: 'catalogers'},
-            {name: 'active', title: 'Active', filterType: 'boolean'}
+            {name: 'active', title: 'Active', filterType: 'boolean', getCellValue: row => row.active == 1 ? <CheckCircleOutline /> : <HighlightOff />}
         ];
         this.deleteCallback = props.onDelete;
         this.editCallback = props.onEdit;
-        this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
+        this.closeDialog = this.closeDialog.bind(this);
         this.deleteFile = this.deleteFile.bind(this);
         this.handleFilesRightClick = this.handleFilesRightClick.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
         this.getFilterCellComponent = this.getFilterCellComponent.bind(this);
         this.filterExtensions = [
+            {columnName: 'actions', filteringEnabled: false},
             {columnName: 'creators', predicate: filterThroughArray},
             {columnName: 'coverage', predicate: filterThroughArray},
             {columnName: 'subjects', predicate: filterThroughArray},
@@ -268,7 +310,17 @@ class FileListComponent extends React.Component {
     */
     tableRowComponent(obj, menuName)  {
         const {row, children} = obj;
-        return(<tr onContextMenu={evt => this.handleFilesRightClick(evt, row, menuName)}>{children}</tr>);
+        return(
+            <tr
+                onContextMenu={evt => this.handleFilesRightClick(evt, row, menuName)}
+                onMouseUp={evt => this.setState({
+                    contentDialogOpen: true,
+                    selectedFile: row
+                })}
+            >
+                {children}
+            </tr>
+        );
     }
     /*
     * Delete a file
@@ -295,8 +347,8 @@ class FileListComponent extends React.Component {
     /*
     * Abort confirmation
     */
-    closeConfirmDialog() {
-        this.setState({confirmDelete: false})
+    closeDialog(dialogName) {
+        this.setState({[dialogName]: false})
     }
     /*
     * Get filtered items
@@ -330,16 +382,18 @@ class FileListComponent extends React.Component {
                     </TableCell>
                 )
             case "textfield":
-                <TableCell style={{paddingLeft: '10px', paddingRight: '5px'}}>
-                    <Input
-                        fullWidth
-                        value={filter ? filter.value : ''}
-                        placeholder='Filter...'
-                        onChange={evt => onFilter(evt.target.value ? { value: evt.target.value } : null)}
-                    />
-                </TableCell>
+                return (
+                    <TableCell style={{paddingLeft: '10px', paddingRight: '5px'}}>
+                        <Input
+                            fullWidth
+                            value={filter ? filter.value : ''}
+                            placeholder='Filter...'
+                            onChange={evt => onFilter(evt.target.value ? { value: evt.target.value } : null)}
+                        />
+                    </TableCell>
+                )
             default:
-                return null
+                return <TableCell />
         }
     }
     
@@ -391,8 +445,8 @@ class FileListComponent extends React.Component {
                     <Table style={{width: '100%', color: '#3592BE', fontFamily: 'Asap', fontWeight: 'bold', borderStyle: 'none',}} rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
                     <TableColumnResizing
                         defaultColumnWidths={[
-                            { columnName: 'actions', width: 50},
-                            { columnName: 'name', width: 200 },
+                            { columnName: 'actions', width: 150},
+                            { columnName: 'name', width: 150 },
                             { columnName: 'description', width: 300 },
                             { columnName: 'creators', width: 130 },
                             { columnName: 'coverage', width: 130 },
@@ -442,7 +496,7 @@ class FileListComponent extends React.Component {
                 </Menu>
                 <Dialog
                     open={this.state.confirmDelete}
-                    onClose={this.closeConfirmDialog}
+                    onClose={() => this.closeDialog('confirmDelete')}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
@@ -453,11 +507,78 @@ class FileListComponent extends React.Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.closeConfirmDialog} color="primary">
+                        <Button onClick={() => this.closeDialog('confirmDelete')} color="primary">
                             No
                         </Button>
-                        <Button onClick={evt => {this.closeConfirmDialog(); this.deleteFile(this.state.selectedFile);}} color="primary" autoFocus>
+                        <Button onClick={evt => {this.closeDialog('confirmDelete'); this.deleteFile(this.state.selectedFile);}} color="primary" autoFocus>
                             Yes
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.contentDialogOpen}
+                    onClose={() => this.setState({contentDialogOpen: true})}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">Data for content file: {get(this.state.selectedFile, "name", "")}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            <FileInfoEntry name="Description" property="description"/>
+                            <FileInfoEntry
+                                name="Creators"
+                                property="creators"
+                                displayFn={ids => ids.map(id => this.props.tagIdsTagsMap["creators"][id].name).join(", ")}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
+                                name="Coverage"
+                                property="coverage"
+                                displayFn={id => this.props.tagIdsTagsMap["coverages"][id].name}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
+                                name="Subjects"
+                                property="subjects"
+                                displayFn={ids => ids.map(id => this.props.tagIdsTagsMap["subjects"][id].name).join(", ")}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
+                                name="Keywords"
+                                property="keywords"
+                                displayFn={ids => ids.map(id => this.props.tagIdsTagsMap["keywords"][id].name).join(", ")}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
+                                name="Workareas"
+                                property="workareas"
+                                displayFn={ids => ids.map(id => this.props.tagIdsTagsMap["workareas"][id].name).join(", ")}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
+                                name="Language"
+                                property="language"
+                                displayFn={id => this.props.tagIdsTagsMap["languages"][id].name}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
+                                name="Cataloger"
+                                property="cataloger"
+                                displayFn={id => this.props.tagIdsTagsMap["catalogers"][id].name}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry name="Updated On" property="updated_time"/>
+                            <FileInfoEntry
+                                name="Active"
+                                property="active"
+                                displayFn={active => active == 1 ? <CheckCircleOutline /> : <HighlightOff />}
+                                selectedFile={this.state.selectedFile}
+                            />
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={evt => {this.setState({contentDialogOpen: false})}} color="primary" autoFocus>
+                            OK
                         </Button>
                     </DialogActions>
                 </Dialog>

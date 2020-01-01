@@ -43,6 +43,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { APP_URLS } from "./url";
 import cloneDeep from 'lodash/fp/cloneDeep';
 import { TAG_SAVE_TYPE } from './constants.js';
+import { ActionPanel } from './action_panel';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -94,6 +95,10 @@ const styles = theme => ({
 class TagManagementComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        this.getActionPanel = this.getActionPanel.bind(this)
+        this.handleTagEdit = this.handleTagEdit.bind(this);
+
         this.state = {
             selectedTag: null,
             currentPanel: null,
@@ -110,36 +115,43 @@ class TagManagementComponent extends React.Component {
             listUrl: null,
             detailUrl: null,
             creatorColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
-                { name: 'description', title: 'Description' }
+                { name: 'description', title: 'Description' },
             ],
             creatorRows: [],
             keywordColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
                 { name: 'description', title: 'Description' }
             ],
             keywordRows: [],
             coverageColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
                 { name: 'description', title: 'Description' }
             ],
             coverageRows: [],
             subjectColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
                 { name: 'description', title: 'Description' },
             ],
             subjectRows: [],
             workareaColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
                 { name: 'description', title: 'Description' },
             ],
             workareaRows: [],
             languageColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
                 { name: 'description', title: 'Description' },
             ],
             languageRows: [],
             catalogerColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
                 { name: 'description', title: 'Description' },
             ],
@@ -153,11 +165,28 @@ class TagManagementComponent extends React.Component {
         this.deleteTag = this.deleteTag.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.saveTagCallback = this.saveTagCallback.bind(this);
-        this.handleTagEdit = this.handleTagEdit.bind(this);
+        
         this.addNewTag = this.addNewTag.bind(this);
         this.confirmDeleteTag = this.confirmDeleteTag.bind(this);
         this.closeConfirmDialog = this.closeConfirmDialog.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
+    }
+    
+    //Returns an action panel for a metadata table given the row data for that table
+    getActionPanel(row) {
+        return (
+            <ActionPanel
+                editFn={evt => {
+                    this.setState({selectedTag: row}, this.handleTagEdit)
+                }}
+                deleteFn={evt => {
+                    this.setState({
+                        selectedTag: row,
+                        confirmDelete: true
+                    })
+                }}
+            />
+        )
     }
     /*
     * Error method
@@ -370,7 +399,8 @@ class TagManagementComponent extends React.Component {
     * Edit a specific file
     */
     handleTagEdit() {
-        const selectedTag = this.state.selectedTagsMenu.selectedTag;
+        const selectedTag = this.state.selectedTag;
+        
         const currentInstance = this;
         this.setState({
             currentView: 'addTag',

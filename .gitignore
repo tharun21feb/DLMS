@@ -286,6 +286,9 @@ typings/
 # pylama settings
 pylama.ini
 
+# eslint
+.eslintrc.js
+
 # SolarSPELL Specific Settings
 build_automation/frontend/static/
 build_automation/temp_files/
