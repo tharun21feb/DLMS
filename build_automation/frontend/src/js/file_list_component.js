@@ -214,6 +214,12 @@ class FileListComponent extends React.Component {
                             confirmDelete: true
                         })
                     }}
+                    viewFn={evt => {
+                        this.setState({
+                            selectedFile: row,
+                            contentDialogOpen: true
+                        })
+                    }}
                     setActive={new_active => {
                         const payload = new FormData()
                         payload.append('active', new_active ? 1 : 0)
@@ -313,10 +319,6 @@ class FileListComponent extends React.Component {
         return(
             <tr
                 onContextMenu={evt => this.handleFilesRightClick(evt, row, menuName)}
-                onMouseUp={evt => this.setState({
-                    contentDialogOpen: true,
-                    selectedFile: row
-                })}
             >
                 {children}
             </tr>
@@ -572,6 +574,12 @@ class FileListComponent extends React.Component {
                                 name="Active"
                                 property="active"
                                 displayFn={active => active == 1 ? <CheckCircleOutline /> : <HighlightOff />}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
+                                name="Preview"
+                                property="content_file"
+                                displayFn={url => <a href={url} target="_blank">Click to preview file</a>}
                                 selectedFile={this.state.selectedFile}
                             />
                         </DialogContentText>

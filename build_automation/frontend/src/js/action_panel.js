@@ -1,8 +1,8 @@
 import React from "react"
-import { Edit, Delete, CheckCircleOutline, HighlightOff } from "@material-ui/icons"
+import { Edit, Delete, CheckCircleOutline, HighlightOff, Visibility } from "@material-ui/icons"
 
 const ActionPanel = (props) => {
-    const { row, editFn, deleteFn, setActive } = props
+    const { row, editFn, deleteFn, setActive, viewFn } = props
     const pointerStyle = {
         cursor: 'pointer'
     }
@@ -31,11 +31,18 @@ const ActionPanel = (props) => {
             ) : (
                <></> 
             )}
+            {viewFn !== undefined ? (
+                <Visibility
+                    style={pointerStyle}
+                    onClick={() => viewFn()}
+                />
+            ) : (
+                <></>
+            )}
         </>
     )
 }
 
 export {
     ActionPanel
-
 }

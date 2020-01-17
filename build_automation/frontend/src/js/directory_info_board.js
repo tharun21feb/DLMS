@@ -83,7 +83,7 @@ class DirectoryInfoBoard extends React.Component {
     /*
     * Build a map containing tag ids
     */
-    buildTagIdTagsMap(tags) {
+    buildTagIdTagsMap(tags = {}) {
         // Builds a map of <Tag Id> - Tag map for each tag type.
         const tagIdTagMap = {};
         Object.keys(tags).forEach(eachTagType => {
@@ -94,7 +94,7 @@ class DirectoryInfoBoard extends React.Component {
     /*
     * Build a map containing tag names
     */
-    buildTagNameTagMap(tags) {
+    buildTagNameTagMap(tags = {}) {
         const tagNameTagMap = {};
         Object.keys(tags).forEach(eachTagType => {
             tagNameTagMap[eachTagType] = buildMapFromArray(tags[eachTagType], 'name');
@@ -625,7 +625,7 @@ class DirectoryInfoBoard extends React.Component {
                     }
 
                     <div style={{marginTop: '40px'}}></div>
-                    <FileSelectionComponent allFiles={this.allFiles} tagIdsTagsMap={this.tagIdsTagsMap}
+                    <FileSelectionComponent allFiles={this.props.allFiles} tagIdsTagsMap={this.tagIdsTagsMap}
                         selectedFiles={this.state.selectedFiles} fileIdFileMap={this.fileIdFileMap}
                         onFileSelect={this.fileSelectionCallback} onFileDeselect={this.fileDeselectionCallback}
                         tags={this.props.tags}

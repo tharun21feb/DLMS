@@ -34,6 +34,8 @@ import OpenInNew from '@material-ui/icons/OpenInNew';
 
 import AutoCompleteFilter from './autocomplete_filter.js';
 
+import isEqual from "lodash/isEqual"
+
 var __tagIdsTagsMap = {};
 /*
 * Format chipped tags
@@ -154,7 +156,13 @@ class FileSelectionComponent extends React.Component {
         this.selectCallback = props.onFileSelect;
         this.deselectCallback = props.onFileDeselect;
     }
-
+    componentDidUpdate(prevProps, prevState) {
+        if(!isEqual(this.props.selectedFiles, prevProps.selectedFiles)) {
+            this.setState({
+                selectedFiles: this.getSelectedFilesFromFileIds(props.selectedFiles, props.fileIdFileMap)
+            })
+        }
+    }
     /*
      * Get the File Information object from the list of File IDs
      */
