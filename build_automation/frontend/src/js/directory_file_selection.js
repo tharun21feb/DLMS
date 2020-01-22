@@ -7,8 +7,10 @@ import {
     FilteringState,
     IntegratedFiltering,
     IntegratedPaging,
+    IntegratedSelection,
     PagingState,
-    CustomPaging
+    CustomPaging,
+    SelectionState
 } from '@devexpress/dx-react-grid';
 import {
     ColumnChooser,
@@ -20,21 +22,23 @@ import {
     TableColumnVisibility,
     Toolbar,
     PagingPanel,
+    TableSelection
 } from '@devexpress/dx-react-grid-material-ui';
 
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+
 
 import Chip from '@material-ui/core/Chip';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
+import Button from "@material-ui/core/Button"
 
 import OpenInNew from '@material-ui/icons/OpenInNew';
 
 import AutoCompleteFilter from './autocomplete_filter.js';
 
 import isEqual from "lodash/isEqual"
+import { isThisSecond } from 'date-fns';
 
 var __tagIdsTagsMap = {};
 /*
@@ -111,7 +115,8 @@ class FileSelectionComponent extends React.Component {
                 AnchorPos: null
             },
             pageSize: 10,
-            currentPage: 1
+            currentPage: 1,
+            selection: []
         };
         __tagIdsTagsMap = props.tagIdsTagsMap;
         this.columns = [
@@ -150,7 +155,7 @@ class FileSelectionComponent extends React.Component {
         this.getFilterCellComponent = this.getFilterCellComponent.bind(this);
         this.handleFilesRightClick = this.handleFilesRightClick.bind(this);
         this.handleMenuClose = this.handleMenuClose.bind(this);
-        this.tableRowComponent = this.tableRowComponent.bind(this);
+        this.tableCellComponent = this.tableCellComponent.bind(this);
         this.addFileToSelection = this.addFileToSelection.bind(this);
         this.removeFileFromSelection = this.removeFileFromSelection.bind(this);
         this.selectCallback = props.onFileSelect;
@@ -221,9 +226,16 @@ class FileSelectionComponent extends React.Component {
     /*
     * Table rows
     */
-    tableRowComponent(obj, menuName)  {
-        const {row, children} = obj;
-        return(<TableRow onContextMenu={evt => this.handleFilesRightClick(evt, row, menuName)}>{children}</TableRow>);
+    tableCellComponent(menuName)  {
+        return (props) => {
+            const { tableRow, ...restProps } = props
+            return (
+                <Table.Cell
+                    {...restProps}
+                    onContextMenu={evt => this.handleFilesRightClick(evt, tableRow.row, menuName)}
+                />
+            )
+        }
     }
     /*
     * Get filtered cells
@@ -233,20 +245,20 @@ class FileSelectionComponent extends React.Component {
         if (column.filterType === "autocomplete") {
             const { tagKey } = column;
             return (
-                <TableCell style={{paddingLeft: '10px', paddingRight: '5px'}}>
+                <Table.Cell style={{paddingLeft: '10px', paddingRight: '5px'}}>
                     <AutoCompleteFilter filter={filter} suggestions={this.props.tags[tagKey]} onFilter={onFilter} />
-                </TableCell>
+                </Table.Cell>
             );
         }
         return (
-            <TableCell style={{paddingLeft: '10px', paddingRight: '5px'}}>
+            <Table.Cell style={{paddingLeft: '10px', paddingRight: '5px'}}>
                 <Input
                     fullWidth
                     value={filter ? filter.value : ''}
                     placeholder='Filter...'
                     onChange={evt => onFilter(evt.target.value ? { value: evt.target.value } : null)}
                 />
-            </TableCell>
+            </Table.Cell>
         );
     }
     /*
@@ -258,18 +270,41 @@ class FileSelectionComponent extends React.Component {
                 <Typography gutterBottom variant="h5" component="h2">
                     Select individual files
                 </Typography>
+                <Button
+                    disabled={this.state.selection.length <= 0}
+                    onClick={() => {
+                        this.state.selection.map((file_id) => {
+                            this.addFileToSelection(this.props.allFiles[file_id])
+                        })
+                    }}
+                    color='primary'
+                >
+                    Add Selected
+                </Button>
                 <Grid rows={this.props.allFiles} columns={this.columns}>
                     <ChippedTagsTypeProvider for={['creators', 'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger']} />
                     <LinkTypeProvider for={['content_file']} />
+
+                    
                     <FilteringState defaultFilters={[]} columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]} />
-                    <IntegratedFiltering columnExtensions={this.filterExtensions} />
                     <PagingState currentPage={this.state.currentPage} pageSize={this.state.pageSize} />
+                    <SelectionState selection={this.state.selection} onSelectionChange={selection => this.setState({selection})}/>
+                    
                     <CustomPaging totalCount={this.props.totalCount} />
+                    
+                    
+                    <IntegratedFiltering columnExtensions={this.filterExtensions} />
                     <IntegratedPaging />
-                    <Table rowComponent={obj => {return this.tableRowComponent(obj, 'allFilesMenu')}} />
+                    <IntegratedSelection />
+                    
+                    <Table cellComponent={this.tableCellComponent('allFilesMenu')} />
+                    
                     <TableColumnResizing defaultColumnWidths={this.defaultColumnWidths} />
                     <TableHeaderRow />
+                    <TableSelection showSelectAll />
                     <TableColumnVisibility/>
+                    
+                    
                     <Toolbar />
                     <ColumnChooser />
                     <TableFilterRow cellComponent={this.getFilterCellComponent}/>
@@ -303,6 +338,7 @@ class FileSelectionComponent extends React.Component {
                 <Typography gutterBottom variant="h5" component="h2">
                     Selected Files
                 </Typography>
+                
                 <Grid rows={this.state.selectedFiles} columns={this.columns}>
                     <ChippedTagsTypeProvider for={['creators', 'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger']} />
                     <LinkTypeProvider for={['content_file']} />
@@ -310,7 +346,7 @@ class FileSelectionComponent extends React.Component {
                     <IntegratedFiltering  columnExtensions={this.filterExtensions} />
                     <PagingState defaultCurrentPage={0} defaultPageSize={10} />
                     <IntegratedPaging />
-                    <Table rowComponent={obj => {return this.tableRowComponent(obj, 'selectedFilesMenu')}} />
+                    <Table cellComponent={this.tableCellComponent('selectedFilesMenu')} />
                     <TableColumnResizing defaultColumnWidths={this.defaultColumnWidths} />
                     <TableHeaderRow />
                     <TableColumnVisibility/>

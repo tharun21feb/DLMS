@@ -435,7 +435,9 @@ class TagManagementComponent extends React.Component {
                                 <ExpansionPanelDetails>
                                     <Grid container>
                                         <Grid item>
-
+                                            <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Creator') }}>
+                                                Add New
+                                            </Button>
                                         </Grid>
                                         <DataGrid
                                             rows={this.state.creatorRows}
@@ -463,7 +465,7 @@ class TagManagementComponent extends React.Component {
                                         <Grid item>
                                             <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Coverages') }}>
                                                 Add New
-            </Button>
+                                            </Button>
                                         </Grid>
                                         <DataGrid
                                             rows={this.state.coverageRows}
@@ -492,7 +494,7 @@ class TagManagementComponent extends React.Component {
                                         <Grid item>
                                             <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Subjects') }}>
                                                 Add New
-            </Button>
+                                            </Button>
                                         </Grid>
                                         <DataGrid
                                             rows={this.state.subjectRows}
@@ -517,7 +519,9 @@ class TagManagementComponent extends React.Component {
                                 <ExpansionPanelDetails>
                                     <Grid container>
                                         <Grid item>
-
+                                            <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Creator') }}>
+                                                Add New
+                                            </Button>
                                         </Grid>
                                         <DataGrid
                                             rows={this.state.keywordRows}
@@ -545,7 +549,7 @@ class TagManagementComponent extends React.Component {
                                         <Grid item>
                                             <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Work Areas') }}>
                                                 Add New
-            </Button>
+                                            </Button>
                                         </Grid>
                                         <DataGrid
                                             rows={this.state.workareaRows}
@@ -572,7 +576,7 @@ class TagManagementComponent extends React.Component {
                                         <Grid item>
                                             <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Languages') }}>
                                                 Add New
-            </Button>
+                                            </Button>
                                         </Grid>
                                         <DataGrid
                                             rows={this.state.languageRows}
@@ -596,9 +600,10 @@ class TagManagementComponent extends React.Component {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container>
-                                        <Grid item><Button variant="contained" color="primary" onClick={e => { this.addNewTag('Catalogers') }}>
-                                            Add New
-            </Button>
+                                        <Grid item>
+                                            <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Catalogers') }}>
+                                                Add New
+                                            </Button>
                                         </Grid>
                                         <DataGrid
                                             rows={this.state.catalogerRows}

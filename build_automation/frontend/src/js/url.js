@@ -64,7 +64,7 @@ const get_filter_query = (filters, viewset_params) => {
         if (isEqual(operations, ['in'])) {
             return get_filter_param(name, operations[0], val.join(","))
         } else if (isEqual(operations, ['lte', 'gte'])) {
-            //Turns filter.value == '12/19/2019-12/21/2019' into dates == ['12-19-2019', '12-19-2019']
+            //Turns filter.value == '12/19/2019-12/21/2019' into dates == ['12-19-2019', '12-21-2019']
             const dates = val.split("-").map(date => date.replace(/\//g, '-'))
             return dates.length !== 2 ? null : operations.map((op, idx) => get_filter_param(name, op, dates[idx])).join("&")
         } else if (name == "active") {
