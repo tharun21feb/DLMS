@@ -95,6 +95,7 @@ class DirectoryLayoutComponent extends React.Component {
             infoBoardType: BOARD_TYPES.NONE,
             infoBoardData: {},
             allFiles: [],
+            filteredFiles: [],
             fileIdFileMap: {},
             dirContextMenu: {
                 selectedDirectory: null,

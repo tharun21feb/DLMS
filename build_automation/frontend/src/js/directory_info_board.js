@@ -337,6 +337,7 @@ class DirectoryInfoBoard extends React.Component {
     handleChipAddition(addedChip, tagType) {
         this.setState((prevState, props) => {
             const selectedTags = prevState[tagType];
+            console.log(addedChips)
             selectedTags.push(addedChip.name);
             return {[tagType]: selectedTags};
         });
