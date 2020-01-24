@@ -278,6 +278,7 @@ class ContentManagement extends React.Component{
                 workareas: [],
                 languages: [],
                 catalogers: [],
+                collections: [],
                 updatedDate: new Date(),
                 source: "",
                 copyright: "",

@@ -476,6 +476,7 @@ class DirectoryLayoutComponent extends React.Component {
                 workareas: [],
                 languages: [],
                 catalogers: [],
+                colletions: [],
                 creatorsNeedAll: false,
                 coveragesNeedAll: false,
                 subjectsNeedAll: false,
@@ -729,6 +730,7 @@ class DirectoryLayoutComponent extends React.Component {
                         workareas: newValue.workareas,
                         languages: newValue.languages,
                         catalogers: newValue.catalogers,
+                        collections: newValue.collections,
                         creatorsNeedAll: newValue.creators_need_all,
                         coveragesNeedAll: newValue.coverages_need_all,
                         subjectsNeedAll: newValue.subjects_need_all,
@@ -753,6 +755,7 @@ class DirectoryLayoutComponent extends React.Component {
                     array[i].workareas = newValue.workareas;
                     array[i].languages = newValue.languages;
                     array[i].catalogers = newValue.catalogers;
+                    array[i].collections = newValue.collections;
                     array[i].creatorsNeedAll = newValue.creators_need_all;
                     array[i].coveragesNeedAll = newValue.coverages_need_all;
                     array[i].subjectsNeedAll = newValue.subjects_need_all;
@@ -790,6 +793,7 @@ class DirectoryLayoutComponent extends React.Component {
         boardData.workareas = directory.workareas;
         boardData.languages = directory.languages;
         boardData.catalogers = directory.catalogers;
+        boardData.collections = directory.collections
         boardData.creatorsNeedAll = directory.creators_need_all;
         boardData.coveragesNeedAll = directory.coverages_need_all;
         boardData.subjectsNeedAll = directory.subjects_need_all;
@@ -835,6 +839,7 @@ class DirectoryLayoutComponent extends React.Component {
                         workareas: savedInfo.workareas,
                         languages: savedInfo.languages,
                         catalogers: savedInfo.catalogers,
+                        collections: savedInfo.collections,
                         creatorsNeedAll: savedInfo.creators_need_all,
                         coveragesNeedAll: savedInfo.coverages_need_all,
                         subjectsNeedAll: savedInfo.subjects_need_all,

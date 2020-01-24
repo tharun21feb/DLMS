@@ -16,6 +16,8 @@ const APP_URLS = {
     CREATORS_DETAIL: (id) => `/api/creators/${id}/`,
     COVERAGES_LIST: '/api/coverages/',
     COVERAGES_DETAIL: (id) => `/api/coverages/${id}/`,
+    COLLECTIONS_LIST: '/api/collections/',
+    COLLECTIONS_DETAIL: (id) => `api/coverages/${id}/`,
     SUBJECTS_LIST: '/api/subjects/',
     SUBJECTS_DETAIL: (id) => `/api/subjects/${id}/`,
     KEYWORDS_LIST: '/api/keywords/',

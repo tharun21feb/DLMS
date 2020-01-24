@@ -117,43 +117,36 @@ class TagManagementComponent extends React.Component {
             creatorColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
-                { name: 'description', title: 'Description' },
             ],
             creatorRows: [],
             keywordColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
-                { name: 'description', title: 'Description' }
             ],
             keywordRows: [],
             coverageColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
-                { name: 'description', title: 'Description' }
             ],
             coverageRows: [],
             subjectColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
-                { name: 'description', title: 'Description' },
             ],
             subjectRows: [],
             workareaColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
-                { name: 'description', title: 'Description' },
             ],
             workareaRows: [],
             languageColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
-                { name: 'description', title: 'Description' },
             ],
             languageRows: [],
             catalogerColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
-                { name: 'description', title: 'Description' },
             ],
             catalogerRows: []
         };
