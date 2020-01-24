@@ -7,7 +7,7 @@ from rest_framework.validators import UniqueValidator
 
 from content_management.models import (
     Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout,
-    Keyword, Language, Subject, Workarea, MetadataSheet
+    Keyword, Language, Subject, Workarea, MetadataSheet, Collection
 )
 
 
@@ -58,6 +58,7 @@ class ContentSerializer(serializers.ModelSerializer):
         content.copyright = (validated_data.get('copyright', content.copyright))
         content.rights_statement = (validated_data.get('rights_statement', content.rights_statement))
         content.active = (validated_data.get('active', content.active))
+        content.audience = (validated_data.get('audience', content.audience))
 
         return self.__create_update(content)
 
@@ -72,7 +73,7 @@ class ContentSerializer(serializers.ModelSerializer):
         model = Content
         fields = ('url', 'id', 'name', 'description', 'content_file', 'updated_time', 'last_uploaded_time', 'creators',
                   'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger', 'original_file_name',
-                  'source', 'copyright', 'rights_statement', 'active')
+                  'source', 'copyright', 'rights_statement', 'active', "audience")
         read_only_fields = ('original_file_name',)
         extra_kwargs = {
             'url': {'lookup_field': 'pk'},
@@ -115,6 +116,27 @@ class CoverageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Coverage
+        fields = ('id', 'url', 'name', 'description')
+        extra_kwargs = {
+            'url': {'lookup_field': 'pk'},
+        }
+
+
+class CollectionSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(
+        max_length=50, validators=[
+            UniqueValidator(
+                queryset=Collection.objects.all(),
+                message={
+                    'error': 'DUPLICATE_COLLECTION_NAME'
+                },
+                lookup='iexact'
+            )
+        ]
+    )
+
+    class Meta:
+        model = Collection
         fields = ('id', 'url', 'name', 'description')
         extra_kwargs = {
             'url': {'lookup_field': 'pk'},

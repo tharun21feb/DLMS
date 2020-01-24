@@ -1,11 +1,9 @@
 import os
 from openpyxl import Workbook
 from io import BytesIO
-from tempfile import TemporaryFile
 
 from django.core.files.base import ContentFile
 from django.http import Http404, FileResponse
-from django.conf import settings
 
 from rest_framework import status
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
@@ -16,12 +14,12 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from content_management.exceptions import DuplicateContentFileException
 from content_management.models import (
     Build, Cataloger, Content, Coverage, Creator, Directory, DirectoryLayout,
-    Keyword, Language, Subject, Workarea, MetadataSheet
+    Keyword, Language, Subject, Workarea, MetadataSheet, Collection
 )
 from content_management.serializers import (
     BuildSerializer, CatalogerSerializer, ContentSerializer, CoverageSerializer, CreatorSerializer,
     DirectoryLayoutSerializer, DirectorySerializer, KeywordSerializer, LanguageSerializer, SubjectSerializer,
-    WorkareaSerializer, MetadataSheetSerializer
+    WorkareaSerializer, MetadataSheetSerializer, CollectionSerializer
 )
 from content_management.filters import ContentsFilterSet
 from content_management.tasks import start_dirlayout_build
@@ -80,6 +78,11 @@ class CreatorViewSet(ModelViewSet):
 
 class CoverageViewSet(ModelViewSet):
     serializer_class = CoverageSerializer
+    queryset = Coverage.objects.all()
+
+
+class CollectionViewSet(ModelViewSet):
+    serializer_class = CollectionSerializer
     queryset = Coverage.objects.all()
 
 
@@ -200,6 +203,7 @@ class AllTagsApiViewSet(ViewSet, ListModelMixin):
             'workareas': Workarea.objects.all().values(),
             'languages': Language.objects.all().values(),
             'catalogers': Cataloger.objects.all().values(),
+            'collections': Collection.objects.all().values(),
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
@@ -300,7 +304,9 @@ class SpreadsheetView(ViewSet):
                 'workareas': ['many', 7],
                 'language': ['foreign', 8],
                 'cataloger': ['foreign', 9],
-                'active': ['field', 10]
+                'active': ['field', 10],
+                'audience': ['field', 11],
+                'collections': ['many', 12],
             }
         }
     }
