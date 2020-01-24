@@ -148,8 +148,61 @@ class TagManagementComponent extends React.Component {
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
             ],
-            catalogerRows: []
+            catalogerRows: [],
+            collectionColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
+                { name: 'name', title: 'Name' },
+            ],
+            collectionRows: [],
         };
+        this.metadataItems = {
+            creator: {
+                detail_url: APP_URLS.CREATORS_DETAIL,
+                list_url: APP_URLS.CREATORS_LIST,
+                display_plural: "Creators",
+            },
+            coverage: {
+                detail_url: APP_URLS.COVERAGES_DETAIL,
+                list_url: APP_URLS.COVERAGES_LIST,
+                display_plural: "Coverages",
+            },
+            subject: {
+                detail_url: APP_URLS.SUBJECTS_DETAIL,
+                list_url: APP_URLS.SUBJECTS_LIST,
+                display_plural: "Subjects",
+            },
+            keyword: {
+                detail_url: APP_URLS.KEYWORDS_DETAIL,
+                list_url: APP_URLS.KEYWORDS_LIST,
+                display_plural: "Keywords",
+            },
+            workarea: {
+                detail_url: APP_URLS.WORKAREAS_DETAIL,
+                list_url: APP_URLS.WORKAREAS_LIST,
+                display_plural: "Workareas",
+            },
+            language: {
+                detail_url: APP_URLS.LANGUAGES_DETAIL,
+                list_url: APP_URLS.LANGUAGES_LIST,
+                display_plural: "Languages",
+            },
+            cataloger: {
+                detail_url: APP_URLS.CATALOGERS_DETAIL,
+                list_url: APP_URLS.CATALOGERS_LIST,
+                display_plural: "Catalogers",
+            },
+            collection: {
+                detail_url: APP_URLS.COLLECTIONS_DETAIL,
+                list_url: APP_URLS.COLLECTIONS_LIST,
+                display_plural: "Collections",
+            }
+        }
+        this.columns = [
+            { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
+            { name: 'name', title: 'Name' },
+        ]
+        this.pageSizes = [5, 10, 20]
+
         this.handleChange = this.handleChange.bind(this);
         this.setCurrentView = this.setCurrentView.bind(this);
         this.setUrls = this.setUrls.bind(this);
@@ -408,6 +461,43 @@ class TagManagementComponent extends React.Component {
     * Render the metadata page
     */
     render() {
+        const panels = Object.entries(this.metadataItems).map((entry) => {
+            const [name, data] = entry
+            const {
+                detail_url,
+                list_url
+            } = data
+            return (
+                <ExpansionPanel expanded={this.state.expanded === name} onChange={this.handleChange(name)} onClick={e => { this.handleAccordionClick(name) }}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(detail_url, list_url) }}>
+                        <Typography variant="h6" color="primary" className={styles.paragraph}>Creators</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Grid container>
+                            <Grid item>
+                                <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Creator') }}>
+                                    Add New
+                                </Button>
+                            </Grid>
+                            <DataGrid
+                                rows={this.state[name + "Rows"]}
+                                columns={this.state[name + "Columns"]}
+                            >
+                                <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
+                                <IntegratedFiltering />
+                                <PagingState defaultCurrentPage={0} defaultPageSize={10} />
+                                <IntegratedPaging />
+                                <Table rowComponent={obj => { return this.tableRowComponent(obj, 'selectedTagsMenu') }} />
+                                <TableHeaderRow />
+                                <TableFilterRow />
+                                <PagingPanel pageSizes={this.pageSizes} />
+                            </DataGrid>
+                        </Grid>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            )
+        })
+
         return (
 		<MuiThemeProvider theme={theme}>
             <Grid container spacing={0}>
@@ -601,6 +691,33 @@ class TagManagementComponent extends React.Component {
                                         <DataGrid
                                             rows={this.state.catalogerRows}
                                             columns={this.state.catalogerColumns}
+                                        >
+                                            <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
+                                            <IntegratedFiltering />
+                                            <PagingState defaultCurrentPage={0} defaultPageSize={10} />
+                                            <IntegratedPaging />
+                                            <Table rowComponent={obj => { return this.tableRowComponent(obj, 'selectedTagsMenu') }} />
+                                            <TableHeaderRow />
+                                            <TableFilterRow />
+                                            <PagingPanel pageSizes={[5, 10, 20]} />
+                                        </DataGrid>
+                                    </Grid>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                            <ExpansionPanel expanded={this.state.expanded === 'collection'} onChange={this.handleChange('collection')} onClick={e => { this.handleAccordionClick('cataloger') }}>
+                                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(APP_URLS.CATALOGERS_LIST, APP_URLS.CATALOGERS_DETAIL) }}>
+                                    <Typography variant="h6" color="primary" className={styles.paragraph}>Collections</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Grid container>
+                                        <Grid item>
+                                            <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Collection') }}>
+                                                Add New
+                                            </Button>
+                                        </Grid>
+                                        <DataGrid
+                                            rows={this.state.collectionRows}
+                                            columns={this.state.collectionColumns}
                                         >
                                             <FilteringState defaultFilters={[]} columnExtensions={[{ columnName: 'name', filteringEnabled: true }]} />
                                             <IntegratedFiltering />
