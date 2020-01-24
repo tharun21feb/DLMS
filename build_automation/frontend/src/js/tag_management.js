@@ -465,12 +465,13 @@ class TagManagementComponent extends React.Component {
             const [name, data] = entry
             const {
                 detail_url,
-                list_url
+                list_url,
+                display_plural
             } = data
             return (
                 <ExpansionPanel expanded={this.state.expanded === name} onChange={this.handleChange(name)} onClick={e => { this.handleAccordionClick(name) }}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(detail_url, list_url) }}>
-                        <Typography variant="h6" color="primary" className={styles.paragraph}>Creators</Typography>
+                        <Typography variant="h6" color="primary" className={styles.paragraph}>{display_plural}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <Grid container>
