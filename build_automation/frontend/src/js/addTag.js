@@ -59,7 +59,7 @@ class TagCreation extends React.Component {
         const currentInstance = this;
         if (this.state.id > 0) {
             // Update an exising Tag.
-            targetUrl = (this.props.detailUrl, { id: this.state.id });
+            targetUrl = this.props.detailUrl(this.state.id);
             axios.patch(targetUrl, payload, {
                 responseType: 'json'
             }).then(function (response) {

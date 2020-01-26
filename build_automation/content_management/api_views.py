@@ -83,7 +83,7 @@ class CoverageViewSet(ModelViewSet):
 
 class CollectionViewSet(ModelViewSet):
     serializer_class = CollectionSerializer
-    queryset = Coverage.objects.all()
+    queryset = Collection.objects.all()
 
 
 class SubjectViewSet(ModelViewSet):

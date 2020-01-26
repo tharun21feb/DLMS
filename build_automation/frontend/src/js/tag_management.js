@@ -469,14 +469,14 @@ class TagManagementComponent extends React.Component {
                 display_plural
             } = data
             return (
-                <ExpansionPanel expanded={this.state.expanded === name} onChange={this.handleChange(name)} onClick={e => { this.handleAccordionClick(name) }}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(detail_url, list_url) }}>
+                <ExpansionPanel key={name} expanded={this.state.expanded === name} onChange={this.handleChange(name)} onClick={e => { this.handleAccordionClick(name) }}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} onClick={e => { this.setUrls(list_url, detail_url) }}>
                         <Typography variant="h6" color="primary" className={styles.paragraph}>{display_plural}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <Grid container>
                             <Grid item>
-                                <Button variant="contained" color="primary" onClick={e => { this.addNewTag('Creator') }}>
+                                <Button variant="contained" color="primary" onClick={e => { this.addNewTag(display_plural) }}>
                                     Add New
                                 </Button>
                             </Grid>

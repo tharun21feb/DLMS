@@ -26,6 +26,7 @@ class ContentSerializer(serializers.ModelSerializer):
     cataloger = serializers.PrimaryKeyRelatedField(
         queryset=Cataloger.objects.all(), read_only=False, allow_null=True, required=False
     )
+    collections = serializers.PrimaryKeyRelatedField(many=True, queryset=Collection.objects.all(), read_only=False)
 
     def create(self, validated_data):
         validated_data_copy = dict(validated_data)
@@ -73,7 +74,7 @@ class ContentSerializer(serializers.ModelSerializer):
         model = Content
         fields = ('url', 'id', 'name', 'description', 'content_file', 'updated_time', 'last_uploaded_time', 'creators',
                   'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger', 'original_file_name',
-                  'source', 'copyright', 'rights_statement', 'active', "audience")
+                  'source', 'copyright', 'rights_statement', 'active', "audience", 'collections')
         read_only_fields = ('original_file_name',)
         extra_kwargs = {
             'url': {'lookup_field': 'pk'},

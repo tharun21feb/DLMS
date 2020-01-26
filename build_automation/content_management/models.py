@@ -103,7 +103,7 @@ class Collection(AbstractTag):
         return reverse('collection-detail', args=[str(self.id)])
 
     def __str__(self):
-        return f"Catatloger[{self.name}]"
+        return "Catatloger[{}]".format(self.name)
 
     class Meta:
         ordering = ['name']
