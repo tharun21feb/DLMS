@@ -142,6 +142,7 @@ class DirectoryLayoutComponent extends React.Component {
                 keywords: [infoBoardData.keywordsNeedAll, true, "keywords"],
                 language: [infoBoardData.languagesNeedAll, false, "languages"],
                 subjects: [infoBoardData.subjectsNeedAll, true, "subjects"],
+                collections: [infoBoardData.collectionsNeedAll, true, "collections"],
                 workareas: [infoBoardData.workareasNeedAll, true, "workareas"]
             }
             const entries = Object.entries(metadataInfoMap)
@@ -282,9 +283,10 @@ class DirectoryLayoutComponent extends React.Component {
             layoutDirectories[eachDir.id].workareas = eachDir.workareas;
             layoutDirectories[eachDir.id].languages = eachDir.languages;
             layoutDirectories[eachDir.id].catalogers = eachDir.catalogers;
+            layoutDirectories[eachDir.id].collections = eachDir.collections;
             layoutDirectories[eachDir.id].creatorsNeedAll = eachDir.creators_need_all;
             layoutDirectories[eachDir.id].coveragesNeedAll = eachDir.coverages_need_all;
-            layoutDirectories[eachDir.id].subjectsNeedAll = eachDir.subjects_need_all;
+            layoutDirectories[eachDir.id].collectionsNeedAll = eachDir.collections_need_all;
             layoutDirectories[eachDir.id].keywordsNeedAll = eachDir.keywords_need_all;
             layoutDirectories[eachDir.id].workareasNeedAll = eachDir.workareas_need_all;
             layoutDirectories[eachDir.id].languagesNeedAll = eachDir.languages_need_all;
@@ -476,7 +478,7 @@ class DirectoryLayoutComponent extends React.Component {
                 workareas: [],
                 languages: [],
                 catalogers: [],
-                colletions: [],
+                collections: [],
                 creatorsNeedAll: false,
                 coveragesNeedAll: false,
                 subjectsNeedAll: false,
@@ -763,6 +765,7 @@ class DirectoryLayoutComponent extends React.Component {
                     array[i].workareasNeedAll = newValue.workareas_need_all;
                     array[i].languagesNeedAll = newValue.languages_need_all;
                     array[i].catalogersNeedAll = newValue.catalogers_need_all;
+                    array[i].collectionsNeedAll = newValue.collections_need_all;
                 }
                 return true;
             }
@@ -801,6 +804,7 @@ class DirectoryLayoutComponent extends React.Component {
         boardData.workareasNeedAll = directory.workareas_need_all;
         boardData.languagesNeedAll = directory.languages_need_all;
         boardData.catalogersNeedAll = directory.catalogers_need_all;
+        boardData.collectionsNeedAll = directory.collections_need_all
         boardData.parent = directory.parent;
     }
     /*
@@ -847,6 +851,7 @@ class DirectoryLayoutComponent extends React.Component {
                         workareasNeedAll: savedInfo.workareas_need_all,
                         languagesNeedAll: savedInfo.languages_need_all,
                         catalogersNeedAll: savedInfo.catalogers_need_all,
+                        collectionsNeedAll: savedInfo.collections_need_all,
                         children: []
                     });
                 }

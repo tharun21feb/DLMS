@@ -316,6 +316,7 @@ class UploadContent extends React.Component{
         selectedTags.creators.forEach(creator => {payload.append('creators', creator)});
         selectedTags.coverages.length>0 && payload.append('coverage', selectedTags.coverages[0]);
         selectedTags.subjects.forEach(subject => {payload.append('subjects', subject)});
+        selectedTags.collections.forEach(collection => {payload.append('collections', collection)});
         selectedTags.keywords.forEach(keyword => {payload.append('keywords', keyword)});
         selectedTags.workareas.forEach(workarea => {payload.append('workareas', workarea)});
         selectedTags.languages.length>0 && payload.append('language', selectedTags.languages[0]);
@@ -505,6 +506,15 @@ class UploadContent extends React.Component{
                             <AutoCompleteWithChips suggestions={this.props.allTags['subjects']}
                                                    searchKey={'name'} selectedItem={this.state.subjects}
                                                    onAddition={this.handleSubjectAddition} onDeletion={this.handleSubjectDeletion}/>
+                        </span>
+                        <div style={{marginTop: '20px'}}> </div>
+                <Typography gutterBottom variant="subtitle1">
+                    Collection(s)
+                </Typography>
+                <span>
+                            <AutoCompleteWithChips suggestions={this.props.allTags['collections']}
+                                                   searchKey={'name'} selectedItem={this.state.collections}
+                                                   onAddition={this.handleCollectionAddition} onDeletion={this.handleCollectionDeletion}/>
                         </span>
                 <div style={{marginTop: '20px'}}> </div>
                 <Typography gutterBottom variant="subtitle1">

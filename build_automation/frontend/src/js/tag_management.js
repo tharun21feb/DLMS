@@ -129,6 +129,11 @@ class TagManagementComponent extends React.Component {
                 { name: 'name', title: 'Name' },
             ],
             coverageRows: [],
+            collectionColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
+                { name: 'name', title: 'Name' },
+            ],
+            collectionColumns: [],
             subjectColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
@@ -223,7 +228,9 @@ class TagManagementComponent extends React.Component {
         return (
             <ActionPanel
                 editFn={evt => {
-                    this.setState({selectedTag: row}, this.handleTagEdit)
+                    this.setState({
+                        selectedTag: row
+                    }, this.handleTagEdit)
                 }}
                 deleteFn={evt => {
                     this.setState({
@@ -326,6 +333,7 @@ class TagManagementComponent extends React.Component {
                 creatorRows: response['creators'],
                 keywordRows: response['keywords'],
                 subjectRows: response['subjects'],
+                collectionRows: response['collections'],
                 coverageRows: response['coverages'],
                 workareaRows: response['workareas'],
                 languageRows: response['languages'],
@@ -447,9 +455,9 @@ class TagManagementComponent extends React.Component {
     handleTagEdit() {
         const selectedTag = this.state.selectedTag;
         
-        const currentInstance = this;
         this.setState({
             currentView: 'addTag',
+            currentTitle: this.metadataItems[this.state.currentPanel].display_plural,
             selectedTag: {
                 id: selectedTag.id,
                 name: selectedTag.name,

@@ -17,7 +17,7 @@ const ActionPanel = (props) => {
                 onClick={deleteFn}
             />
             {setActive !== undefined ? (
-                row.active == 1 ? (
+                row.active == 0 ? (
                     <CheckCircleOutline
                         style={pointerStyle}
                         onClick={() => setActive(false)}

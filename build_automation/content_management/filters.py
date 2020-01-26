@@ -23,6 +23,7 @@ class ContentsFilterSet(FilterSet):
             'language': ['in'],
             'cataloger': ['in'],
             'active': ['exact'],
+            'audience': ['icontains'],
             'collections': ['in']
         }
 
