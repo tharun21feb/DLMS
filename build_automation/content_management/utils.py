@@ -424,6 +424,9 @@ def load_metadata(metadata_sheet):
             "audience": row["audience"],
             "last_uploaded_time": timezone.now(),
             "original_file_name": row["filename"],
+            "source": row["source"],
+            "copyright": row["copyright"],
+            "rights_statement": row["rights_statement"],
             "active": 1,
         }
 
@@ -434,18 +437,19 @@ def load_metadata(metadata_sheet):
             for metadata in singletons:
                 dict_key, model = metadata
                 try:
-                    obj, created = model.objects.get_or_create(name=row[dict_key])
+                    trimmed = row[dict_key].strip()
+                    obj, created = model.objects.get_or_create(name=trimmed)
                     setattr(content_object, dict_key, obj)
                 except ObjectDoesNotExist:
                     continue
 
             for metadata in multiples:
                 dict_key, model = metadata
-                metadata_names = row[dict_key].split(",")
-                print(metadata_names)
+                metadata_names = row[dict_key].split("|")
                 field = getattr(content_object, dict_key)
                 for metadata_name in metadata_names:
-                    obj, created = model.objects.get_or_create(name=metadata_name)
+                    trimmed = metadata_name.strip()
+                    obj, created = model.objects.get_or_create(name=trimmed)
                     field.add(obj)
             content_object.save()
         except IntegrityError as e:
