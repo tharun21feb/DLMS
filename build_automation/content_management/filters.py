@@ -23,6 +23,7 @@ class ContentsFilterSet(FilterSet):
             'cataloger': ['in'],
             'active': ['exact'],
             'audience': ['in'],
+            'resourcetype': ['in'],
             'original_file_name': ['icontains'],
             'collections': ['in']
         }

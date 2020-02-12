@@ -18,7 +18,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from content_management.models import (
     Build, Content, Directory, DirectoryLayout, Collection, Creator,
-    Keyword, Language, Subject, Cataloger, Audience
+    Keyword, Language, Subject, Cataloger, Audience, ResourceType
 )
 from content_management.storage import CustomFileStorage
 
@@ -287,6 +287,7 @@ class LibraryVersionBuildUtil:
         keywords = directory.keywords.all()
         languages = directory.languages.all()
         audiences = directory.audiences.all()
+        resourcetypes = directory.resourcetypes.all()
         catalogers = directory.catalogers.all()
         collections = directory.collections.all()
 
@@ -320,6 +321,12 @@ class LibraryVersionBuildUtil:
             'audience',
             metadata_filter_criteria,
             directory.audiences_need_all,
+        )
+        metadata_filter_criteria = self.__add_metadata_to_filter(
+            resourcetypes,
+            'resourcetypes',
+            metadata_filter_criteria,
+            directory.resourcetypes_need_all,
         )
         metadata_filter_criteria = self.__add_metadata_to_filter(
             catalogers,
@@ -401,7 +408,10 @@ def temporary_filename(dir=settings.TEMP_ROOT):
 
 # Takes a metadata sheet instance and loads all metadata from that uploaded csv sheet into the content database
 def load_metadata(metadata_sheet):
-    singletons = [["Cataloger", Cataloger], ["Language", Language], ["Audience", Audience]]
+    singletons = [
+        ["Cataloger", Cataloger], ["Language", Language], ["Audience", Audience],
+        ["Resource Type", ResourceType]
+    ]
     multiples = [
         ["Collection Type", Collection], ["Creator", Creator], ["Keyword", Keyword],
         ["Subject", Subject]

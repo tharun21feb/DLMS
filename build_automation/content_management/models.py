@@ -24,6 +24,18 @@ class Audience(AbstractTag):
         ordering = ['name']
 
 
+class ResourceType(AbstractTag):
+
+    def get_absolute_url(self):
+        return reverse('resourcetype-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return "ResourceType[{}]".format(self.name)
+
+    class Meta:
+        ordering = ['name']
+
+
 class Creator(AbstractTag):
     name = models.CharField(max_length=300, unique=True)
 
@@ -141,7 +153,7 @@ class Content(models.Model):
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
     cataloger = models.ForeignKey(Cataloger, on_delete=models.SET_NULL, null=True)
     original_file_name = models.CharField(max_length=300, null=True)
-    resource_type = models.CharField(max_length=2000, null=True)
+    resourcetype = models.ForeignKey(ResourceType, on_delete=models.SET_NULL, null=True)
     copyright = models.CharField(max_length=500, null=True)
     rights_statement = models.TextField(null=True)
     active = models.SmallIntegerField(default=1)
