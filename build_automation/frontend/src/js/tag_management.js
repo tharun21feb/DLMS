@@ -139,6 +139,11 @@ class TagManagementComponent extends React.Component {
                 { name: 'name', title: 'Name' },
             ],
             languageRows: [],
+            audienceColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
+                { name: 'name', title: 'Name' },
+            ],
+            audienceRows: [],
             catalogerColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
@@ -170,6 +175,11 @@ class TagManagementComponent extends React.Component {
                 detail_url: APP_URLS.LANGUAGES_DETAIL,
                 list_url: APP_URLS.LANGUAGES_LIST,
                 display_plural: "Languages",
+            },
+            audience: {
+                detail_url: APP_URLS.AUDIENCES_DETAIL,
+                list_url: APP_URLS.AUDIENCES_LIST,
+                display_plural: "Audiences",
             },
             cataloger: {
                 detail_url: APP_URLS.CATALOGERS_DETAIL,
@@ -315,6 +325,7 @@ class TagManagementComponent extends React.Component {
                 subjectRows: response['subjects'],
                 collectionRows: response['collections'],
                 languageRows: response['languages'],
+                audienceRows: response['audiences'],
                 catalogerRows: response['catalogers'],
             })
         }).catch(function (error) {

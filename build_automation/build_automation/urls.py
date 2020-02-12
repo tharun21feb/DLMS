@@ -23,7 +23,7 @@ from content_management.api_views import (
     AllTagsApiViewSet, BuildLibraryVersionViewSet, CatalogerViewSet, ContentApiViewset,
     CreatorViewSet, DirectoryCloneApiViewSet, DirectoryLayoutViewSet, DirectoryViewSet, DiskSpaceViewSet,
     KeywordViewSet, LanguageViewSet, SubjectViewSet, MetadataSheetApiViewSet, MetadataMatchViewSet,
-    SpreadsheetView, CollectionViewSet
+    SpreadsheetView, CollectionViewSet, AudienceViewSet
 )
 
 router = routers.SimpleRouter()
@@ -35,6 +35,7 @@ router.register(r'creators', CreatorViewSet)
 router.register(r'subjects', SubjectViewSet)
 router.register(r'keywords', KeywordViewSet)
 router.register(r'languages', LanguageViewSet)
+router.register(r'audiences', AudienceViewSet)
 router.register(r'catalogers', CatalogerViewSet)
 router.register(r'collections', CollectionViewSet)
 router.register(r'alltags', AllTagsApiViewSet, base_name='alltag')

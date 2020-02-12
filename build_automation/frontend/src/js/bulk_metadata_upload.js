@@ -50,10 +50,11 @@ class BulkMetadataUpload extends React.Component {
             subjects: props.content.subjects,
             keywords: props.content.keywords,
             languages: props.content.languages,
+            audiences: props.content.audiences,
             catalogers: props.content.catalogers,
             collections: props.content.collections,
             //fieldErrors: {},
-            selectedDate: props.content.updatedDate,
+            selectedDate: props.content.publishedDate,
             source: props.content.source,
             copyright: props.content.copyright,
             rightsStatement: props.content.rightsStatement,
@@ -165,6 +166,11 @@ class BulkMetadataUpload extends React.Component {
                                       }
                                          
                                    }
+                                    for (var x = 0; x < currInstance.props.allTags.audiences.length; x++){
+                                        if (parsed[i]["Audience"] == currInstance.props.allTags.audiences[x].name) {
+                                            payload.append('audience', currInstance.props.allTags.audiences[x].id);                                    
+                                        }
+                                    }
                                    
                                     for (var x = 0; x < currInstance.props.allTags.subjects.length; x++){
                                       if (parsed[i]["Subject"] == currInstance.props.allTags.subjects[x].name) {

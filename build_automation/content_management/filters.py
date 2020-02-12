@@ -15,13 +15,14 @@ class ContentsFilterSet(FilterSet):
             'name': ['icontains'],
             'description': ['icontains'],
             'updated_time': ['lte', 'gte'],
+            'published_date': ['lte', 'gte'],
             'creators': ['in'],
             'subjects': ['in'],
             'keywords': ['in'],
             'language': ['in'],
             'cataloger': ['in'],
             'active': ['exact'],
-            'audience': ['icontains'],
+            'audience': ['in'],
             'original_file_name': ['icontains'],
             'collections': ['in']
         }

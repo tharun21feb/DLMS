@@ -235,9 +235,10 @@ class FileListComponent extends React.Component {
             {name: 'name', title: 'Name', filterType: 'textfield'},
             {name: 'original_file_name', title: 'Filename', filterType: 'textfield'},
             {name: 'creators', title: 'Creators', filterType: 'autocomplete', tagKey: 'creators'},
-            {name: 'updated_time', title: 'Updated on', filterType: 'textfield', placeholder: "YYYY/MM/DD-YYYY/MM/DD"},
+            {name: 'published_date', title: 'Published on', filterType: 'textfield', placeholder: "YYYY/MM/DD-YYYY/MM/DD"},
             {name: 'description', title: 'Description', filterType: 'textfield'},
             {name: 'language', title: 'Language', filterType: 'autocomplete', tagKey: 'languages'},
+            {name: 'audience', title: 'Audience', filterType: 'autocomplete', tagKey: 'audiences'},
             //TODO: Add Collection Type and Resource Type column + filter
             //TODO: fix date filter
             {name: 'subjects', title: 'Subjects', filterType: 'autocomplete', tagKey: 'subjects'},
@@ -258,6 +259,7 @@ class FileListComponent extends React.Component {
             {columnName: 'subjects', predicate: filterThroughArray},
             {columnName: 'keywords', predicate: filterThroughArray},
             {columnName: 'language', predicate: filterThroughArray},
+            {columnName: 'audience', predicate: filterThroughArray},
             {columnName: 'cataloger', predicate: filterThroughArray},
             {columnName: 'collections', predicate: filterThroughArray}
         ];
@@ -425,14 +427,14 @@ class FileListComponent extends React.Component {
                     columns={this.columns}
 					style={{color: '#3592BE'}}
                 >
-                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'cataloger', 'collections']} />
+                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'audience', 'cataloger', 'collections']} />
                     <FilteringState
                         defaultFilters={[]}
                         columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]}
                         onFiltersChange={this.setFilters}
                     />
                     <DataTypeProvider
-                        for={["updated_time"]}
+                        for={["published_date"]}
                     />
                     <PagingState
                         currentPage={this.state.currentPage - 1}
@@ -452,9 +454,10 @@ class FileListComponent extends React.Component {
                             { columnName: 'name', width: 150 },
                             { columnName: 'original_file_name', width: 150 },
                             { columnName: 'creators', width: 130 },
-                            { columnName: 'updated_time', width: 150 },
+                            { columnName: 'published_date', width: 150 },
                             { columnName: 'description', width: 130 },
                             { columnName: 'language', width: 130 },
+                            { columnName: 'audience', width: 130 },
                             { columnName: 'subjects', width: 130 },
                             { columnName: 'collections', width: 130 },
                             { columnName: 'keywords', width: 130 },
@@ -562,14 +565,20 @@ class FileListComponent extends React.Component {
                                 selectedFile={this.state.selectedFile}
                             />
                             <FileInfoEntry
+                                name="Audience"
+                                property="audience"
+                                displayFn={id => this.props.tagIdsTagsMap["audiences"][id].name}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
                                 name="Cataloger"
                                 property="cataloger"
                                 displayFn={id => this.props.tagIdsTagsMap["catalogers"][id].name}
                                 selectedFile={this.state.selectedFile}
                             />
                             <FileInfoEntry
-                                name="Updated On"
-                                property="updated_time"
+                                name="Published On"
+                                property="published_date"
                                 selectedFile={this.state.selectedFile}
                             />
                             <FileInfoEntry

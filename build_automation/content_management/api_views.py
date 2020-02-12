@@ -14,12 +14,12 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from content_management.exceptions import DuplicateContentFileException
 from content_management.models import (
     Build, Cataloger, Content, Creator, Directory, DirectoryLayout,
-    Keyword, Language, Subject, MetadataSheet, Collection
+    Keyword, Language, Subject, MetadataSheet, Collection, Audience
 )
 from content_management.serializers import (
     BuildSerializer, CatalogerSerializer, ContentSerializer, CreatorSerializer,
     DirectoryLayoutSerializer, DirectorySerializer, KeywordSerializer, LanguageSerializer, SubjectSerializer,
-    MetadataSheetSerializer, CollectionSerializer
+    MetadataSheetSerializer, CollectionSerializer, AudienceSerializer
 )
 from content_management.filters import ContentsFilterSet
 from content_management.tasks import start_dirlayout_build
@@ -96,6 +96,11 @@ class LanguageViewSet(ModelViewSet):
     queryset = Language.objects.all()
 
 
+class AudienceViewSet(ModelViewSet):
+    serializer_class = AudienceSerializer
+    queryset = Audience.objects.all()
+
+
 class CatalogerViewSet(ModelViewSet):
     serializer_class = CatalogerSerializer
     queryset = Cataloger.objects.all()
@@ -169,6 +174,7 @@ class DirectoryCloneApiViewSet(ViewSet, CreateModelMixin):
             cloned_directory.subjects.set(list(each_original_directory.subjects.all()))
             cloned_directory.keywords.set(list(each_original_directory.keywords.all()))
             cloned_directory.languages.set(list(each_original_directory.languages.all()))
+            cloned_directory.audiences.set(list(each_original_directory.audiences.all()))
             cloned_directory.catalogers.set(list(each_original_directory.catalogers.all()))
             cloned_directory.collections.set(list(each_original_directory.collections.all()))
             cloned_directory.save()
@@ -189,6 +195,7 @@ class AllTagsApiViewSet(ViewSet, ListModelMixin):
             'subjects': Subject.objects.all().values(),
             'keywords': Keyword.objects.all().values(),
             'languages': Language.objects.all().values(),
+            'audiences': Audience.objects.all().values(),
             'catalogers': Cataloger.objects.all().values(),
             'collections': Collection.objects.all().values(),
         }
@@ -290,8 +297,9 @@ class SpreadsheetView(ViewSet):
                 'language': ['foreign', 6],
                 'cataloger': ['foreign', 7],
                 'active': ['field', 8],
-                'audience': ['field', 9],
+                'audience': ['foreign', 9],
                 'collections': ['many', 10],
+                'published_date': ['field', 11]
             }
         }
     }

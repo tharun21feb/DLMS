@@ -122,22 +122,24 @@ class FileSelectionComponent extends React.Component {
         this.columns = [
             {name: 'name', title: 'Name', filterType: 'textfield'},
             {name: 'description', title: 'Description', filterType: 'textfield'},
-            {name: 'updated_time', title: 'Updated on', filterType: 'textfield'},
+            {name: 'published_date', title: 'Updated on', filterType: 'textfield'},
             {name: 'creators', title: 'Creators', filterType: 'autocomplete', tagKey: 'creators'},
             {name: 'subjects', title: 'Subjects', filterType: 'autocomplete', tagKey: 'subjects'},
             {name: 'collections', title: 'Collections', filterType: 'autocomplete', tagKey: 'collections'},
             {name: 'keywords', title: 'Keywords', filterType: 'autocomplete', tagKey: 'keywords'},
             {name: 'language', title: 'Language', filterType: 'autocomplete', tagKey: 'languages'},
+            {name: 'audience', title: 'Audience', filterType: 'autocomplete', tagKey: 'audiences'},
             {name: 'cataloger', title: 'Cataloger', filterType: 'autocomplete', tagKey: 'catalogers'},
         ];
         this.defaultColumnWidths = [
             {columnName: 'name', width: 230},
             {columnName: 'description', width: 250},
-            {columnName: 'updated_time', width: 240},
+            {columnName: 'published_date', width: 240},
             {columnName: 'creators', width: 420},
             {columnName: 'subjects', width: 420},
             {columnName: 'keywords', width: 420},
             {columnName: 'language', width: 240},
+            {columnName: 'audience', width: 240},
             {columnName: 'cataloger', width: 240},
             {columnName: 'collections', width: 240},
         ];
@@ -146,6 +148,7 @@ class FileSelectionComponent extends React.Component {
             {columnName: 'subjects', predicate: filterThroughArray},
             {columnName: 'keywords', predicate: filterThroughArray},
             {columnName: 'language', predicate: filterThroughArray},
+            {columnName: 'audience', predicate: filterThroughArray},
             {columnName: 'cataloger', predicate: filterThroughArray},
             {columnName: 'collections', predicate: filterThroughArray},
         ];
@@ -279,7 +282,7 @@ class FileSelectionComponent extends React.Component {
                     Add Selected
                 </Button>
                 <Grid rows={this.props.allFiles} columns={this.columns}>
-                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'cataloger', 'collections']} />
+                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'audience', 'cataloger', 'collections']} />
                     <LinkTypeProvider for={['content_file']} />
 
                     
@@ -337,7 +340,7 @@ class FileSelectionComponent extends React.Component {
                 </Typography>
                 
                 <Grid rows={this.state.selectedFiles} columns={this.columns}>
-                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'cataloger', 'collections']} />
+                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'audience', 'cataloger', 'collections']} />
                     <LinkTypeProvider for={['content_file']} />
                     <FilteringState defaultFilters={[]} columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]} />
                     <IntegratedFiltering  columnExtensions={this.filterExtensions} />

@@ -18,7 +18,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from content_management.models import (
     Build, Content, Directory, DirectoryLayout, Collection, Creator,
-    Keyword, Language, Subject, Cataloger
+    Keyword, Language, Subject, Cataloger, Audience
 )
 from content_management.storage import CustomFileStorage
 
@@ -286,6 +286,7 @@ class LibraryVersionBuildUtil:
         subjects = directory.subjects.all()
         keywords = directory.keywords.all()
         languages = directory.languages.all()
+        audiences = directory.audiences.all()
         catalogers = directory.catalogers.all()
         collections = directory.collections.all()
 
@@ -313,6 +314,12 @@ class LibraryVersionBuildUtil:
             'language',
             metadata_filter_criteria,
             directory.languages_need_all,
+        )
+        metadata_filter_criteria = self.__add_metadata_to_filter(
+            audiences,
+            'audience',
+            metadata_filter_criteria,
+            directory.audiences_need_all,
         )
         metadata_filter_criteria = self.__add_metadata_to_filter(
             catalogers,
@@ -394,7 +401,7 @@ def temporary_filename(dir=settings.TEMP_ROOT):
 
 # Takes a metadata sheet instance and loads all metadata from that uploaded csv sheet into the content database
 def load_metadata(metadata_sheet):
-    singletons = [["Cataloger", Cataloger], ["Language", Language]]
+    singletons = [["Cataloger", Cataloger], ["Language", Language], ["Audience", Audience]]
     multiples = [
         ["Collection Type", Collection], ["Creator", Creator], ["Keyword", Keyword],
         ["Subject", Subject]
@@ -406,8 +413,8 @@ def load_metadata(metadata_sheet):
             "name": row["Title"],
             "description": row["Description"],
             "updated_time": timezone.now(),
-            "audience": row["Audience"],
             "last_uploaded_time": timezone.now(),
+            "published_date": datetime.date(int(row["date"]), 1, 1),
             "original_file_name": row["File Name"],
             "copyright": row["copyright"],
             "rights_statement": row["Rights Statement"],

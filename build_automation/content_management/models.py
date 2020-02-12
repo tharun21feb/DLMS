@@ -12,6 +12,18 @@ class AbstractTag(models.Model):
         abstract = True
 
 
+class Audience(AbstractTag):
+
+    def get_absolute_url(self):
+        return reverse('audience-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return "Audience[{}]".format(self.name)
+
+    class Meta:
+        ordering = ['name']
+
+
 class Creator(AbstractTag):
     name = models.CharField(max_length=300, unique=True)
 
@@ -133,7 +145,9 @@ class Content(models.Model):
     copyright = models.CharField(max_length=500, null=True)
     rights_statement = models.TextField(null=True)
     active = models.SmallIntegerField(default=1)
-    audience = models.CharField(max_length=50, null=True)
+    audience = models.ForeignKey(Audience, on_delete=models.SET_NULL, null=True)
+
+    published_date = models.DateField(null=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

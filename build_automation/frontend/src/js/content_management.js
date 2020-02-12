@@ -275,9 +275,11 @@ class ContentManagement extends React.Component{
                 subjects: [],
                 keywords: [],
                 languages: [],
+                audiences: [],
                 catalogers: [],
                 collections: [],
                 updatedDate: new Date(),
+                publishedDate: new Date(),
                 source: "",
                 copyright: "",
                 rightsStatement: "",
@@ -299,9 +301,11 @@ class ContentManagement extends React.Component{
                 subjects: [],
                 keywords: [],
                 languages: [],
+                audiences: [],
                 catalogers: [],
                 collections: [],
                 updatedDate: new Date(),
+                publishedDate: new Date(),
                 source: "",
                 copyright: "",
                 rightsStatement: "",
@@ -321,9 +325,11 @@ class ContentManagement extends React.Component{
                 subjects: [],
                 keywords: [],
                 languages: [],
+                audiences: [],
                 catalogers: [],
                 collections: [],
                 updatedDate: new Date(),
+                publishedDate: new Date(),
                 source: "",
                 copyright: "",
                 rightsStatement: "",
@@ -348,8 +354,10 @@ class ContentManagement extends React.Component{
                 collections: content.collections||[],
                 keywords: content.keywords||[],
                 languages: content.language?[content.language]:[],
+                audiences: content.audience?[content.audience]:[],
                 catalogers: content.cataloger?[content.cataloger]:[],
                 updatedDate: this.parseDate(content.updated_time),
+                publishedDate: this.parseDate(content.published_date),
                 source: content.source||'',
                 copyright: content.copyright||'',
                 rightsStatement: content.rights_statement||'',
@@ -361,6 +369,7 @@ class ContentManagement extends React.Component{
     * Function to parse dates
     */
     parseDate(inputStr) {
+        if (!inputStr) return null
         let splitval = inputStr.split("-");
         return new Date(splitval[0], splitval[1] - 1, splitval[2]);
     }
