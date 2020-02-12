@@ -25,18 +25,6 @@ class Creator(AbstractTag):
         ordering = ['name']
 
 
-class Coverage(AbstractTag):
-
-    def get_absolute_url(self):
-        return reverse('coverage-detail', args=[str(self.id)])
-
-    def __str__(self):
-        return "Coverage[{}]".format(self.name)
-
-    class Meta:
-        ordering = ['name']
-
-
 class Subject(AbstractTag):
 
     def get_absolute_url(self):
@@ -56,18 +44,6 @@ class Keyword(AbstractTag):
 
     def __str__(self):
         return "Keyword[{}]".format(self.name)
-
-    class Meta:
-        ordering = ['name']
-
-
-class Workarea(AbstractTag):
-
-    def get_absolute_url(self):
-        return reverse('workarea-detail', args=[str(self.id)])
-
-    def __str__(self):
-        return "Workarea[{}]".format(self.name)
 
     class Meta:
         ordering = ['name']
@@ -147,15 +123,13 @@ class Content(models.Model):
     content_file_uploaded = False
 
     creators = models.ManyToManyField(Creator)
-    coverage = models.ForeignKey(Coverage, on_delete=models.SET_NULL, null=True)
     collections = models.ManyToManyField(Collection)
     subjects = models.ManyToManyField(Subject)
     keywords = models.ManyToManyField(Keyword)
-    workareas = models.ManyToManyField(Workarea)
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
     cataloger = models.ForeignKey(Cataloger, on_delete=models.SET_NULL, null=True)
     original_file_name = models.CharField(max_length=300, null=True)
-    source = models.CharField(max_length=2000, null=True)
+    resource_type = models.CharField(max_length=2000, null=True)
     copyright = models.CharField(max_length=500, null=True)
     rights_statement = models.TextField(null=True)
     active = models.SmallIntegerField(default=1)
@@ -220,10 +194,8 @@ class Directory(models.Model):
 
     # Tags
     creators = models.ManyToManyField(Creator)
-    coverages = models.ManyToManyField(Coverage)
     subjects = models.ManyToManyField(Subject)
     keywords = models.ManyToManyField(Keyword)
-    workareas = models.ManyToManyField(Workarea)
     languages = models.ManyToManyField(Language)
     catalogers = models.ManyToManyField(Cataloger)
     collections = models.ManyToManyField(Collection)
@@ -231,10 +203,8 @@ class Directory(models.Model):
     # Whether All of the specificed tags should be present in the content, or atleast one is needed.
     # Represent ALL or ANY of the UI state.
     creators_need_all = models.BooleanField(default=False)
-    coverages_need_all = models.BooleanField(default=False)
     subjects_need_all = models.BooleanField(default=False)
     keywords_need_all = models.BooleanField(default=False)
-    workareas_need_all = models.BooleanField(default=False)
     languages_need_all = models.BooleanField(default=False)
     catalogers_need_all = models.BooleanField(default=False)
     collections_need_all = models.BooleanField(default=False)

@@ -44,18 +44,14 @@ class DirectoryInfoBoard extends React.Component {
             bannerFile: null,
             bannerFileName: props.boardData.originalFileName ? props.boardData.originalFileName : '',
             creators: labels['creators'],
-            coverages: labels['coverages'],
             subjects: labels['subjects'],
             keywords: labels['keywords'],
-            workareas: labels['workareas'],
             languages: labels['languages'],
             catalogers: labels['catalogers'],
             collections: labels['collections'],
             creatorsNeedAll: (props.boardData.creatorsNeedAll ? 'All' : 'Any'),
-            coveragesNeedAll: (props.boardData.coveragesNeedAll ? 'All' : 'Any'),
             subjectsNeedAll: (props.boardData.subjectsNeedAll ? 'All' : 'Any'),
             keywordsNeedAll: (props.boardData.keywordsNeedAll ? 'All' : 'Any'),
-            workareasNeedAll: (props.boardData.workareasNeedAll ? 'All' : 'Any'),
             languagesNeedAll: (props.boardData.languagesNeedAll ? 'All' : 'Any'),
             catalogersNeedAll: (props.boardData.catalogersNeedAll ? 'All' : 'Any'),
             collectionsNeedAll: (props.boardData.collectionsNeedAll ? 'All' : 'Any'),
@@ -152,18 +148,14 @@ class DirectoryInfoBoard extends React.Component {
                 bannerFile: null,
                 bannerFileName: props.boardData.originalFileName ? props.boardData.originalFileName : '',
                 creators: labels['creators'],
-                coverages: labels['coverages'],
                 subjects: labels['subjects'],
                 keywords: labels['keywords'],
-                workareas: labels['workareas'],
                 languages: labels['languages'],
                 catalogers: labels['catalogers'],
                 collections: labels['collections'],
                 creatorsNeedAll: (props.boardData.creatorsNeedAll ? 'All' : 'Any'),
-                coveragesNeedAll: (props.boardData.coveragesNeedAll ? 'All' : 'Any'),
                 subjectsNeedAll: (props.boardData.subjectsNeedAll ? 'All' : 'Any'),
                 keywordsNeedAll: (props.boardData.keywordsNeedAll ? 'All' : 'Any'),
-                workareasNeedAll: (props.boardData.workareasNeedAll ? 'All' : 'Any'),
                 languagesNeedAll: (props.boardData.languagesNeedAll ? 'All' : 'Any'),
                 catalogersNeedAll: (props.boardData.catalogersNeedAll ? 'All' : 'Any'),
                 collectionsNeedAll: (props.boardData.collectionsNeedAll ? 'All' : 'Any'),
@@ -211,19 +203,15 @@ class DirectoryInfoBoard extends React.Component {
         payload.append('dir_layout', this.state.dirLayoutId);
         this.state.selectedFiles.forEach(file => {payload.append('individual_files', file)});
         selectedTags['creators'].forEach(creator => {payload.append('creators', creator)});
-        selectedTags['coverages'].forEach(coverage => {payload.append('coverages', coverage)});
         selectedTags['subjects'].forEach(subject => {payload.append('subjects', subject)});
         selectedTags['collections'].forEach(collection => {payload.append('collections', collection)});
         selectedTags['keywords'].forEach(keyword => {payload.append('keywords', keyword)});
-        selectedTags['workareas'].forEach(workarea => {payload.append('workareas', workarea)});
         selectedTags['languages'].forEach(language => {payload.append('languages', language)});
         selectedTags['catalogers'].forEach(cataloger => {payload.append('catalogers', cataloger)});
         payload.append('creators_need_all', (this.state.creatorsNeedAll === 'All'));
-        payload.append('coverages_need_all', (this.state.coveragesNeedAll === 'All'));
         payload.append('subjects_need_all', (this.state.subjectsNeedAll === 'All'));
         payload.append('collections_need_all', (this.state.collectionsNeedAll === 'All'));
         payload.append('keywords_need_all', (this.state.keywordsNeedAll === 'All'));
-        payload.append('workareas_need_all', (this.state.workareasNeedAll === 'All'));
         payload.append('languages_need_all', (this.state.languagesNeedAll === 'All'));
         payload.append('catalogers_need_all', (this.state.catalogersNeedAll === 'All'));
         Boolean(this.state.parent) && payload.append('parent', this.state.parent);
@@ -342,7 +330,7 @@ class DirectoryInfoBoard extends React.Component {
     }
 
     handleUpdateMetadata() {
-        const toCheck = ["catalogers", "collections", "coverages", "creators", "keywords", "languages", "subjects", "workareas"]
+        const toCheck = ["catalogers", "collections", "creators", "keywords", "languages", "subjects"]
         const retVal = {}
         toCheck.forEach(metadata => retVal[metadata] = this.state[metadata])
         this.props.updateMetadata(retVal)
@@ -501,28 +489,6 @@ class DirectoryInfoBoard extends React.Component {
                         <Grid item xs={3}>
                             <Select
                                 fullWidth
-                                value={this.state.coveragesNeedAll}
-                                displayEmpty
-                                name="coverage-operator"
-                                onChange={evt => this.handleOperatorChange(evt, 'coveragesNeedAll')}
-                            >
-                                <MenuItem value="All">All of the Coverages</MenuItem>
-                                <MenuItem value="Any">Any of the Coverages</MenuItem>
-                            </Select>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <AutoCompleteWithChips suggestions={this.props.tags['coverages']}
-                                selectedItem={this.state.coverages}
-                                onAddition={addedTag => {this.handleChipAddition(addedTag, 'coverages')}}
-                                onDeletion={deletedTag => {this.handleChipDeletion(deletedTag, 'coverages')}}
-                                required={true}
-                                errorMsg={this.state.fieldErrors.selectedTags} />
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={3}>
-                        <Grid item xs={3}>
-                            <Select
-                                fullWidth
                                 value={this.state.subjectsNeedAll}
                                 displayEmpty
                                 name="subjects-operator"
@@ -581,28 +547,6 @@ class DirectoryInfoBoard extends React.Component {
                                 selectedItem={this.state.keywords}
                                 onAddition={addedTag => {this.handleChipAddition(addedTag, 'keywords')}}
                                 onDeletion={deletedTag => {this.handleChipDeletion(deletedTag, 'keywords')}}
-                                required={true}
-                                errorMsg={this.state.fieldErrors.selectedTags} />
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={3}>
-                        <Grid item xs={3}>
-                            <Select
-                                fullWidth
-                                value={this.state.workareasNeedAll}
-                                displayEmpty
-                                name="workarea-operator"
-                                onChange={evt => this.handleOperatorChange(evt, 'workareasNeedAll')}
-                            >
-                                <MenuItem value="All">All of the Work Areas</MenuItem>
-                                <MenuItem value="Any">Any of the Work Areas</MenuItem>
-                            </Select>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <AutoCompleteWithChips suggestions={this.props.tags['workareas']}
-                                selectedItem={this.state.workareas}
-                                onAddition={addedTag => {this.handleChipAddition(addedTag, 'workareas')}}
-                                onDeletion={deletedTag => {this.handleChipDeletion(deletedTag, 'workareas')}}
                                 required={true}
                                 errorMsg={this.state.fieldErrors.selectedTags} />
                         </Grid>

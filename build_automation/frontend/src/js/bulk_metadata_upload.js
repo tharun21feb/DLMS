@@ -47,10 +47,8 @@ class BulkMetadataUpload extends React.Component {
             //Below is the state of the upload content module; use this to adjust the metadata updates
             description: "",
             creators: props.content.creators,
-            coverages: props.content.coverages,
             subjects: props.content.subjects,
             keywords: props.content.keywords,
-            workareas: props.content.workareas,
             languages: props.content.languages,
             catalogers: props.content.catalogers,
             collections: props.content.collections,
@@ -172,14 +170,6 @@ class BulkMetadataUpload extends React.Component {
                                       if (parsed[i]["Subject"] == currInstance.props.allTags.subjects[x].name) {
                                           
                                       payload.append('subjects', currInstance.props.allTags.subjects[x].id);
-                                      
-                                      }
-                                   }
-                                   
-                                    for (var x = 0; x < currInstance.props.allTags.coverages.length; x++){
-                                      if (parsed[i]["Coverage (Spatial)"] == currInstance.props.allTags.coverages[x].name) {
-                                          
-                                      payload.append('coverage', currInstance.props.allTags.coverages[x].id);
                                       
                                       }
                                    }

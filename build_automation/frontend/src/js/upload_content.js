@@ -46,10 +46,8 @@ class UploadContent extends React.Component{
             name: props.content.name,
             description: props.content.description,
             creators: labels.creators,
-            coverages: labels.coverages,
             subjects: labels.subjects,
             keywords: labels.keywords,
-            workareas: labels.workareas,
             languages: labels.languages,
             catalogers: labels.catalogers,
             collections: labels.collections,
@@ -67,19 +65,15 @@ class UploadContent extends React.Component{
         this.handleDateChange=this.handleDateChange.bind(this);
         this.handleTagAddition=this.handleTagAddition.bind(this);
         this.handleCreatorAddition=this.handleCreatorAddition.bind(this);
-        this.handleCoverageAddition=this.handleCoverageAddition.bind(this);
         this.handleSubjectAddition=this.handleSubjectAddition.bind(this);
         this.handleKeywordAddition=this.handleKeywordAddition.bind(this);
-        this.handleWorkareaAddition=this.handleWorkareaAddition.bind(this);
         this.handleLanguageAddition=this.handleLanguageAddition.bind(this);
         this.handleCatalogerAddition=this.handleCatalogerAddition.bind(this);
         this.handleCollectionAddition=this.handleCollectionAddition.bind(this);
         this.handleTagDeletion=this.handleTagDeletion.bind(this);
         this.handleCreatorDeletion=this.handleCreatorDeletion.bind(this);
-        this.handleCoverageDeletion=this.handleCoverageDeletion.bind(this);
         this.handleSubjectDeletion=this.handleSubjectDeletion.bind(this);
         this.handleKeywordDeletion=this.handleKeywordDeletion.bind(this);
-        this.handleWorkareaDeletion=this.handleWorkareaDeletion.bind(this);
         this.handleLanguageDeletion=this.handleLanguageDeletion.bind(this);
         this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this);
         this.handleFileSelection=this.handleFileSelection.bind(this);
@@ -199,17 +193,11 @@ class UploadContent extends React.Component{
     handleCreatorAddition(creator){
         this.handleTagAddition(creator, 'creators')
     }
-    handleCoverageAddition(coverage){
-        this.handleTagAddition(coverage, 'coverages')
-    }
     handleSubjectAddition(subject){
         this.handleTagAddition(subject, 'subjects')
     }
     handleKeywordAddition(keyword){
         this.handleTagAddition(keyword, 'keywords')
-    }
-    handleWorkareaAddition(workarea){
-        this.handleTagAddition(workarea, 'workareas')
     }
     handleLanguageAddition(language){
         this.handleTagAddition(language, 'languages')
@@ -226,17 +214,11 @@ class UploadContent extends React.Component{
     handleCreatorDeletion(creator){
         this.handleTagDeletion(creator, 'creators')
     }
-    handleCoverageDeletion(coverage){
-        this.handleTagDeletion(coverage, 'coverages')
-    }
     handleSubjectDeletion(subject){
         this.handleTagDeletion(subject, 'subjects')
     }
     handleKeywordDeletion(keyword){
         this.handleTagDeletion(keyword, 'keywords')
-    }
-    handleWorkareaDeletion(workarea){
-        this.handleTagDeletion(workarea, 'workareas')
     }
     handleLanguageDeletion(language){
         this.handleTagDeletion(language, 'languages')
@@ -315,11 +297,9 @@ class UploadContent extends React.Component{
         payload.append('name', this.state.name);
         payload.append('description', this.state.description);
         selectedTags.creators.forEach(creator => {payload.append('creators', creator)});
-        selectedTags.coverages.length>0 && payload.append('coverage', selectedTags.coverages[0]);
         selectedTags.subjects.forEach(subject => {payload.append('subjects', subject)});
         selectedTags.collections.forEach(collection => {payload.append('collections', collection)});
         selectedTags.keywords.forEach(keyword => {payload.append('keywords', keyword)});
-        selectedTags.workareas.forEach(workarea => {payload.append('workareas', workarea)});
         selectedTags.languages.length>0 && payload.append('language', selectedTags.languages[0]);
         selectedTags.catalogers.length>0 && payload.append('cataloger', selectedTags.catalogers[0]);
         payload.append('updated_time', this.formatDate(this.state.selectedDate));
@@ -492,15 +472,6 @@ class UploadContent extends React.Component{
                         </span>
                 <div style={{marginTop: '20px'}}> </div>
                 <Typography gutterBottom variant="subtitle1">
-                    Coverage
-                </Typography>
-                <span>
-                            <AutoCompleteWithChips maxChips={1} suggestions={this.props.allTags['coverages']}
-                                                   searchKey={'name'} selectedItem={this.state.coverages}
-                                                   onAddition={this.handleCoverageAddition} onDeletion={this.handleCoverageDeletion}/>
-                        </span>
-                <div style={{marginTop: '20px'}}> </div>
-                <Typography gutterBottom variant="subtitle1">
                     Subject(s)
                 </Typography>
                 <span>
@@ -525,15 +496,6 @@ class UploadContent extends React.Component{
                             <AutoCompleteWithChips onAddNew={tag => this.saveTag(tag, APP_URLS.KEYWORDS_LIST, 'keywords')} suggestions={this.props.allTags['keywords']}
                                                    searchKey={'name'} selectedItem={this.state.keywords}
                                                    onAddition={this.handleKeywordAddition} onDeletion={this.handleKeywordDeletion}/>
-                        </span>
-                <div style={{marginTop: '20px'}}> </div>
-                <Typography gutterBottom variant="subtitle1">
-                    Work Area(s)
-                </Typography>
-                <span>
-                            <AutoCompleteWithChips suggestions={this.props.allTags['workareas']}
-                                                   searchKey={'name'} selectedItem={this.state.workareas}
-                                                   onAddition={this.handleWorkareaAddition} onDeletion={this.handleWorkareaDeletion}/>
                         </span>
                 <div style={{marginTop: '20px'}}> </div>
                 <Typography gutterBottom variant="subtitle1">

@@ -20,9 +20,9 @@ from django.views.static import serve
 from rest_framework import routers
 
 from content_management.api_views import (
-    AllTagsApiViewSet, BuildLibraryVersionViewSet, CatalogerViewSet, ContentApiViewset, CoverageViewSet,
+    AllTagsApiViewSet, BuildLibraryVersionViewSet, CatalogerViewSet, ContentApiViewset,
     CreatorViewSet, DirectoryCloneApiViewSet, DirectoryLayoutViewSet, DirectoryViewSet, DiskSpaceViewSet,
-    KeywordViewSet, LanguageViewSet, SubjectViewSet, WorkareaViewSet, MetadataSheetApiViewSet, MetadataMatchViewSet,
+    KeywordViewSet, LanguageViewSet, SubjectViewSet, MetadataSheetApiViewSet, MetadataMatchViewSet,
     SpreadsheetView, CollectionViewSet
 )
 
@@ -32,9 +32,7 @@ router.register(r'contents', ContentApiViewset)
 router.register(r'directories', DirectoryViewSet)
 router.register(r'dirlayouts', DirectoryLayoutViewSet)
 router.register(r'creators', CreatorViewSet)
-router.register(r'coverages', CoverageViewSet)
 router.register(r'subjects', SubjectViewSet)
-router.register(r'workareas', WorkareaViewSet)
 router.register(r'keywords', KeywordViewSet)
 router.register(r'languages', LanguageViewSet)
 router.register(r'catalogers', CatalogerViewSet)

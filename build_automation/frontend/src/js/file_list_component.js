@@ -255,10 +255,8 @@ class FileListComponent extends React.Component {
         this.filterExtensions = [
             {columnName: 'actions', filteringEnabled: false},
             {columnName: 'creators', predicate: filterThroughArray},
-            {columnName: 'coverage', predicate: filterThroughArray},
             {columnName: 'subjects', predicate: filterThroughArray},
             {columnName: 'keywords', predicate: filterThroughArray},
-            {columnName: 'workareas', predicate: filterThroughArray},
             {columnName: 'language', predicate: filterThroughArray},
             {columnName: 'cataloger', predicate: filterThroughArray},
             {columnName: 'collections', predicate: filterThroughArray}
@@ -427,7 +425,7 @@ class FileListComponent extends React.Component {
                     columns={this.columns}
 					style={{color: '#3592BE'}}
                 >
-                    <ChippedTagsTypeProvider for={['creators', 'coverage', 'subjects', 'keywords', 'workareas', 'language', 'cataloger', 'collections']} />
+                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'cataloger', 'collections']} />
                     <FilteringState
                         defaultFilters={[]}
                         columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]}
@@ -540,12 +538,6 @@ class FileListComponent extends React.Component {
                                 selectedFile={this.state.selectedFile}
                             />
                             <FileInfoEntry
-                                name="Coverage"
-                                property="coverage"
-                                displayFn={id => this.props.tagIdsTagsMap["coverages"][id].name}
-                                selectedFile={this.state.selectedFile}
-                            />
-                            <FileInfoEntry
                                 name="Subjects"
                                 property="subjects"
                                 displayFn={ids => ids.map(id => this.props.tagIdsTagsMap["subjects"][id].name).join(", ")}
@@ -561,12 +553,6 @@ class FileListComponent extends React.Component {
                                 name="Keywords"
                                 property="keywords"
                                 displayFn={ids => ids.map(id => this.props.tagIdsTagsMap["keywords"][id].name).join(", ")}
-                                selectedFile={this.state.selectedFile}
-                            />
-                            <FileInfoEntry
-                                name="Workareas"
-                                property="workareas"
-                                displayFn={ids => ids.map(id => this.props.tagIdsTagsMap["workareas"][id].name).join(", ")}
                                 selectedFile={this.state.selectedFile}
                             />
                             <FileInfoEntry

@@ -138,13 +138,11 @@ class DirectoryLayoutComponent extends React.Component {
             //if the metadata can have multiple then the internal metadata category name under infoBoardData used can be different for some reason :(
             const metadataInfoMap = {
                 catalogers: [infoBoardData.catalogersNeedAll, false, "catalogers"],
-                coverage: [infoBoardData.coveragesNeedAll, false, "coverages"],
                 creators: [infoBoardData.creatorsNeedAll, true, "creators"],
                 keywords: [infoBoardData.keywordsNeedAll, true, "keywords"],
                 language: [infoBoardData.languagesNeedAll, false, "languages"],
                 subjects: [infoBoardData.subjectsNeedAll, true, "subjects"],
                 collections: [infoBoardData.collectionsNeedAll, true, "collections"],
-                workareas: [infoBoardData.workareasNeedAll, true, "workareas"]
             }
             const entries = Object.entries(metadataInfoMap)
 
@@ -278,18 +276,14 @@ class DirectoryLayoutComponent extends React.Component {
             layoutDirectories[eachDir.id].originalFileName = eachDir.original_file_name;
             layoutDirectories[eachDir.id].individualFiles = eachDir.individual_files;
             layoutDirectories[eachDir.id].creators = eachDir.creators;
-            layoutDirectories[eachDir.id].coverages = eachDir.coverages;
             layoutDirectories[eachDir.id].subjects = eachDir.subjects;
             layoutDirectories[eachDir.id].keywords = eachDir.keywords;
-            layoutDirectories[eachDir.id].workareas = eachDir.workareas;
             layoutDirectories[eachDir.id].languages = eachDir.languages;
             layoutDirectories[eachDir.id].catalogers = eachDir.catalogers;
             layoutDirectories[eachDir.id].collections = eachDir.collections;
             layoutDirectories[eachDir.id].creatorsNeedAll = eachDir.creators_need_all;
-            layoutDirectories[eachDir.id].coveragesNeedAll = eachDir.coverages_need_all;
             layoutDirectories[eachDir.id].collectionsNeedAll = eachDir.collections_need_all;
             layoutDirectories[eachDir.id].keywordsNeedAll = eachDir.keywords_need_all;
-            layoutDirectories[eachDir.id].workareasNeedAll = eachDir.workareas_need_all;
             layoutDirectories[eachDir.id].languagesNeedAll = eachDir.languages_need_all;
             layoutDirectories[eachDir.id].catalogersNeedAll = eachDir.catalogers_need_all;
 
@@ -337,7 +331,7 @@ class DirectoryLayoutComponent extends React.Component {
     * Retrieve and load components with data
     */
     loadData() {
-        const toCheck = ["catalogers", "collections", "coverages", "creators", "keywords", "languages", "subjects", "workareas"]
+        const toCheck = ["catalogers", "collections", "creators", "keywords", "languages", "subjects"]
         const filters = toCheck.map(metadata => {
             const value = this.state.infoBoardData[metadata] ? this.state.infoBoardData[metadata].map(tag_name => 
                 this.state.tags[metadata].find(tag => tag.name == tag_name).id
@@ -497,18 +491,14 @@ class DirectoryLayoutComponent extends React.Component {
                 bannerFile: '',
                 originalFileName: '',
                 creators: [],
-                coverages: [],
                 subjects: [],
                 keywords: [],
-                workareas: [],
                 languages: [],
                 catalogers: [],
                 collections: [],
                 creatorsNeedAll: false,
-                coveragesNeedAll: false,
                 subjectsNeedAll: false,
                 keywordsNeedAll: false,
-                workareasNeedAll: false,
                 languagesNeedAll: false,
                 catalogersNeedAll: false,
                 dirLayoutId: dirLayout.id,
@@ -757,18 +747,14 @@ class DirectoryLayoutComponent extends React.Component {
                         originalFileName: newValue.original_file_name,
                         individualFiles: newValue.individual_files,
                         creators: newValue.creators,
-                        coverages: newValue.coverages,
                         subjects: newValue.subjects,
                         keywords: newValue.keywords,
-                        workareas: newValue.workareas,
                         languages: newValue.languages,
                         catalogers: newValue.catalogers,
                         collections: newValue.collections,
                         creatorsNeedAll: newValue.creators_need_all,
-                        coveragesNeedAll: newValue.coverages_need_all,
                         subjectsNeedAll: newValue.subjects_need_all,
                         keywordsNeedAll: newValue.keywords_need_all,
-                        workareasNeedAll: newValue.workareas_need_all,
                         languagesNeedAll: newValue.languages_need_all,
                         catalogersNeedAll: newValue.catalogers_need_all,
                         children: []
@@ -782,18 +768,14 @@ class DirectoryLayoutComponent extends React.Component {
                     array[i].originalFileName = newValue.original_file_name;
                     array[i].individualFiles = newValue.individual_files;
                     array[i].creators = newValue.creators;
-                    array[i].coverages = newValue.coverages;
                     array[i].subjects = newValue.subjects;
                     array[i].keywords = newValue.keywords;
-                    array[i].workareas = newValue.workareas;
                     array[i].languages = newValue.languages;
                     array[i].catalogers = newValue.catalogers;
                     array[i].collections = newValue.collections;
                     array[i].creatorsNeedAll = newValue.creators_need_all;
-                    array[i].coveragesNeedAll = newValue.coverages_need_all;
                     array[i].subjectsNeedAll = newValue.subjects_need_all;
                     array[i].keywordsNeedAll = newValue.keywords_need_all;
-                    array[i].workareasNeedAll = newValue.workareas_need_all;
                     array[i].languagesNeedAll = newValue.languages_need_all;
                     array[i].catalogersNeedAll = newValue.catalogers_need_all;
                     array[i].collectionsNeedAll = newValue.collections_need_all;
@@ -821,18 +803,14 @@ class DirectoryLayoutComponent extends React.Component {
         boardData.originalFileName = directory.original_file_name;
         boardData.individualFiles = directory.individual_files;
         boardData.creators = directory.creators;
-        boardData.coverages = directory.coverages;
         boardData.subjects = directory.subjects;
         boardData.keywords = directory.keywords;
-        boardData.workareas = directory.workareas;
         boardData.languages = directory.languages;
         boardData.catalogers = directory.catalogers;
         boardData.collections = directory.collections
         boardData.creatorsNeedAll = directory.creators_need_all;
-        boardData.coveragesNeedAll = directory.coverages_need_all;
         boardData.subjectsNeedAll = directory.subjects_need_all;
         boardData.keywordsNeedAll = directory.keywords_need_all;
-        boardData.workareasNeedAll = directory.workareas_need_all;
         boardData.languagesNeedAll = directory.languages_need_all;
         boardData.catalogersNeedAll = directory.catalogers_need_all;
         boardData.collectionsNeedAll = directory.collections_need_all
@@ -868,18 +846,14 @@ class DirectoryLayoutComponent extends React.Component {
                         originalFileName: savedInfo.original_file_name,
                         individualFiles: savedInfo.individual_files,
                         creators: savedInfo.creators,
-                        coverages: savedInfo.coverages,
                         subjects: savedInfo.subjects,
                         keywords: savedInfo.keywords,
-                        workareas: savedInfo.workareas,
                         languages: savedInfo.languages,
                         catalogers: savedInfo.catalogers,
                         collections: savedInfo.collections,
                         creatorsNeedAll: savedInfo.creators_need_all,
-                        coveragesNeedAll: savedInfo.coverages_need_all,
                         subjectsNeedAll: savedInfo.subjects_need_all,
                         keywordsNeedAll: savedInfo.keywords_need_all,
-                        workareasNeedAll: savedInfo.workareas_need_all,
                         languagesNeedAll: savedInfo.languages_need_all,
                         catalogersNeedAll: savedInfo.catalogers_need_all,
                         collectionsNeedAll: savedInfo.collections_need_all,
