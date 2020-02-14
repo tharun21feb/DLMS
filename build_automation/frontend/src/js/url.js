@@ -22,6 +22,8 @@ const APP_URLS = {
     KEYWORDS_DETAIL: (id) => `/api/keywords/${id}/`,
     AUDIENCES_LIST:'/api/audiences/',
     AUDIENCES_DETAIL: (id) => `/api/audiences/${id}/`,
+    RESOURCETYPES_LIST:'/api/resourcetypes/',
+    RESOURCETYPES_DETAIL: (id) => `/api/resourcetypes/${id}/`,
     LANGUAGES_LIST:'/api/languages/',
     LANGUAGES_DETAIL: (id) => `/api/languages/${id}/`,
     CATALOGERS_LIST:'/api/catalogers/',

@@ -50,6 +50,7 @@ class UploadContent extends React.Component{
             keywords: labels.keywords,
             languages: labels.languages,
             audiences: labels.audiences,
+            resourcetypes: labels.resourcetypes,
             catalogers: labels.catalogers,
             collections: labels.collections,
             fieldErrors: {},
@@ -70,6 +71,7 @@ class UploadContent extends React.Component{
         this.handleKeywordAddition=this.handleKeywordAddition.bind(this);
         this.handleLanguageAddition=this.handleLanguageAddition.bind(this);
         this.handleAudienceAddition=this.handleAudienceAddition.bind(this);
+        this.handleResourceTypeAddition=this.handleResourceTypeAddition.bind(this);
         this.handleCatalogerAddition=this.handleCatalogerAddition.bind(this);
         this.handleCollectionAddition=this.handleCollectionAddition.bind(this);
         this.handleTagDeletion=this.handleTagDeletion.bind(this);
@@ -78,6 +80,7 @@ class UploadContent extends React.Component{
         this.handleKeywordDeletion=this.handleKeywordDeletion.bind(this);
         this.handleLanguageDeletion=this.handleLanguageDeletion.bind(this);
         this.handleAudienceDeletion=this.handleAudienceDeletion.bind(this);
+        this.handleResourceTypeDeletion=this.handleResourceTypeDeletion.bind(this);
         this.handleCatalogerDeletion=this.handleCatalogerDeletion.bind(this);
         this.handleFileSelection=this.handleFileSelection.bind(this);
         this.handleCollectionDeletion=this.handleCollectionDeletion.bind(this)
@@ -208,6 +211,9 @@ class UploadContent extends React.Component{
     handleAudienceAddition(audience){
         this.handleTagAddition(audience, 'audiences')
     }
+    handleResourceTypeAddition(resourcetype){
+        this.handleTagAddition(resourcetype, 'resourcetypes')
+    }
     handleCatalogerAddition(cataloger){
         this.handleTagAddition(cataloger, 'catalogers')
     }
@@ -231,6 +237,9 @@ class UploadContent extends React.Component{
     }
     handleAudienceDeletion(audience){
         this.handleTagDeletion(audience, 'audiences')
+    }
+    handleResourceTypeDeletion(resourcetype){
+        this.handleTagDeletion(resourcetype, 'resourcetypes')
     }
     handleCatalogerDeletion(cataloger){
         this.handleTagDeletion(cataloger, 'catalogers')
@@ -311,6 +320,7 @@ class UploadContent extends React.Component{
         selectedTags.keywords.forEach(keyword => {payload.append('keywords', keyword)});
         selectedTags.languages.length>0 && payload.append('language', selectedTags.languages[0]);
         selectedTags.audiences.length>0 && payload.append('audience', selectedTags.audiences[0]);
+        selectedTags.resourcetypes.length>0 && payload.append('resourcetype', selectedTags.resourcetypes[0]);
         selectedTags.catalogers.length>0 && payload.append('cataloger', selectedTags.catalogers[0]);
         payload.append('published_date', this.formatDate(this.state.selectedDate));
         Boolean(this.state.contentFile) && payload.append('content_file', this.state.contentFile);
@@ -524,6 +534,15 @@ class UploadContent extends React.Component{
                             <AutoCompleteWithChips maxChips={1} suggestions={this.props.allTags['audiences']}
                                                    searchKey={'name'} selectedItem={this.state.audiences}
                                                    onAddition={this.handleAudienceAddition} onDeletion={this.handleAudienceDeletion}/>
+                        </span>
+                <div style={{marginTop: '20px'}}> </div>
+                <Typography gutterBottom variant="subtitle1">
+                    Resource Type
+                </Typography>
+                <span>
+                            <AutoCompleteWithChips maxChips={1} suggestions={this.props.allTags['resourcetypes']}
+                                                   searchKey={'name'} selectedItem={this.state.resourcetypes}
+                                                   onAddition={this.handleResourceTypeAddition} onDeletion={this.handleResourceTypeDeletion}/>
                         </span>
                 <div style={{marginTop: '20px'}}> </div>
                 <Typography gutterBottom variant="subtitle1">

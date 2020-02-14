@@ -239,8 +239,7 @@ class FileListComponent extends React.Component {
             {name: 'description', title: 'Description', filterType: 'textfield'},
             {name: 'language', title: 'Language', filterType: 'autocomplete', tagKey: 'languages'},
             {name: 'audience', title: 'Audience', filterType: 'autocomplete', tagKey: 'audiences'},
-            //TODO: Add Collection Type and Resource Type column + filter
-            //TODO: fix date filter
+            {name: 'resourcetype', title: 'Resource Type', filterType: 'autocomplete', tagKey: 'resourcetypes'},
             {name: 'subjects', title: 'Subjects', filterType: 'autocomplete', tagKey: 'subjects'},
             {name: 'collections', title: 'Collections', filterType: 'autocomplete', tagKey: 'collections'},
             {name: 'keywords', title: 'Keywords', filterType: 'autocomplete', tagKey: 'keywords'},
@@ -260,6 +259,7 @@ class FileListComponent extends React.Component {
             {columnName: 'keywords', predicate: filterThroughArray},
             {columnName: 'language', predicate: filterThroughArray},
             {columnName: 'audience', predicate: filterThroughArray},
+            {columnName: 'resourcetype', predicate: filterThroughArray},
             {columnName: 'cataloger', predicate: filterThroughArray},
             {columnName: 'collections', predicate: filterThroughArray}
         ];
@@ -427,7 +427,7 @@ class FileListComponent extends React.Component {
                     columns={this.columns}
 					style={{color: '#3592BE'}}
                 >
-                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'audience', 'cataloger', 'collections']} />
+                    <ChippedTagsTypeProvider for={['creators', 'subjects', 'keywords', 'language', 'audience', 'resourcetype', 'cataloger', 'collections']} />
                     <FilteringState
                         defaultFilters={[]}
                         columnExtensions={[{columnName: 'content_file', filteringEnabled: false}]}
@@ -458,6 +458,7 @@ class FileListComponent extends React.Component {
                             { columnName: 'description', width: 130 },
                             { columnName: 'language', width: 130 },
                             { columnName: 'audience', width: 130 },
+                            { columnName: 'resourcetype', width: 130 },
                             { columnName: 'subjects', width: 130 },
                             { columnName: 'collections', width: 130 },
                             { columnName: 'keywords', width: 130 },
@@ -568,6 +569,12 @@ class FileListComponent extends React.Component {
                                 name="Audience"
                                 property="audience"
                                 displayFn={id => this.props.tagIdsTagsMap["audiences"][id].name}
+                                selectedFile={this.state.selectedFile}
+                            />
+                            <FileInfoEntry
+                                name="Resource Type"
+                                property="resourcetype"
+                                displayFn={id => this.props.tagIdsTagsMap["resourcetypes"][id].name}
                                 selectedFile={this.state.selectedFile}
                             />
                             <FileInfoEntry

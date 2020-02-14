@@ -144,6 +144,11 @@ class TagManagementComponent extends React.Component {
                 { name: 'name', title: 'Name' },
             ],
             audienceRows: [],
+            resourcetypeColumns: [
+                { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
+                { name: 'name', title: 'Name' },
+            ],
+            resourcetypeRows: [],
             catalogerColumns: [
                 { name: 'actions', title: 'Actions', getCellValue: this.getActionPanel},
                 { name: 'name', title: 'Name' },
@@ -180,6 +185,11 @@ class TagManagementComponent extends React.Component {
                 detail_url: APP_URLS.AUDIENCES_DETAIL,
                 list_url: APP_URLS.AUDIENCES_LIST,
                 display_plural: "Audiences",
+            },
+            resourcetype: {
+                detail_url: APP_URLS.RESOURCETYPES_DETAIL,
+                list_url: APP_URLS.RESOURCETYPES_LIST,
+                display_plural: "Resource Types",
             },
             cataloger: {
                 detail_url: APP_URLS.CATALOGERS_DETAIL,
@@ -326,6 +336,7 @@ class TagManagementComponent extends React.Component {
                 collectionRows: response['collections'],
                 languageRows: response['languages'],
                 audienceRows: response['audiences'],
+                resourcetypeRows: response['resourcetypes'],
                 catalogerRows: response['catalogers'],
             })
         }).catch(function (error) {

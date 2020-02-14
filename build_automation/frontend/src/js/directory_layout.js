@@ -142,6 +142,7 @@ class DirectoryLayoutComponent extends React.Component {
                 keywords: [infoBoardData.keywordsNeedAll, true, "keywords"],
                 language: [infoBoardData.languagesNeedAll, false, "languages"],
                 audience: [infoBoardData.audiencesNeedAll, false, "audiences"],
+                resourcetype: [infoBoardData.resourcetypesNeedAll, false, "resourcetypes"],
                 subjects: [infoBoardData.subjectsNeedAll, true, "subjects"],
                 collections: [infoBoardData.collectionsNeedAll, true, "collections"],
             }
@@ -281,14 +282,16 @@ class DirectoryLayoutComponent extends React.Component {
             layoutDirectories[eachDir.id].keywords = eachDir.keywords;
             layoutDirectories[eachDir.id].languages = eachDir.languages;
             layoutDirectories[eachDir.id].audiences = eachDir.audiences;
+            layoutDirectories[eachDir.id].resourcetypes = eachDir.resourcetypes;
             layoutDirectories[eachDir.id].catalogers = eachDir.catalogers;
             layoutDirectories[eachDir.id].collections = eachDir.collections;
             layoutDirectories[eachDir.id].creatorsNeedAll = eachDir.creators_need_all;
             layoutDirectories[eachDir.id].collectionsNeedAll = eachDir.collections_need_all;
             layoutDirectories[eachDir.id].keywordsNeedAll = eachDir.keywords_need_all;
             layoutDirectories[eachDir.id].languagesNeedAll = eachDir.languages_need_all;
-            layoutDirectories[eachDir.id].audiencesNeedAll = eachDir.audiences_need_all;
+            layoutDirectories[eachDir.id].resourcetypesNeedAll = eachDir.resourcetypes_need_all;
             layoutDirectories[eachDir.id].catalogersNeedAll = eachDir.catalogers_need_all;
+            layoutDirectories[eachDir.id].audiencesNeedAll = eachDir.audiences_need_all;
 
             if (eachDir.parent) {
                 /* Since the directory has a parent, it is a subdirectory, so add it to the children
@@ -334,7 +337,7 @@ class DirectoryLayoutComponent extends React.Component {
     * Retrieve and load components with data
     */
     loadData() {
-        const toCheck = ["catalogers", "collections", "creators", "keywords", "languages", "audiences", "subjects"]
+        const toCheck = ["catalogers", "collections", "creators", "keywords", "languages", "audiences", "resourcetypes", "subjects"]
         const filters = toCheck.map(metadata => {
             const value = this.state.infoBoardData[metadata] ? this.state.infoBoardData[metadata].map(tag_name => 
                 this.state.tags[metadata].find(tag => tag.name == tag_name).id
@@ -498,6 +501,7 @@ class DirectoryLayoutComponent extends React.Component {
                 keywords: [],
                 languages: [],
                 audiences: [],
+                resourcetypes: [],
                 catalogers: [],
                 collections: [],
                 creatorsNeedAll: false,
@@ -505,6 +509,7 @@ class DirectoryLayoutComponent extends React.Component {
                 keywordsNeedAll: false,
                 languagesNeedAll: false,
                 audiencesNeedAll: false,
+                resourcetypesNeedAll: false,
                 catalogersNeedAll: false,
                 dirLayoutId: dirLayout.id,
                 parent: Boolean(parentDir) ? parentDir.id : null,
@@ -756,6 +761,7 @@ class DirectoryLayoutComponent extends React.Component {
                         keywords: newValue.keywords,
                         languages: newValue.languages,
                         audiences: newValue.audiences,
+                        resourcetypes: newValue.resourcetypes,
                         catalogers: newValue.catalogers,
                         collections: newValue.collections,
                         creatorsNeedAll: newValue.creators_need_all,
@@ -763,6 +769,7 @@ class DirectoryLayoutComponent extends React.Component {
                         keywordsNeedAll: newValue.keywords_need_all,
                         languagesNeedAll: newValue.languages_need_all,
                         audiencesNeedAll: newValue.audiences_need_all,
+                        resourcetypesNeedAll: newValue.resourcetypes_need_all,
                         catalogersNeedAll: newValue.catalogers_need_all,
                         children: []
                     });
@@ -779,6 +786,7 @@ class DirectoryLayoutComponent extends React.Component {
                     array[i].keywords = newValue.keywords;
                     array[i].languages = newValue.languages;
                     array[i].audiences = newValue.audiences;
+                    array[i].resourcetypes = newValue.resourcetypes;
                     array[i].catalogers = newValue.catalogers;
                     array[i].collections = newValue.collections;
                     array[i].creatorsNeedAll = newValue.creators_need_all;
@@ -786,6 +794,7 @@ class DirectoryLayoutComponent extends React.Component {
                     array[i].keywordsNeedAll = newValue.keywords_need_all;
                     array[i].languagesNeedAll = newValue.languages_need_all;
                     array[i].audiencesNeedAll = newValue.audiences_need_all;
+                    array[i].resourcetypesNeedAll = newValue.resourcetypes_need_all;
                     array[i].catalogersNeedAll = newValue.catalogers_need_all;
                     array[i].collectionsNeedAll = newValue.collections_need_all;
                 }
@@ -816,6 +825,7 @@ class DirectoryLayoutComponent extends React.Component {
         boardData.keywords = directory.keywords;
         boardData.languages = directory.languages;
         boardData.audiences = directory.audiences;
+        boardData.resourcetypes = directory.resourcetypes;
         boardData.catalogers = directory.catalogers;
         boardData.collections = directory.collections
         boardData.creatorsNeedAll = directory.creators_need_all;
@@ -823,6 +833,7 @@ class DirectoryLayoutComponent extends React.Component {
         boardData.keywordsNeedAll = directory.keywords_need_all;
         boardData.languagesNeedAll = directory.languages_need_all;
         boardData.audiencesNeedAll = directory.audiences_need_all;
+        boardData.resourcetypesNeedAll = directory.resourcetypes_need_all;
         boardData.catalogersNeedAll = directory.catalogers_need_all;
         boardData.collectionsNeedAll = directory.collections_need_all
         boardData.parent = directory.parent;
@@ -861,6 +872,7 @@ class DirectoryLayoutComponent extends React.Component {
                         keywords: savedInfo.keywords,
                         languages: savedInfo.languages,
                         audiences: savedInfo.audiences,
+                        resourcetypes: savedInfo.resourcetypes,
                         catalogers: savedInfo.catalogers,
                         collections: savedInfo.collections,
                         creatorsNeedAll: savedInfo.creators_need_all,
@@ -868,6 +880,7 @@ class DirectoryLayoutComponent extends React.Component {
                         keywordsNeedAll: savedInfo.keywords_need_all,
                         languagesNeedAll: savedInfo.languages_need_all,
                         audiencesNeedAll: savedInfo.audiences_need_all,
+                        resourcetypesNeedAll: savedInfo.resourcetypes_need_all,
                         catalogersNeedAll: savedInfo.catalogers_need_all,
                         collectionsNeedAll: savedInfo.collections_need_all,
                         children: []

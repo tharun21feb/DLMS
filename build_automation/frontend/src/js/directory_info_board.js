@@ -48,6 +48,7 @@ class DirectoryInfoBoard extends React.Component {
             keywords: labels['keywords'],
             languages: labels['languages'],
             audiences: labels['audiences'],
+            resourcetypes: labels['resourcetypes'],
             catalogers: labels['catalogers'],
             collections: labels['collections'],
             creatorsNeedAll: (props.boardData.creatorsNeedAll ? 'All' : 'Any'),
@@ -55,6 +56,7 @@ class DirectoryInfoBoard extends React.Component {
             keywordsNeedAll: (props.boardData.keywordsNeedAll ? 'All' : 'Any'),
             languagesNeedAll: (props.boardData.languagesNeedAll ? 'All' : 'Any'),
             audiencesNeedAll: (props.boardData.audiencesNeedAll ? 'All' : 'Any'),
+            resourcetypesNeedAll: (props.boardData.resourcetypesNeedAll ? 'All' : 'Any'),
             catalogersNeedAll: (props.boardData.catalogersNeedAll ? 'All' : 'Any'),
             collectionsNeedAll: (props.boardData.collectionsNeedAll ? 'All' : 'Any'),
             selectedFiles: props.boardData.individualFiles,
@@ -154,6 +156,7 @@ class DirectoryInfoBoard extends React.Component {
                 keywords: labels['keywords'],
                 languages: labels['languages'],
                 audiences: labels['audiences'],
+                resourcetypes: labels['resourcetypes'],
                 catalogers: labels['catalogers'],
                 collections: labels['collections'],
                 creatorsNeedAll: (props.boardData.creatorsNeedAll ? 'All' : 'Any'),
@@ -161,6 +164,7 @@ class DirectoryInfoBoard extends React.Component {
                 keywordsNeedAll: (props.boardData.keywordsNeedAll ? 'All' : 'Any'),
                 languagesNeedAll: (props.boardData.languagesNeedAll ? 'All' : 'Any'),
                 audiencesNeedAll: (props.boardData.audiencesNeedAll ? 'All' : 'Any'),
+                resourcetypesNeedAll: (props.boardData.resourcetypesNeedAll ? 'All' : 'Any'),
                 catalogersNeedAll: (props.boardData.catalogersNeedAll ? 'All' : 'Any'),
                 collectionsNeedAll: (props.boardData.collectionsNeedAll ? 'All' : 'Any'),
                 selectedFiles: props.boardData.individualFiles,
@@ -212,12 +216,14 @@ class DirectoryInfoBoard extends React.Component {
         selectedTags['keywords'].forEach(keyword => {payload.append('keywords', keyword)});
         selectedTags['languages'].forEach(language => {payload.append('languages', language)});
         selectedTags['audiences'].forEach(audience => {payload.append('audiences', audience)});
+        selectedTags['resourcetypes'].forEach(resourcetype => {payload.append('resourcetypes', resourcetype)});
         selectedTags['catalogers'].forEach(cataloger => {payload.append('catalogers', cataloger)});
         payload.append('creators_need_all', (this.state.creatorsNeedAll === 'All'));
         payload.append('subjects_need_all', (this.state.subjectsNeedAll === 'All'));
         payload.append('collections_need_all', (this.state.collectionsNeedAll === 'All'));
         payload.append('keywords_need_all', (this.state.keywordsNeedAll === 'All'));
         payload.append('audiences_need_all', (this.state.audiencesNeedAll === 'All'));
+        payload.append('resourcetypes_need_all', (this.state.resourcetypesNeedAll === 'All'));
         payload.append('catalogers_need_all', (this.state.catalogersNeedAll === 'All'));
         Boolean(this.state.parent) && payload.append('parent', this.state.parent);
         Boolean(this.state.bannerFile) && payload.append('banner_file', this.state.bannerFile);
@@ -335,7 +341,7 @@ class DirectoryInfoBoard extends React.Component {
     }
 
     handleUpdateMetadata() {
-        const toCheck = ["catalogers", "collections", "creators", "keywords", "languages", "audiences", "subjects"]
+        const toCheck = ["catalogers", "collections", "creators", "keywords", "languages", "audiences", "resourcetypes", "subjects"]
         const retVal = {}
         toCheck.forEach(metadata => retVal[metadata] = this.state[metadata])
         this.props.updateMetadata(retVal)
@@ -596,6 +602,28 @@ class DirectoryInfoBoard extends React.Component {
                                 selectedItem={this.state.audiences}
                                 onAddition={addedTag => {this.handleChipAddition(addedTag, 'audiences')}}
                                 onDeletion={deletedTag => {this.handleChipDeletion(deletedTag, 'audiences')}}
+                                required={true}
+                                errorMsg={this.state.fieldErrors.selectedTags} />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={3}>
+                        <Grid item xs={3}>
+                            <Select
+                                fullWidth
+                                value={this.state.resourcetypesNeedAll}
+                                displayEmpty
+                                name="lang-operator"
+                                onChange={evt => this.handleOperatorChange(evt, 'resourcetypesNeedAll')}
+                            >
+                                <MenuItem value="All">All of the Resource Types</MenuItem>
+                                <MenuItem value="Any">Any of the Resource Types</MenuItem>
+                            </Select>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <AutoCompleteWithChips suggestions={this.props.tags['resourcetypes']}
+                                selectedItem={this.state.resourcetypes}
+                                onAddition={addedTag => {this.handleChipAddition(addedTag, 'resourcetypes')}}
+                                onDeletion={deletedTag => {this.handleChipDeletion(deletedTag, 'resourcetypes')}}
                                 required={true}
                                 errorMsg={this.state.fieldErrors.selectedTags} />
                         </Grid>
