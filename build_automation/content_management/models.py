@@ -127,7 +127,8 @@ class Content(models.Model):
 
     updated_time = models.DateField(
         "Content updated on",
-        help_text='Date when the content was last updated'
+        help_text='Date when the content was last updated',
+        null=True
     )
 
     last_uploaded_time = models.DateTimeField(
@@ -147,7 +148,7 @@ class Content(models.Model):
     content_file_uploaded = False
 
     creators = models.ManyToManyField(Creator)
-    collections = models.ManyToManyField(Collection)
+    collection = models.ForeignKey(Collection, on_delete=models.SET_NULL, null=True)
     subjects = models.ManyToManyField(Subject)
     keywords = models.ManyToManyField(Keyword)
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)

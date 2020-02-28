@@ -50,7 +50,7 @@ const FILTER_PARAMS = {
         'keywords': ['in'],
         'language': ['in'],
         'cataloger': ['in'],
-        'collections': ['in'],
+        'collection': ['in'],
         'active': [null],
         'original_file_name': ['icontains'],
         'resourcetypes': ['in'],
