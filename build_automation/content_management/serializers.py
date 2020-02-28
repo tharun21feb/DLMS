@@ -30,7 +30,9 @@ class ContentSerializer(serializers.ModelSerializer):
     cataloger = serializers.PrimaryKeyRelatedField(
         queryset=Cataloger.objects.all(), read_only=False, allow_null=True, required=False
     )
-    collection = serializers.PrimaryKeyRelatedField(queryset=Collection.objects.all(), read_only=False, allow_null=True, required=False)
+    collection = serializers.PrimaryKeyRelatedField(
+        queryset=Collection.objects.all(), read_only=False, allow_null=True, required=False
+    )
 
     def create(self, validated_data):
         validated_data_copy = dict(validated_data)
